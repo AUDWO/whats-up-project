@@ -109,8 +109,8 @@ const Login = () => {
           </UserLoginInfoDiscord>
         )}
         <LoginButton
-          onClick={() => {
-            handleLogin();
+          onClick={(e) => {
+            handleLogin(e);
           }}
         >
           로그인 하기

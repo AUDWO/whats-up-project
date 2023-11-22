@@ -26,14 +26,14 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswCheck] = useState(false);
-  let response;
+
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     console.log("실행했음");
     try {
-      response = await axios.post("/auth/login", formData);
+      let response = await axios.post("/auth/login", formData);
       console.log("response.data");
       console.log(response.data);
       console.log("response.data");
@@ -52,13 +52,6 @@ const Login = () => {
     password: password,
   };
 
-  if (response) {
-    return (
-      <>
-        <div>{response.user.nickname}</div>
-      </>
-    );
-  }
   return (
     <Middle>
       <WebTitleWrap>

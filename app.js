@@ -2,7 +2,6 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 const session = require("express-session");
-const router = express.Router();
 const path = require("path");
 const dotenv = require("dotenv");
 const passport = require("passport");

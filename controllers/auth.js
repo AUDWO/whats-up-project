@@ -32,16 +32,15 @@ exports.join = async (req, res, next) => {
 exports.login = (req, res, next) => {
   passport.authenticate("local", (authError, user, info) => {
     if (authError) {
-      //console.error(authError);
-      //return next(authError);
-      return res.send("authError");
+      console.error(authError);
+      return next(authError);
     }
     if (!user) {
-      // res.send(info.message);
-      return res.send("not exist");
+      return res.send(info.message);
       //유저 정보가 옳바르지 않다.
     }
     return req.login(user, (loginError) => {
+      res.send("llll");
       if (loginError) {
         //console.log(loginError);
         //return next(loginError);

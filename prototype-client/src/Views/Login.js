@@ -29,9 +29,7 @@ const Login = () => {
   let response;
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-
+  const handleLogin = async () => {
     try {
       response = await axios.post("/auth/login", formData);
       if (response.data === "discord" || response.data === "not exist") {

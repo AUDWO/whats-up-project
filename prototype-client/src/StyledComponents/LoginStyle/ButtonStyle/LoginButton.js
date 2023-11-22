@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
-const LoginButton = styled.button`
+const LoginButton = styled.div`
   border-radius: 7px;
-  background-color: #f7dd07;
+  background-color: red;
   height: 50px;
   width: 100%;
   font-weight: 500;
@@ -11,3 +11,5 @@ const LoginButton = styled.button`
 `;
 
 export default LoginButton;
+
+//background-color: #f7dd07;

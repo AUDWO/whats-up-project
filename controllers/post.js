@@ -10,7 +10,7 @@ const { hashtag } = require("bcrypt");
 const e = require("express");
 
 exports.afterUploadImage = (req, res) => {
-  res.json({ url: `/img/${req.file.filename}` });
+  res.json({ url: req.file.location });
 };
 
 exports.uploadPost = async (req, res, next) => {

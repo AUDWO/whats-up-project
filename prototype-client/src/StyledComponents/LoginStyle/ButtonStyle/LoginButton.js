@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const LoginButton = styled.div`
+const LoginButton = styled.button`
   border-radius: 7px;
   background-color: red;
   height: 50px;

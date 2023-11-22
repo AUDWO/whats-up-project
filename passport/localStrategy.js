@@ -1,15 +1,15 @@
 const passport = require("passport");
-const { Strategy: localStrategy } = require("passport-local");
+const { LocalStrategy } = require("passport-local");
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
 
 module.exports = () => {
   passport.use(
-    new localStrategy(
+    new LocalStrategy(
       {
         usernameField: "email",
         passwordField: "password",
-        passReqToCallback: false,
+        //passReqToCallback: false,
       },
       async (email, password, done) => {
         try {
@@ -22,7 +22,7 @@ module.exports = () => {
               done(null, false, { message: "discord" });
             }
           } else {
-            done(null, false, { message: "not dxist." });
+            done(null, false, { message: "not dxist" });
           }
         } catch (err) {
           console.error(err);

@@ -37,7 +37,7 @@ exports.login = (req, res, next) => {
     }
     if (!user) {
       // res.send(info.message);
-      return res.send("not pxist");
+      return res.send("not exist");
       //유저 정보가 옳바르지 않다.
     }
     return req.login(user, (loginError) => {

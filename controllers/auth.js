@@ -40,7 +40,7 @@ exports.login = (req, res, next) => {
       //유저 정보가 옳바르지 않다.
     }
     return req.login(user, (loginError) => {
-      res.send("llll");
+      return res.send("llll");
       if (loginError) {
         //console.log(loginError);
         //return next(loginError);

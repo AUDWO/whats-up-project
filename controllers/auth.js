@@ -45,7 +45,7 @@ exports.login = (req, res, next) => {
         console.log(loginError);
         return next(loginError);
       }
-      return res.status(200).send("login success");
+      return res.send("login success");
     });
   })(req, res, next);
 };

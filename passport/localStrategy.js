@@ -22,7 +22,7 @@ module.exports = () => {
               done(null, false, { message: "discord" });
             }
           } else {
-            done(null, false, { message: "not exist." });
+            done(null, false, { message: "not dxist." });
           }
         } catch (err) {
           console.error(err);

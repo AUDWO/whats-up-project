@@ -61,7 +61,7 @@ if (process.env.NODE_ENV === "production") {
 }
 app.use(express.json({ limit: "10mb" }));
 //var cors = require("cors");
-const { deepStrictEqual } = require("assert");
+//const { deepStrictEqual } = require("assert");
 //app.use(cors());
 app.use("/img", express.static(path.join(__dirname, "uploads")));
 app.use("/profileImg", express.static(path.join(__dirname, "profileImg")));
@@ -119,7 +119,7 @@ app.use((err, req, res, next) => {
   res.locals.message = err.message;
   res.locals.erorr = process.env.NODE_ENV !== "production" ? err : {};
   res.status(err.status || 500);
-  res.sendFile(path.join(__dirname, "/prototype-client/build/nndex.html"));
+  res.sendFile(path.join(__dirname, "/prototype-client/build/index.html"));
 });
 
 module.exports = app;

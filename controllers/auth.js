@@ -32,8 +32,9 @@ exports.join = async (req, res, next) => {
 exports.login = (req, res, next) => {
   passport.authenticate("local", (authError, user, info) => {
     if (authError) {
-      console.error(authError);
-      return next(authError);
+      //console.error(authError);
+      //return next(authError);
+      return res.send("authError");
     }
     if (!user) {
       // res.send(info.message);
@@ -42,8 +43,9 @@ exports.login = (req, res, next) => {
     }
     return req.login(user, (loginError) => {
       if (loginError) {
-        console.log(loginError);
-        return next(loginError);
+        //console.log(loginError);
+        //return next(loginError);
+        return res.send("loginERROR");
       }
       return res.send("login success");
     });

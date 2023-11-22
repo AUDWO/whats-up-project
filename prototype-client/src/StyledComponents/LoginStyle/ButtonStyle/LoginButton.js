@@ -8,6 +8,10 @@ const LoginButton = styled.div`
   font-weight: 500;
   font-size: 18px;
   margin-top: 15px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export default LoginButton;

@@ -29,7 +29,8 @@ const Login = () => {
   let response;
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
     console.log("실행했음");
     try {
       response = await axios.post("/auth/login", formData);

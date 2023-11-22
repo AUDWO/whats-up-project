@@ -74,7 +74,7 @@ const Login = () => {
           회원가입 하기
         </GoSignUp>
       </CheckUserWrapper>
-      <LoginFormWrap onSubmit={handleLogin}>
+      <LoginFormWrap>
         <InputWrap>
           <Label>email</Label>
           <Input
@@ -105,7 +105,7 @@ const Login = () => {
             확인해주세요.
           </UserLoginInfoDiscord>
         )}
-        <LoginButton type="submit">로그인 하기</LoginButton>
+        <LoginButton onClick={handleLogin}>로그인 하기</LoginButton>
       </LoginFormWrap>
     </Middle>
   );

@@ -9,7 +9,7 @@ class Post extends Sequelize.Model {
           allowNull: true,
         },
         img: {
-          type: Sequelize.STRING(140),
+          type: Sequelize.STRING(500),
           allowNull: true,
         },
         title: {

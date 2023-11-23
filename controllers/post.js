@@ -1,15 +1,11 @@
 const Post = require("../models/post");
 const Story = require("../models/story");
 const Diary = require("../models/diary");
-const User = require("../models/user");
 const ContactStory = require("../models/contactStory");
 const ContactDiary = require("../models/contactDiary");
 
-const Hashtag = require("../models/hashtag");
-const { hashtag } = require("bcrypt");
-const e = require("express");
-
 exports.afterUploadImage = (req, res) => {
+  console.log(req.file);
   res.json({ url: req.file.location });
 };
 

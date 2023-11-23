@@ -34,7 +34,7 @@ passportConfig();
 app.set("port", process.env.PORT || 8005);
 
 sequelize
-  .sync({ force: false })
+  .sync({ force: true })
   .then(() => {
     console.log("데이터베이스 연결 성공");
   })
@@ -61,6 +61,7 @@ app.use(express.json({ limit: "10mb" }));
 //var cors = require("cors");
 //const { deepStrictEqual } = require("assert");
 //app.use(cors());
+app.use(express.static(path.join(__dirname, "/prototype-client/build")));
 app.use("/img", express.static(path.join(__dirname, "uploads")));
 app.use("/profileImg", express.static(path.join(__dirname, "profileImg")));
 app.use(express.json());
@@ -83,8 +84,6 @@ app.use(session(sessionOption));
 
 app.use(passport.initialize());
 app.use(passport.session());
-
-app.use(express.static(path.join(__dirname, "/prototype-client/build")));
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "/prototype-client/build/index.html"));

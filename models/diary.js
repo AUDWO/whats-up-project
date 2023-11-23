@@ -13,7 +13,7 @@ class Diary extends Sequelize.Model {
           allowNull: false,
         },
         img: {
-          type: Sequelize.STRING(140),
+          type: Sequelize.STRING(5000),
           allowNull: true,
         },
         publicControl: {

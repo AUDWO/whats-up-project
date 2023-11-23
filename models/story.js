@@ -5,32 +5,12 @@ class Story extends Sequelize.Model {
     Story.init(
       {
         img: {
-          type: Sequelize.STRING(140),
+          type: Sequelize.STRING(500),
           allowNull: false,
         },
         content: {
           type: Sequelize.STRING(500),
           allowNull: true,
-        },
-        likeCount: {
-          type: Sequelize.INTEGER,
-          allowNull: false,
-          defaultValue: 0,
-        },
-        loveCount: {
-          type: Sequelize.INTEGER,
-          allowNull: false,
-          defaultValue: 0,
-        },
-        smileCount: {
-          type: Sequelize.INTEGER,
-          allowNull: false,
-          defaultValue: 0,
-        },
-        sadCount: {
-          type: Sequelize.INTEGER,
-          allowNull: false,
-          defaultValue: 0,
         },
         contactCheck: {
           type: Sequelize.STRING(50),

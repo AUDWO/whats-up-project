@@ -10,7 +10,7 @@ class User extends Sequelize.Model {
           unique: true,
         },
         profileImg: {
-          type: Sequelize.STRING(140),
+          type: Sequelize.STRING(500),
           allowNull: true,
         },
         name: {

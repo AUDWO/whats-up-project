@@ -98,11 +98,20 @@ const MakeDiary = () => {
     handlePostDiary();
   };
 
+  /*
+  const handleImageError = (event) => {
+    event.target.src = event.target.src.replace(/\/thumb\//, '/original/');
+  };*/
+
   const handlePostDiary = async () => {
     try {
       //사진을 선택한 경우
       if (imgUrlData) {
         const imgDataResponse = await axios.post("/post/diaryimg", formData);
+
+        console.log("imgDataResponse");
+        console.log(imgDataResponse);
+        console.log("imgDataResponse");
 
         if (publicControl) {
           const postResponse = await axios.post("/post/diary", {

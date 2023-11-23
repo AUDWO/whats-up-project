@@ -104,7 +104,7 @@ app.get("*", function (req, res) {
 
 //에러 처리 담당
 app.use((req, res, next) => {
-  const error = new Error(`${(req, method)} ${req.url} 라우터가 없습니다.`);
+  const error = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
   error.status = 404;
   logger.info("hello");
   logger.error(error.message);

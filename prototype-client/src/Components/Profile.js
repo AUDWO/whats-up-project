@@ -7,6 +7,8 @@ import {
 
 import { BasicProfileImg } from "../StyledComponents/CommonCpStyle/Icon/BasicProfileIcom";
 
+import styled from "styled-components";
+
 const Profile = ({ nickname, profileImg }) => {
   return (
     <ProfileWrapper>
@@ -15,9 +17,13 @@ const Profile = ({ nickname, profileImg }) => {
       ) : (
         <BasicProfileImg fontSize={"40px"} />
       )}
-      <div>{nickname}</div>
+      <ProfileNickName>{nickname}</ProfileNickName>
     </ProfileWrapper>
   );
 };
 
 export default Profile;
+
+const ProfileNickName = styled.div`
+  margin-left: 10px;
+`;

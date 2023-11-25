@@ -13,7 +13,6 @@ import {
 //Atom
 import ModalOpenAtom from "../../store/ModalOpenAtom";
 
-import styled from "styled-components";
 const MoreModalCp = forwardRef((props, ref) => {
   const navigate = useNavigate();
 

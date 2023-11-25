@@ -45,7 +45,7 @@ const MoreStoryContentCp = ({ storyId }) => {
         <MoreStoryContentDiv>
           <MoreStoryContentsWrapper>
             <MoreStoryProfileWrapper>
-              <MoreStoryProfileImg />
+              <MoreStoryProfileImg src={storyInfo.User.profileIng} />
               <MoreStoryInfo>
                 <MoreStoryProfileName>
                   {storyInfo.User.nickname}

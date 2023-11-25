@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const MoreModalWrapper = styled.div`
   width: 200px;
-  height: 300px;
+  height: 225px;
   border-radius: 10px;
   background-color: #ffffff;
   position: fixed;

@@ -56,7 +56,7 @@ export const PostImgWrapper = styled.div`
   min-height: 585px;
   height: auto;
   transition: all 0.3s ease-in-out;
-  transform: ${({ click }) => (click ? "translate3d(-130px, 0, 0)" : "none")};
+  transform: ${({ click }) => (click ? "translate3d(-110px, 0, 0)" : "none")};
 `;
 
 export const PostImg = styled.img`

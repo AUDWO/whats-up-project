@@ -16,7 +16,7 @@ export const CommentModalWrapper = styled.div`
   position: absolute;
   transition: all 0.3s ease-in-out;
   transform: ${({ click }) =>
-    click ? "translate3d(280px, 0, 0)" : "translate3d(0, 0, 0)"};
+    click ? "translate3d(300px, 0, 0)" : "translate3d(0, 0, 0)"};
 `;
 
 export const CommentClosingIcon = styled(AiOutlineClose)`

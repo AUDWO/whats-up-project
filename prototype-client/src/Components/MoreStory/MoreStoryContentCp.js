@@ -40,12 +40,18 @@ const MoreStoryContentCp = ({ storyId }) => {
   }, []);
 
   if (storyInfo) {
+    console.log("storyInfo");
+    console.log(storyInfo);
+    console.log("storyInfo");
+  }
+
+  if (storyInfo) {
     return (
       <MoreStoryWrapper>
         <MoreStoryContentDiv>
           <MoreStoryContentsWrapper>
             <MoreStoryProfileWrapper>
-              <MoreStoryProfileImg src={storyInfo.User.profileIng} />
+              <MoreStoryProfileImg src={storyInfo.User.profileImg} />
               <MoreStoryInfo>
                 <MoreStoryProfileName>
                   {storyInfo.User.nickname}

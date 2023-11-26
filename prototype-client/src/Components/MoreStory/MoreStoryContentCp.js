@@ -40,12 +40,6 @@ const MoreStoryContentCp = ({ storyId }) => {
   }, []);
 
   if (storyInfo) {
-    console.log("storyInfo");
-    console.log(storyInfo);
-    console.log("storyInfo");
-  }
-
-  if (storyInfo) {
     return (
       <MoreStoryWrapper>
         <MoreStoryContentDiv>

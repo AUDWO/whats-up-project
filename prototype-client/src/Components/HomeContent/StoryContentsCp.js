@@ -31,25 +31,24 @@ const StoryContentsCp = () => {
 
   const [stories, setStories] = useState([]);
 
-  const fetchStoryies = async () => {
-    try {
-      const response = await axios.get("/page/render-story");
-
-      setStories([...response.data]);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
+    const fetchStoryies = async () => {
+      try {
+        const response = await axios.get("/page/render-story");
+
+        setStories([...response.data]);
+      } catch (error) {
+        console.error(error);
+      }
+    };
     fetchStoryies();
     setStoryModalOpen(false);
   }, [storyUpdate]);
 
-  const { data } = useQuery("storyContents", fetchStoryies);
+  //const { data } = useQuery("storyContents", fetchStoryies);
 
   console.log("data");
-  console.log(data);
+  //console.log(data);
   console.log("data");
 
   return (

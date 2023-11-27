@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { useQuery } from "react-query";
 
 //Styled-Components
 import {
@@ -30,20 +31,26 @@ const StoryContentsCp = () => {
 
   const [stories, setStories] = useState([]);
 
+  const fetchStoryies = async () => {
+    try {
+      const response = await axios.get("/page/render-story");
+
+      setStories([...response.data]);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
-    const fetchStoryies = async () => {
-      try {
-        const response = await axios.get("/page/render-story");
-
-        setStories([...response.data]);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
     fetchStoryies();
     setStoryModalOpen(false);
   }, [storyUpdate]);
+
+  const { data } = useQuery("storyContents", fetchStoryies);
+
+  console.log("data");
+  console.log(data);
+  console.log("data");
 
   return (
     <StoryWrapper>

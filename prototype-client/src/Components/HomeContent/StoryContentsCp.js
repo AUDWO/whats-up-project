@@ -57,31 +57,31 @@ const StoryContentsCp = () => {
   console.log("data");
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <StoryWrapper>
-        <StoryContents>
-          <MakeStoryContent
-            onClick={() => {
-              setStoryModalOpen(!storyModalOpen);
-            }}
-          >
-            <StoryProfile>
-              <MakeStoryProfileImg>
-                <PlusIcon />
-              </MakeStoryProfileImg>
-              <StoryProfileName>Make story</StoryProfileName>
-            </StoryProfile>
-          </MakeStoryContent>
-          {stories.map((story) => {
-            return (
-              <Link to={`/more-story/${story.id}`} key={story.id}>
-                <StoryContentCp index={story.id} story={story} />
-              </Link>
-            );
-          })}
-        </StoryContents>
-      </StoryWrapper>
-    </QueryClientProvider>
+    //<QueryClientProvider client={queryClient}>
+    <StoryWrapper>
+      <StoryContents>
+        <MakeStoryContent
+          onClick={() => {
+            setStoryModalOpen(!storyModalOpen);
+          }}
+        >
+          <StoryProfile>
+            <MakeStoryProfileImg>
+              <PlusIcon />
+            </MakeStoryProfileImg>
+            <StoryProfileName>Make story</StoryProfileName>
+          </StoryProfile>
+        </MakeStoryContent>
+        {stories.map((story) => {
+          return (
+            <Link to={`/more-story/${story.id}`} key={story.id}>
+              <StoryContentCp index={story.id} story={story} />
+            </Link>
+          );
+        })}
+      </StoryContents>
+    </StoryWrapper>
+    //</QueryClientProvider>
   );
 };
 

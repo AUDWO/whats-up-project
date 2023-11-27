@@ -22,6 +22,7 @@ import StoryContentCp from "./StoryContentCp";
 //Atom
 import ModalOpenAtom from "../../store/ModalOpenAtom";
 import stateUpdateAtom from "../../store/stateUpdateAtom";
+const queryClient = new QueryClient();
 
 const StoryContentsCp = () => {
   const storyUpdate = useRecoilValue(stateUpdateAtom("story"));
@@ -31,7 +32,6 @@ const StoryContentsCp = () => {
   );
 
   const [stories, setStories] = useState([]);
-  const queryClient = new QueryClient();
 
   const fetchStoryies = async () => {
     try {

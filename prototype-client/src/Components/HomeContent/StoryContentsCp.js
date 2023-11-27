@@ -21,6 +21,7 @@ import StoryContentCp from "./StoryContentCp";
 //Atom
 import ModalOpenAtom from "../../store/ModalOpenAtom";
 import stateUpdateAtom from "../../store/stateUpdateAtom";
+import { QueryClientProvider, QueryClient } from "react-query";
 
 const StoryContentsCp = () => {
   const storyUpdate = useRecoilValue(stateUpdateAtom("story"));
@@ -30,6 +31,7 @@ const StoryContentsCp = () => {
   );
 
   const [stories, setStories] = useState([]);
+  const queryClient = new QueryClient();
 
   useEffect(() => {
     const fetchStoryies = async () => {
@@ -52,29 +54,31 @@ const StoryContentsCp = () => {
   console.log("data");
 
   return (
-    <StoryWrapper>
-      <StoryContents>
-        <MakeStoryContent
-          onClick={() => {
-            setStoryModalOpen(!storyModalOpen);
-          }}
-        >
-          <StoryProfile>
-            <MakeStoryProfileImg>
-              <PlusIcon />
-            </MakeStoryProfileImg>
-            <StoryProfileName>Make story</StoryProfileName>
-          </StoryProfile>
-        </MakeStoryContent>
-        {stories.map((story) => {
-          return (
-            <Link to={`/more-story/${story.id}`} key={story.id}>
-              <StoryContentCp index={story.id} story={story} />
-            </Link>
-          );
-        })}
-      </StoryContents>
-    </StoryWrapper>
+    <QueryClientProvider client={queryClient}>
+      <StoryWrapper>
+        <StoryContents>
+          <MakeStoryContent
+            onClick={() => {
+              setStoryModalOpen(!storyModalOpen);
+            }}
+          >
+            <StoryProfile>
+              <MakeStoryProfileImg>
+                <PlusIcon />
+              </MakeStoryProfileImg>
+              <StoryProfileName>Make story</StoryProfileName>
+            </StoryProfile>
+          </MakeStoryContent>
+          {stories.map((story) => {
+            return (
+              <Link to={`/more-story/${story.id}`} key={story.id}>
+                <StoryContentCp index={story.id} story={story} />
+              </Link>
+            );
+          })}
+        </StoryContents>
+      </StoryWrapper>
+    </QueryClientProvider>
   );
 };
 

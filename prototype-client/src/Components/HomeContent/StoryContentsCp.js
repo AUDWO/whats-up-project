@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { QueryClientProvider, QueryClient } from "react-query";
 import { useRecoilState, useRecoilValue } from "recoil";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -21,7 +22,6 @@ import StoryContentCp from "./StoryContentCp";
 //Atom
 import ModalOpenAtom from "../../store/ModalOpenAtom";
 import stateUpdateAtom from "../../store/stateUpdateAtom";
-import { QueryClientProvider, QueryClient } from "react-query";
 
 const StoryContentsCp = () => {
   const storyUpdate = useRecoilValue(stateUpdateAtom("story"));
@@ -33,24 +33,26 @@ const StoryContentsCp = () => {
   const [stories, setStories] = useState([]);
   const queryClient = new QueryClient();
 
-  useEffect(() => {
-    const fetchStoryies = async () => {
-      try {
-        const response = await axios.get("/page/render-story");
+  const fetchStoryies = async () => {
+    try {
+      const response = await axios.get("/page/render-story");
 
-        setStories([...response.data]);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchStoryies();
+      setStories([...response.data]);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  //fetchStoryies();
+
+  useEffect(() => {
     setStoryModalOpen(false);
   }, [storyUpdate]);
 
-  //const { data } = useQuery("storyContents", fetchStoryies);
+  const { data } = useQuery("storyContents", fetchStoryies);
 
   console.log("data");
-  //console.log(data);
+  console.log(data);
   console.log("data");
 
   return (

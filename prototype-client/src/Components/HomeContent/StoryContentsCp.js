@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { QueryClientProvider, QueryClient } from "react-query";
 import { useRecoilState, useRecoilValue } from "recoil";
 import axios from "axios";
@@ -45,15 +45,15 @@ const StoryContentsCp = () => {
 
   //fetchStoryies();
 
-  /*
   useEffect(() => {
     setStoryModalOpen(false);
-  }, [storyUpdate]);*/
+    fetchStoryies();
+  }, [storyUpdate]);
 
-  const { data } = useQuery("storyContents", fetchStoryies);
+  //const { data } = useQuery("storyContents", fetchStoryies);
 
   console.log("data");
-  console.log(data);
+  //console.log(data);
   console.log("data");
 
   return (

@@ -56,6 +56,7 @@ const StoryContentsCp = () => {
   console.log(data);
   console.log("data");
 
+  /*
   return (
     <QueryClientProvider client={queryClient}>
       <StoryWrapper>
@@ -73,16 +74,23 @@ const StoryContentsCp = () => {
             </StoryProfile>
           </MakeStoryContent>
           {stories.map((story) => {
-            /*
+            
             return (
               <Link to={`/more-story/${story.id}`} key={story.id}>
                 <StoryContentCp index={story.id} story={story} />
               </Link>
-            );*/
+            );
             return <StoryContentCp index={story.id} story={story} />;
           })}
         </StoryContents>
       </StoryWrapper>
+    </QueryClientProvider>
+  );
+};*/
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <div>안녕</div>
     </QueryClientProvider>
   );
 };

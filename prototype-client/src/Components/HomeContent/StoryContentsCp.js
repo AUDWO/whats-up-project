@@ -56,8 +56,9 @@ const StoryContentsCp = () => {
     setStoryModalOpen(false);
     //fetchStories();
   }, [storyUpdate]);
-
+  /*
   return (
+    
     <StoryWrapper>
       <StoryContents>
         <MakeStoryContent
@@ -81,7 +82,7 @@ const StoryContentsCp = () => {
         })}
       </StoryContents>
     </StoryWrapper>
-  );
+  );*/
 };
 
 export default StoryContentsCp;

@@ -56,33 +56,34 @@ const StoryContentsCp = () => {
     setStoryModalOpen(false);
     //fetchStories();
   }, [storyUpdate]);
-  /*
-  return (
-    
-    <StoryWrapper>
-      <StoryContents>
-        <MakeStoryContent
-          onClick={() => {
-            setStoryModalOpen(!storyModalOpen);
-          }}
-        >
-          <StoryProfile>
-            <MakeStoryProfileImg>
-              <PlusIcon />
-            </MakeStoryProfileImg>
-            <StoryProfileName>Make story</StoryProfileName>
-          </StoryProfile>
-        </MakeStoryContent>
-        {info.data.map((story) => {
-          return (
-            <Link to={`/more-story/${story.id}`} key={story.id}>
-              <StoryContentCp index={story.id} story={story} />
-            </Link>
-          );
-        })}
-      </StoryContents>
-    </StoryWrapper>
-  );*/
+
+  if (info) {
+    return (
+      <StoryWrapper>
+        <StoryContents>
+          <MakeStoryContent
+            onClick={() => {
+              setStoryModalOpen(!storyModalOpen);
+            }}
+          >
+            <StoryProfile>
+              <MakeStoryProfileImg>
+                <PlusIcon />
+              </MakeStoryProfileImg>
+              <StoryProfileName>Make story</StoryProfileName>
+            </StoryProfile>
+          </MakeStoryContent>
+          {info.data.data.map((story) => {
+            return (
+              <Link to={`/more-story/${story.id}`} key={story.id}>
+                <StoryContentCp index={story.id} story={story} />
+              </Link>
+            );
+          })}
+        </StoryContents>
+      </StoryWrapper>
+    );
+  }
 };
 
 export default StoryContentsCp;

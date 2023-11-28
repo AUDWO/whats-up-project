@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -44,6 +44,7 @@ const StoryContentsCp = () => {
   useEffect(() => {
     setStoryModalOpen(false);
   }, [storyUpdate]);
+
   if (storyContentsInfo.data) {
     return (
       <StoryWrapper>

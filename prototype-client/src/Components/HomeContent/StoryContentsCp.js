@@ -34,8 +34,8 @@ const StoryContentsCp = () => {
   const fetchStories = async () => {
     try {
       const response = await axios.get("/page/render-story");
-
-      setStories([...response.data]);
+      return response;
+      //setStories([...response.data]);
     } catch (error) {
       console.error(error);
     }
@@ -43,9 +43,7 @@ const StoryContentsCp = () => {
 
   const data = useQuery({
     queryKey: ["storyContents"],
-    queryFn: () => {
-      fetchStories();
-    },
+    queryFn: fetchStories,
   });
 
   console.log("data");

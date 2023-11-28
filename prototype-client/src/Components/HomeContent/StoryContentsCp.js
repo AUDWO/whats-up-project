@@ -41,7 +41,7 @@ const StoryContentsCp = () => {
     }
   };
 
-  const data = useQuery({
+  const { data } = useQuery({
     queryKey: ["storyContents"],
     queryFn: fetchStories,
   });
@@ -54,7 +54,7 @@ const StoryContentsCp = () => {
     setStoryModalOpen(false);
     //fetchStories();
   }, [storyUpdate]);
-  /*
+
   return (
     <StoryWrapper>
       <StoryContents>
@@ -70,7 +70,7 @@ const StoryContentsCp = () => {
             <StoryProfileName>Make story</StoryProfileName>
           </StoryProfile>
         </MakeStoryContent>
-        {stories.map((story) => {
+        {data.data.map((story) => {
           return (
             <Link to={`/more-story/${story.id}`} key={story.id}>
               <StoryContentCp index={story.id} story={story} />
@@ -79,7 +79,7 @@ const StoryContentsCp = () => {
         })}
       </StoryContents>
     </StoryWrapper>
-  );*/
+  );
 };
 
 export default StoryContentsCp;

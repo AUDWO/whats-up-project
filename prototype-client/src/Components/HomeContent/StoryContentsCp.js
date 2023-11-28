@@ -41,13 +41,15 @@ const StoryContentsCp = () => {
     }
   };
 
-  const { data } = useQuery({
+  const info = useQuery({
     queryKey: ["storyContents"],
     queryFn: fetchStories,
   });
 
+  console.log("info");
+  console.log(info);
   console.log("data");
-  console.log(data);
+  console.log(info.data);
   console.log("data");
 
   useEffect(() => {
@@ -70,7 +72,7 @@ const StoryContentsCp = () => {
             <StoryProfileName>Make story</StoryProfileName>
           </StoryProfile>
         </MakeStoryContent>
-        {data.data.map((story) => {
+        {info.data.map((story) => {
           return (
             <Link to={`/more-story/${story.id}`} key={story.id}>
               <StoryContentCp index={story.id} story={story} />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -29,29 +29,25 @@ const StoryContentsCp = () => {
     ModalOpenAtom("makeStoryModal")
   );
 
-  const [stories, setStories] = useState([]);
-
   const fetchStories = async () => {
     try {
       const response = await axios.get("/page/render-story");
       return response;
-      setStories([...response.data]);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const info = useQuery({
+  const storiesInfo = useQuery({
     queryKey: ["storyContents"],
     queryFn: fetchStories,
   });
 
   useEffect(() => {
     setStoryModalOpen(false);
-    fetchStories();
   }, [storyUpdate]);
 
-  if (info.data) {
+  if (storiesInfo.data) {
     return (
       <StoryWrapper>
         <StoryContents>
@@ -67,7 +63,7 @@ const StoryContentsCp = () => {
               <StoryProfileName>Make story</StoryProfileName>
             </StoryProfile>
           </MakeStoryContent>
-          {stories.map((story) => {
+          {storiesInfo.data.map((story) => {
             return (
               <Link to={`/more-story/${story.id}`} key={story.id}>
                 <StoryContentCp index={story.id} story={story} />
@@ -81,13 +77,3 @@ const StoryContentsCp = () => {
 };
 
 export default StoryContentsCp;
-
-/*
- {info.data.data.map((story) => {
-            return (
-              <Link to={`/more-story/${story.id}`} key={story.id}>
-                <StoryContentCp index={story.id} story={story} />
-              </Link>
-            );
-          })}
-*/

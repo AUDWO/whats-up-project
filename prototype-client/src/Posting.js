@@ -33,7 +33,7 @@ const PostCp = ({ post }) => {
     <PostDivWrapper>
       <PostWrapper>
         <PostContentCp postContent={postContent} userId={post.UserId} />
-        <CommentModalCp postId={post.id} />
+        {postContent.img && <CommentModalCp postId={post.id} />}
         <PostInfoCp postInfo={postInfo} />
       </PostWrapper>
     </PostDivWrapper>

@@ -9,20 +9,20 @@ import PostCp from "./Posting";
 import stateUpdateAtom from "./store/stateUpdateAtom";
 
 const UserPosts = () => {
-  const [posts, setPosts] = useState([]);
-
   const contentUpdate = useRecoilValue(stateUpdateAtom("contentUpdate"));
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await axios.get("/page/render-posts/");
+  const [posts, setPosts] = useState([]);
+  const fetchPosts = async () => {
+    try {
+      const response = await axios.get("/page/render-posts/");
 
-        setPosts((prev) => [...response.data]);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+      setPosts((prev) => [...response.data]);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
     fetchPosts();
   }, [contentUpdate]);
 

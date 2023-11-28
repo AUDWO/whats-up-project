@@ -42,7 +42,7 @@ const StoryContentsCp = () => {
   };
 
   const data = useQuery({
-    queryKey: "storyContents",
+    queryKey: ["storyContents"],
     queryFn: fetchStories,
   });
 
@@ -52,9 +52,9 @@ const StoryContentsCp = () => {
 
   useEffect(() => {
     setStoryModalOpen(false);
-    fetchStories();
+    //fetchStories();
   }, [storyUpdate]);
-
+  /*
   return (
     <StoryWrapper>
       <StoryContents>
@@ -79,7 +79,7 @@ const StoryContentsCp = () => {
         })}
       </StoryContents>
     </StoryWrapper>
-  );
+  );*/
 };
 
 export default StoryContentsCp;

@@ -2,8 +2,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import "./App.css";
 
-import { QueryClientProvider, QueryClient } from "react-query";
-
 // Styled-Components
 import GlobalStyles from "./StyledComponents/GlobalStyles";
 

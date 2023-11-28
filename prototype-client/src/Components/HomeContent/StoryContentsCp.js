@@ -35,7 +35,7 @@ const StoryContentsCp = () => {
     try {
       const response = await axios.get("/page/render-story");
       return response;
-      //setStories([...response.data]);
+      setStories([...response.data]);
     } catch (error) {
       console.error(error);
     }
@@ -46,15 +46,9 @@ const StoryContentsCp = () => {
     queryFn: fetchStories,
   });
 
-  console.log("info");
-  console.log(info);
-  console.log("data");
-  console.log(info.data);
-  console.log("data");
-
   useEffect(() => {
     setStoryModalOpen(false);
-    //fetchStories();
+    fetchStories();
   }, [storyUpdate]);
 
   if (info.data) {
@@ -73,7 +67,7 @@ const StoryContentsCp = () => {
               <StoryProfileName>Make story</StoryProfileName>
             </StoryProfile>
           </MakeStoryContent>
-          {info.data.data.map((story) => {
+          {stories.map((story) => {
             return (
               <Link to={`/more-story/${story.id}`} key={story.id}>
                 <StoryContentCp index={story.id} story={story} />
@@ -87,3 +81,13 @@ const StoryContentsCp = () => {
 };
 
 export default StoryContentsCp;
+
+/*
+ {info.data.data.map((story) => {
+            return (
+              <Link to={`/more-story/${story.id}`} key={story.id}>
+                <StoryContentCp index={story.id} story={story} />
+              </Link>
+            );
+          })}
+*/

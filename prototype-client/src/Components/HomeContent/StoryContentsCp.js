@@ -43,7 +43,9 @@ const StoryContentsCp = () => {
 
   const data = useQuery({
     queryKey: ["storyContents"],
-    queryFn: fetchStories,
+    queryFn: () => {
+      fetchStories();
+    },
   });
 
   console.log("data");

@@ -73,11 +73,13 @@ const StoryContentsCp = () => {
             </StoryProfile>
           </MakeStoryContent>
           {stories.map((story) => {
+            /*
             return (
               <Link to={`/more-story/${story.id}`} key={story.id}>
                 <StoryContentCp index={story.id} story={story} />
               </Link>
-            );
+            );*/
+            return <StoryContentCp index={story.id} story={story} />;
           })}
         </StoryContents>
       </StoryWrapper>

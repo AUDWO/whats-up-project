@@ -57,7 +57,7 @@ const StoryContentsCp = () => {
     //fetchStories();
   }, [storyUpdate]);
 
-  if (info) {
+  if (info.data) {
     return (
       <StoryWrapper>
         <StoryContents>

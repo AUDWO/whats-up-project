@@ -61,7 +61,7 @@ const StoryContentsCp = () => {
               <StoryProfileName>Make story</StoryProfileName>
             </StoryProfile>
           </MakeStoryContent>
-          {storyContentsInfo.data.map((story) => {
+          {storyContentsInfo.data.data.map((story) => {
             return (
               <Link to={`/more-story/${story.id}`} key={story.id}>
                 <StoryContentCp index={story.id} story={story} />

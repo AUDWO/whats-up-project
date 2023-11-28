@@ -34,8 +34,8 @@ const StoryContentsCp = () => {
   const fetchStories = async () => {
     try {
       const response = await axios.get("/page/render-story");
-      return response;
       setStories([...response.data]);
+      return response;
     } catch (error) {
       console.error(error);
     }

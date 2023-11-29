@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
 import { useQuery } from "@tanstack/react-query";
+
+import styled from "styled-components";
 
 //Component
 import PostCp from "./Posting";
@@ -38,7 +40,11 @@ const UserPosts = () => {
     return (
       <>
         {postsInfo.data.data.map((post) => {
-          return <PostCp post={post} key={post.id} />;
+          return (
+            <Suspense fallback={<Loading />}>
+              <PostCp post={post} key={post.id} />;
+            </Suspense>
+          );
         })}
       </>
     );
@@ -46,3 +52,9 @@ const UserPosts = () => {
 };
 
 export default UserPosts;
+
+const Loading = styled.div`
+  width: 100px;
+  height: 400px;
+  background-color: ;
+`;

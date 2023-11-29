@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useRecoilValue } from "recoil";
+import React, { useState, useEffect, useRef } from "react";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
@@ -26,6 +26,7 @@ import {
 //Atom
 import ModalOpenAtom from "../../store/ModalOpenAtom";
 import userInfoAtom from "../../store/userState/userAtom";
+import toggleValueAtom from "../../store/ToggleValueAtom";
 
 const PostContentCp = ({ postContent, userId }) => {
   const click = useRecoilValue(
@@ -46,6 +47,9 @@ const PostContentCp = ({ postContent, userId }) => {
     setPostContentOpen(!postContentOpen);
   };
 
+  //댓글창이 먼저 나오지 않도록
+  const setIsImgLoaded = useSetRecoilState(toggleValueAtom("isImgLoaded"));
+
   useEffect(() => {
     const FindUerById = async (id) => {
       const response = await axios.get(`/user/${id}`);
@@ -56,10 +60,23 @@ const PostContentCp = ({ postContent, userId }) => {
     FindUerById(userId);
   }, []);
 
+  useEffect(() => {
+    const updateImgLoadingStatus = (img) => {
+      const isLoaded = img.compelte && img.naturalHeight !== 0;
+      setIsImgLoaded(isLoaded);
+    };
+
+    postImgRef.current.addEventListener("load", () =>
+      updateImgLoadingStatus(postImgRef.current)
+    );
+  }, []);
+
+  const postImgRef = useRef();
+
   if (fetchSuccess) {
     return (
       <PostImgWrapper click={click}>
-        <PostImg src={postContent.url} />
+        <PostImg src={postContent.url} ref={postImgRef} />
         {userInfo.id === postUserInfo.id ? (
           <Link to={`/dashboard/profile/`}>
             <ProfileWrapper>

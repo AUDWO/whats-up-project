@@ -21,6 +21,7 @@ import PostCommentCp from "./PostCommentCp";
 import ModalOpenAtom from "../../../store/ModalOpenAtom";
 import stateUpdateAtom from "../../../store/stateUpdateAtom";
 import userInfoAtom from "../../../store/userState/userAtom";
+import toggleValueAtom from "../../../store/ToggleValueAtom";
 
 const CommentModalCp = ({ postId }) => {
   const [commentCountUpdate, setCommentCountUpdate] = useRecoilState(
@@ -52,6 +53,8 @@ const CommentModalCp = ({ postId }) => {
     });
   };
 
+  const isImgLoaded = useRecoilState(toggleValueAtom("isImgLoaded"));
+
   useEffect(() => {
     const fetchPostsComment = async () => {
       try {
@@ -68,7 +71,7 @@ const CommentModalCp = ({ postId }) => {
     fetchPostsComment();
   }, [postId, postCommentUpdate, replyUpdate]);
 
-  if (comments) {
+  if (comments && isImgLoaded) {
     return (
       <>
         <CommentModalWrapper click={click}>

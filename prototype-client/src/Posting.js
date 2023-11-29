@@ -47,9 +47,3 @@ const PostCp = ({ post }) => {
 };
 
 export default PostCp;
-
-const Spinner = styled.div`
-  width: 100px;
-  height: 300px;
-  background-color: blue;
-`;

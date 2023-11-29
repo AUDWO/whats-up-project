@@ -2,6 +2,7 @@ import React, { Suspense, useEffect, useState } from "react";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
 import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 import styled from "styled-components";
 
@@ -22,7 +23,10 @@ const UserPosts = () => {
     }
   };
 
-  const postsInfo = useQuery(["postInfo"], fetchPosts, { suspense: true });
+  const postsInfo = useSuspenseQuery({
+    queryKey: ["postInfo"],
+    queryFn: fetchPosts,
+  });
 
   useEffect(() => {
     //fetchPosts();

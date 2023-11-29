@@ -32,6 +32,10 @@ const UserPosts = () => {
     //fetchPosts();
   }, [contentUpdate]);
 
+  console.log("postsInfo.data");
+  console.log(postsInfo.data);
+  console.log("postsInfo.data");
+
   if (postsInfo.data) {
     return (
       <>

@@ -12,9 +12,7 @@ import {
 import PostInfoCp from "./Components/Post/PostInfoCp";
 import CommentModalCp from "./Components/Post/PostComment/PostCommentsCp";
 
-const PostContentCp = React.lazy(() =>
-  import("./Components/Post/PostContentCp")
-);
+import PostContentCp from "./Components/Post/PostContentCp";
 
 const PostCp = ({ post }) => {
   const postContent = {
@@ -40,9 +38,7 @@ const PostCp = ({ post }) => {
   return (
     <PostDivWrapper>
       <PostWrapper>
-        <Suspense fallback={<Spinner />}>
-          <PostContentCp postContent={postContent} userId={post.UserId} />
-        </Suspense>
+        <PostContentCp postContent={postContent} userId={post.UserId} />
         <CommentModalCp postId={post.id} />
         <PostInfoCp postInfo={postInfo} />
       </PostWrapper>

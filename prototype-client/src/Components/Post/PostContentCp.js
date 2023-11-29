@@ -59,6 +59,10 @@ const PostContentCp = ({ postContent, userId }) => {
     };
 
     FindUerById(userId);
+    console.log("셋 타임 아웃 고 슛~");
+    setTimeout(() => {
+      setIsImgLoaded(true);
+    }, 2000);
   }, []);
 
   useEffect(() => {

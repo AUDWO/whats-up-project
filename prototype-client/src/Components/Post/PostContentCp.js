@@ -69,7 +69,7 @@ const PostContentCp = ({ postContent, userId }) => {
     const updateImgLoadingStatus = (img) => {
       const isLoaded = img.compelte && img.naturalHeight !== 0;
       console.log("실행 됐어유~");
-      setIsImgLoaded(isLoaded);
+      //setIsImgLoaded(isLoaded);
     };
     if (postImgRef.current) {
       postImgRef.current.addEventListener("load", () =>

@@ -53,6 +53,8 @@ const PostContentCp = ({ postContent, userId }) => {
   );
   const postImgRef = useRef(null);
 
+  const postRef = useRef(null);
+
   useEffect(() => {
     const FindUerById = async (id) => {
       const response = await axios.get(`/user/${id}`);
@@ -80,6 +82,9 @@ const PostContentCp = ({ postContent, userId }) => {
     console.log("postImgRef.current");
     console.log(postImgRef.current);
     console.log("postImgRef.current1");
+    console.log(postRef.current);
+    console.log("postImgRef.current2");
+
     if (postImgRef.current) {
       console.log("postImgRef 실행중");
       postImgRef.current.addEventListener("load", () =>
@@ -91,7 +96,7 @@ const PostContentCp = ({ postContent, userId }) => {
 
   if (fetchSuccess) {
     return (
-      <PostImgWrapper click={click}>
+      <PostImgWrapper click={click} ref={postRef}>
         <PostImg src={postContent.url} ref={postImgRef} />
         {userInfo.id === postUserInfo.id ? (
           <Link to={`/dashboard/profile/`}>

@@ -75,7 +75,7 @@ const CommentModalCp = ({ postId }) => {
   console.log(isImgLoaded);
   console.log("isImgLoaded in postCommentsCp");
 
-  if (comments && isImgLoaded) {
+  if (comments) {
     return (
       <>
         <CommentModalWrapper click={click}>

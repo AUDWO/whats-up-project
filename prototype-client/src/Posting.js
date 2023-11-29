@@ -34,9 +34,9 @@ const PostCp = ({ post }) => {
     likeCheck: post.likeCheck,
   };
 
-  const isImgLoaded = useRecoilValue(toggleValueAtom("isImgLoaded"));
+  const isImgLoaded = useRecoilValue(toggleValueAtom(`isImgLoaded${post.id}`));
 
-  console.log("isImgLoaded");
+  console.log(`isImgLoaded${post.id} 포스트 아이디`);
   console.log(isImgLoaded);
   console.log("isImgLoaded");
 

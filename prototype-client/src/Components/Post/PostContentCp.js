@@ -70,13 +70,16 @@ const PostContentCp = ({ postContent, userId }) => {
   }, []);
 
   const updateImgLoadingStatus = (img) => {
-    const isLoaded = img.complete && img.naturalHeight !== 0;
+    console.log("img");
+    console.log(img);
+    console.log("img");
+
     console.log("isLoaded");
-    console.log(isLoaded);
     console.log("isLoaded");
     console.log("실행 됐어유~");
-    setIsImgLoaded(isLoaded);
+    setIsImgLoaded(true);
   };
+  /*
   useEffect(() => {
     if (!postImgRef.current) {
       return;
@@ -98,7 +101,7 @@ const PostContentCp = ({ postContent, userId }) => {
       });
     }
     console.log("updateImgLoadingStatus 실행 후");
-  }, [postImgRef.current]);
+  }, [postImgRef.current]);*/
 
   if (fetchSuccess) {
     return (

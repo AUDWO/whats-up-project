@@ -69,18 +69,18 @@ const PostContentCp = ({ postContent, userId }) => {
     }, 2000);*/
   }, []);
 
+  const updateImgLoadingStatus = (img) => {
+    const isLoaded = img.complete && img.naturalHeight !== 0;
+    console.log("isLoaded");
+    console.log(isLoaded);
+    console.log("isLoaded");
+    console.log("실행 됐어유~");
+    setIsImgLoaded(isLoaded);
+  };
   useEffect(() => {
-    /*if (!postImgRef.current) {
+    if (!postImgRef.current) {
       return;
-    }*/
-    const updateImgLoadingStatus = (img) => {
-      const isLoaded = img.complete && img.naturalHeight !== 0;
-      console.log("isLoaded");
-      console.log(isLoaded);
-      console.log("isLoaded");
-      console.log("실행 됐어유~");
-      setIsImgLoaded(isLoaded);
-    };
+    }
     console.log("updateImgLoadingStatus 실행 전");
     console.log("postImgRef.current");
     console.log(postImgRef.current);
@@ -90,9 +90,12 @@ const PostContentCp = ({ postContent, userId }) => {
 
     if (postImgRef.current) {
       console.log("postImgRef 실행중");
-      postImgRef.current.addEventListener("load", () =>
-        updateImgLoadingStatus(postImgRef.current)
-      );
+
+      document.addEventListener("load", (e) => {
+        if (e.target === postImgRef.current) {
+          updateImgLoadingStatus(postImgRef.current);
+        }
+      });
     }
     console.log("updateImgLoadingStatus 실행 후");
   }, [postImgRef.current]);
@@ -100,7 +103,7 @@ const PostContentCp = ({ postContent, userId }) => {
   if (fetchSuccess) {
     return (
       <PostImgWrapper click={click} ref={postRef}>
-        <PostImg src={postContent.url} ref={postImgRef} />
+        <PostImg src={postContent.url} onLoad={updateImgLoadingStatus} />
         {userInfo.id === postUserInfo.id ? (
           <Link to={`/dashboard/profile/`}>
             <ProfileWrapper>

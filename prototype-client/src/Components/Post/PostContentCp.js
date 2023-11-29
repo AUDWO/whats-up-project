@@ -63,52 +63,21 @@ const PostContentCp = ({ postContent, userId }) => {
     };
 
     FindUerById(userId);
-    console.log("셋 타임 아웃 고 슛~");
-    /*setTimeout(() => {
-      setIsImgLoaded(true);
-    }, 2000);*/
+    return () => {
+      setIsImgLoaded(false);
+    };
   }, []);
 
-  const updateImgLoadingStatus = (img) => {
-    console.log("img");
-    console.log(img);
-    console.log("img");
-
-    console.log("isLoaded");
-    console.log("isLoaded");
-    console.log("실행 됐어유~");
+  const updateImgLoadingStatus = () => {
     setIsImgLoaded(true);
   };
-  /*
-  useEffect(() => {
-    if (!postImgRef.current) {
-      return;
-    }
-    console.log("updateImgLoadingStatus 실행 전");
-    console.log("postImgRef.current");
-    console.log(postImgRef.current);
-    console.log("postImgRef.current1");
-    console.log(postRef.current);
-    console.log("postImgRef.current2");
-
-    if (postImgRef.current) {
-      console.log("postImgRef 실행중");
-
-      document.addEventListener("load", (e) => {
-        if (e.target === postImgRef.current) {
-          updateImgLoadingStatus(postImgRef.current);
-        }
-      });
-    }
-    console.log("updateImgLoadingStatus 실행 후");
-  }, [postImgRef.current]);*/
 
   if (fetchSuccess) {
     return (
       <PostImgWrapper click={click} ref={postRef}>
         <PostImg
           src={postContent.url}
-          onLoad={() => updateImgLoadingStatus(postImgRef)}
+          onLoad={() => updateImgLoadingStatus()}
           ref={postImgRef}
         />
         {userInfo.id === postUserInfo.id ? (

@@ -75,6 +75,9 @@ const PostContentCp = ({ postContent, userId }) => {
     }*/
     const updateImgLoadingStatus = (img) => {
       const isLoaded = img.complete && img.naturalHeight !== 0;
+      console.log("isLoaded");
+      console.log(isLoaded);
+      console.log("isLoaded");
       console.log("실행 됐어유~");
       setIsImgLoaded(isLoaded);
     };
@@ -92,7 +95,7 @@ const PostContentCp = ({ postContent, userId }) => {
       );
     }
     console.log("updateImgLoadingStatus 실행 후");
-  }, [postImgRef.current]);
+  }, [setIsImgLoaded]);
 
   if (fetchSuccess) {
     return (

@@ -64,6 +64,7 @@ const PostContentCp = ({ postContent, userId }) => {
   useEffect(() => {
     const updateImgLoadingStatus = (img) => {
       const isLoaded = img.compelte && img.naturalHeight !== 0;
+      console.log("실행 됐어유~");
       setIsImgLoaded(isLoaded);
     };
     if (postImgRef.current) {

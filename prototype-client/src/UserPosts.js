@@ -1,10 +1,7 @@
-import React, { Suspense, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
 import { useQuery } from "@tanstack/react-query";
-import { useSuspenseQuery } from "@tanstack/react-query";
-
-import styled from "styled-components";
 
 //Component
 import PostCp from "./Posting";
@@ -13,7 +10,7 @@ import PostCp from "./Posting";
 import stateUpdateAtom from "./store/stateUpdateAtom";
 
 const UserPosts = () => {
-  const contentUpdate = useRecoilValue(stateUpdateAtom("contentUpdate"));
+  //const contentUpdate = useRecoilValue(stateUpdateAtom("contentUpdate"));
 
   const fetchPosts = async () => {
     try {
@@ -23,28 +20,18 @@ const UserPosts = () => {
     }
   };
 
-  const postsInfo = useSuspenseQuery({
+  const postsInfo = useQuery({
     queryKey: ["postInfo"],
     queryFn: fetchPosts,
   });
 
-  useEffect(() => {
-    //fetchPosts();
-  }, [contentUpdate]);
-
-  console.log("postsInfo.data");
-  console.log(postsInfo.data);
-  console.log("postsInfo.data");
+  //useEffect(() => {}, [contentUpdate]);
 
   if (postsInfo.data) {
     return (
       <>
         {postsInfo.data.data.map((post) => {
-          return (
-            <Suspense fallback={<Loading />}>
-              <PostCp post={post} key={post.id} />;
-            </Suspense>
-          );
+          return <PostCp post={post} key={post.id} />;
         })}
       </>
     );
@@ -52,9 +39,3 @@ const UserPosts = () => {
 };
 
 export default UserPosts;
-
-const Loading = styled.div`
-  width: 100px;
-  height: 400px;
-  background-color: ;
-`;

@@ -10,9 +10,11 @@ import {
 
 //Components
 import PostInfoCp from "./Components/Post/PostInfoCp";
-import CommentModalCp from "./Components/Post/PostComment/PostCommentsCp";
-
 import PostContentCp from "./Components/Post/PostContentCp";
+
+const CommentModalCp = React.lazy(() =>
+  import("./Components/Post/PostComment/PostCommentsCp")
+);
 
 const PostCp = ({ post }) => {
   const postContent = {

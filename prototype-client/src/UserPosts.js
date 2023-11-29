@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
+import { useQuery } from "@tanstack/react-query";
 
 //Component
 import PostCp from "./Posting";
@@ -22,14 +23,19 @@ const UserPosts = () => {
     }
   };
 
+  const postsInfo = useQuery({
+    queryKey: "postInfo",
+    queryFn: fetchPosts,
+  });
+
   useEffect(() => {
-    fetchPosts();
+    //fetchPosts();
   }, [contentUpdate]);
 
-  if (posts) {
+  if (postsInfo.data) {
     return (
       <>
-        {posts.map((post) => {
+        {postsInfo.data.data.map((post) => {
           return <PostCp post={post} key={post.id} />;
         })}
       </>

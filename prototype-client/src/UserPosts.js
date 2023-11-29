@@ -24,7 +24,7 @@ const UserPosts = () => {
   };
 
   const postsInfo = useQuery({
-    queryKey: "postInfo",
+    queryKey: ["postInfo"],
     queryFn: fetchPosts,
   });
 

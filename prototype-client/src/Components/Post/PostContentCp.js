@@ -103,7 +103,11 @@ const PostContentCp = ({ postContent, userId }) => {
   if (fetchSuccess) {
     return (
       <PostImgWrapper click={click} ref={postRef}>
-        <PostImg src={postContent.url} onLoad={updateImgLoadingStatus} />
+        <PostImg
+          src={postContent.url}
+          onLoad={() => updateImgLoadingStatus(postImgRef)}
+          ref={postImgRef}
+        />
         {userInfo.id === postUserInfo.id ? (
           <Link to={`/dashboard/profile/`}>
             <ProfileWrapper>

@@ -1,4 +1,6 @@
-import React from "react";
+import React, { Suspense } from "react";
+
+import styled from "styled-components";
 
 //Styled-Components
 import {
@@ -35,7 +37,9 @@ const PostCp = ({ post }) => {
   return (
     <PostDivWrapper>
       <PostWrapper>
-        <PostContentCp postContent={postContent} userId={post.UserId} />
+        <Suspense fallback={<Spinner />}>
+          <PostContentCp postContent={postContent} userId={post.UserId} />
+        </Suspense>
         <CommentModalCp postId={post.id} />
         <PostInfoCp postInfo={postInfo} />
       </PostWrapper>
@@ -44,3 +48,9 @@ const PostCp = ({ post }) => {
 };
 
 export default PostCp;
+
+const Spinner = styled.div`
+  width: 100px;
+  height: 300px;
+  background-color: blue;
+`;

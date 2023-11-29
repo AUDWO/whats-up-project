@@ -66,10 +66,11 @@ const PostContentCp = ({ postContent, userId }) => {
       const isLoaded = img.compelte && img.naturalHeight !== 0;
       setIsImgLoaded(isLoaded);
     };
-
-    postImgRef.current.addEventListener("load", () =>
-      updateImgLoadingStatus(postImgRef.current)
-    );
+    if (postImgRef.current) {
+      postImgRef.current.addEventListener("load", () =>
+        updateImgLoadingStatus(postImgRef.current)
+      );
+    }
   }, []);
 
   if (fetchSuccess) {

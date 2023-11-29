@@ -60,16 +60,16 @@ const PostContentCp = ({ postContent, userId }) => {
 
     FindUerById(userId);
     console.log("셋 타임 아웃 고 슛~");
-    setTimeout(() => {
+    /*setTimeout(() => {
       setIsImgLoaded(true);
-    }, 2000);
+    }, 2000);*/
   }, []);
 
   useEffect(() => {
     const updateImgLoadingStatus = (img) => {
       const isLoaded = img.compelte && img.naturalHeight !== 0;
       console.log("실행 됐어유~");
-      //setIsImgLoaded(isLoaded);
+      setIsImgLoaded(isLoaded);
     };
     if (postImgRef.current) {
       postImgRef.current.addEventListener("load", () =>

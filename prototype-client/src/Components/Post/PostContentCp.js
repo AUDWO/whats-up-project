@@ -66,6 +66,9 @@ const PostContentCp = ({ postContent, userId }) => {
   }, []);
 
   useEffect(() => {
+    if (!postImgRef.current) {
+      return;
+    }
     const updateImgLoadingStatus = (img) => {
       const isLoaded = img.complete && img.naturalHeight !== 0;
       console.log("실행 됐어유~");
@@ -82,7 +85,7 @@ const PostContentCp = ({ postContent, userId }) => {
       );
     }
     console.log("updateImgLoadingStatus 실행 후");
-  }, []);
+  }, [postImgRef]);
 
   if (fetchSuccess) {
     return (

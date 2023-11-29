@@ -15,9 +15,7 @@ const UserPosts = () => {
   const [posts, setPosts] = useState([]);
   const fetchPosts = async () => {
     try {
-      const response = await axios.get("/page/render-posts/");
-
-      setPosts((prev) => [...response.data]);
+      return await axios.get("/page/render-posts/");
     } catch (error) {
       console.error(error);
     }

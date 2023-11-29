@@ -49,7 +49,7 @@ const PostContentCp = ({ postContent, userId }) => {
 
   //댓글창이 먼저 나오지 않도록
   const setIsImgLoaded = useSetRecoilState(toggleValueAtom("isImgLoaded"));
-  const postImgRef = useRef();
+  const postImgRef = useRef(null);
 
   useEffect(() => {
     const FindUerById = async (id) => {

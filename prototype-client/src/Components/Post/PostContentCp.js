@@ -95,7 +95,7 @@ const PostContentCp = ({ postContent, userId }) => {
       );
     }
     console.log("updateImgLoadingStatus 실행 후");
-  }, [setIsImgLoaded]);
+  }, [postImgRef.current]);
 
   if (fetchSuccess) {
     return (

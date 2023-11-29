@@ -72,7 +72,7 @@ const PostContentCp = ({ postContent, userId }) => {
       setIsImgLoaded(isLoaded);
     };
     console.log("updateImgLoadingStatus 실행 전");
-    if (postImgRef.current) {
+    if (postImgRef.current && fetchSuccess) {
       postImgRef.current.addEventListener("load", () =>
         updateImgLoadingStatus(postImgRef.current)
       );

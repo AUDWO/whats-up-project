@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, isValidElement } from "react";
 
 import styled from "styled-components";
 
@@ -13,6 +13,8 @@ import PostInfoCp from "./Components/Post/PostInfoCp";
 import PostContentCp from "./Components/Post/PostContentCp";
 
 import CommentModalCp from "./Components/Post/PostComment/PostCommentsCp";
+import { useRecoilValue } from "recoil";
+import toggleValueAtom from "./store/ToggleValueAtom";
 
 const PostCp = ({ post }) => {
   const postContent = {
@@ -35,11 +37,17 @@ const PostCp = ({ post }) => {
   console.log(post.img);
   console.log("post.img");
 
+  const isImgLoaded = useRecoilValue(toggleValueAtom("isImgLoaded"));
+
+  console.log("isImgLoaded");
+  console.log(isImgLoaded);
+  console.log("isImgLoaded");
+
   return (
     <PostDivWrapper>
       <PostWrapper>
         <PostContentCp postContent={postContent} userId={post.UserId} />
-        <CommentModalCp postId={post.id} />
+        {isImgLoaded && <CommentModalCp postId={post.id} />}
         <PostInfoCp postInfo={postInfo} />
       </PostWrapper>
     </PostDivWrapper>

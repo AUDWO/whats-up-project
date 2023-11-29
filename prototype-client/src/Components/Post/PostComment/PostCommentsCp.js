@@ -71,6 +71,10 @@ const CommentModalCp = ({ postId }) => {
     fetchPostsComment();
   }, [postId, postCommentUpdate, replyUpdate]);
 
+  console.log("isImgLoaded in postCommentsCp");
+  console.log(isImgLoaded);
+  console.log("isImgLoaded in postCommentsCp");
+
   if (comments && isImgLoaded) {
     return (
       <>

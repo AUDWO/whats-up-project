@@ -33,9 +33,6 @@ const PostCp = ({ post }) => {
     commentCount: post.commentCount,
     likeCheck: post.likeCheck,
   };
-  console.log("post.img");
-  console.log(post.img);
-  console.log("post.img");
 
   const isImgLoaded = useRecoilValue(toggleValueAtom("isImgLoaded"));
 

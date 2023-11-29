@@ -14,7 +14,6 @@ import stateUpdateAtom from "./store/stateUpdateAtom";
 const UserPosts = () => {
   const contentUpdate = useRecoilValue(stateUpdateAtom("contentUpdate"));
 
-  const [posts, setPosts] = useState([]);
   const fetchPosts = async () => {
     try {
       return await axios.get("/page/render-posts/");
@@ -23,10 +22,7 @@ const UserPosts = () => {
     }
   };
 
-  const postsInfo = useQuery({
-    queryKey: ["postInfo"],
-    queryFn: fetchPosts,
-  });
+  const postsInfo = useQuery(["postInfo"], fetchPosts, { suspense: true });
 
   useEffect(() => {
     //fetchPosts();

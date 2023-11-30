@@ -58,7 +58,6 @@ const PostInfoCp = ({ postInfo }) => {
 
   const handleSubmitLike = async () => {
     try {
-      console.log("handleSubmitLike");
       const response = await axios.post(`/post/like/${postInfo.id}`);
     } catch (error) {
       console.error(error);
@@ -89,40 +88,20 @@ const PostInfoCp = ({ postInfo }) => {
       }
     };
     fetchPostInfo();
-
-    return () => {
-      console.log(likeCheck);
-      console.log("likeCheck in useEffect!!!");
-      if (likeCheck) {
-        console.log("clean-up check");
-        handleSubmitLike();
-      }
-      if (!likeCheck) {
-        console.log("clean-up uncheck");
-        handleSubmitUnLike();
-      }
-    };
   }, [commentCountUpdate]);
 
-  useEffect(() => {
-    if (fetch) {
-      console.log("다른 useEffect");
-      const handleLikeCheck = () => {
-        console.log("postCountInfo 포스트 포스트 포스트 ");
-        console.log(postCountInfo);
-        console.log("postCountInfo 포스트 포스트 포스트 ");
-        let check = false;
-        postCountInfo.postLikeCount.forEach((info) => {
-          if (info.id === userInfo.id) {
-            check = true;
-          }
-        });
-        return check;
-      };
-      const check = handleLikeCheck();
-      setLikeCheck(check);
-    }
-  }, []);
+  const handleLikeCheck = () => {
+    console.log("postCountInfo 포스트 포스트 포스트 ");
+    console.log(postCountInfo);
+    console.log("postCountInfo 포스트 포스트 포스트 ");
+    let check = false;
+    postCountInfo.postLikeCount.forEach((info) => {
+      if (info.id === userInfo.id) {
+        check = true;
+      }
+    });
+    return check;
+  };
 
   const handleUnLike = () => {
     setLikeCheck(false);
@@ -133,6 +112,7 @@ const PostInfoCp = ({ postInfo }) => {
         length: prev.postLikeCount.length - 1,
       },
     }));
+    handleSubmitUnLike();
   };
 
   const handleLike = () => {
@@ -144,11 +124,8 @@ const PostInfoCp = ({ postInfo }) => {
         length: prev.postLikeCount.length + 1,
       },
     }));
+    handleSubmitLike();
   };
-
-  console.log("likeCheck");
-  console.log(likeCheck);
-  console.log("likeCheck");
 
   if (Object.keys(postCountInfo).length >= 1) {
     return (
@@ -167,7 +144,7 @@ const PostInfoCp = ({ postInfo }) => {
             <CountNumber>{postCountInfo.commentCount.length}</CountNumber>
           )}
         </IconWrapper>
-        {likeCheck ? (
+        {handleLikeCheck() ? (
           <IconWrapper
             onClick={() => {
               handleUnLike();

@@ -80,9 +80,15 @@ const PostInfoCp = ({ postInfo }) => {
         const response = await axios.get(
           `page/render-only-post-info/${postInfo.id}`
         );
-
+        const check = response.data.postLikeCount.forEach((info) => {
+          if (info.id === userInfo.id) {
+            return true;
+          } else {
+            return false;
+          }
+        });
+        setLikeCheck(check);
         setPostCountInfo({ ...response.data });
-        setFetch(true);
       } catch (error) {
         console.error(error);
       }
@@ -144,7 +150,7 @@ const PostInfoCp = ({ postInfo }) => {
             <CountNumber>{postCountInfo.commentCount.length}</CountNumber>
           )}
         </IconWrapper>
-        {handleLikeCheck() ? (
+        {likeCheck ? (
           <IconWrapper
             onClick={() => {
               handleUnLike();

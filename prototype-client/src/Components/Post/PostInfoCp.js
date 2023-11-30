@@ -63,7 +63,7 @@ const PostInfoCp = ({ postInfo }) => {
     return check;
   };
 
-  const [likeCheck, setLikeCheck] = useState(handleLikeCheck());
+  const [likeCheck, setLikeCheck] = useState("");
 
   useEffect(() => {
     const fetchPostInfo = async () => {
@@ -78,6 +78,7 @@ const PostInfoCp = ({ postInfo }) => {
       }
     };
     fetchPostInfo();
+    setLikeCheck(handleLikeCheck());
 
     return () => {
       if (likeCheck) {

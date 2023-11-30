@@ -109,7 +109,10 @@ const PostInfoCp = ({ postInfo }) => {
   }, [commentCountUpdate]);
 
   useEffect(() => {
-    if (Object.keys(postCountInfo).length > 0) setLikeCheck(handleLikeCheck());
+    if (Object.keys(postCountInfo).length > 0) {
+      const check = handleLikeCheck();
+      setLikeCheck(check);
+    }
   }, [postCountInfo]);
 
   const handleUnLike = () => {

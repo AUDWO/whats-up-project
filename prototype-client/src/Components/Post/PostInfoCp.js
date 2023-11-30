@@ -52,8 +52,6 @@ const PostInfoCp = ({ postInfo }) => {
     setClick(!click);
   };
 
-  const [likeCheck, setLikeCheck] = useState(handleClick());
-
   //게시물에 좋아요를 눌렀는지 알려주는 함수
   const handleLikeCheck = () => {
     let check = false;
@@ -64,6 +62,8 @@ const PostInfoCp = ({ postInfo }) => {
     });
     return check;
   };
+
+  const [likeCheck, setLikeCheck] = useState(handleLikeCheck());
 
   useEffect(() => {
     const fetchPostInfo = async () => {

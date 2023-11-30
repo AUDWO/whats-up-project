@@ -36,10 +36,6 @@ const PostCp = ({ post }) => {
 
   const isImgLoaded = useRecoilValue(toggleValueAtom(`isImgLoaded${post.id}`));
 
-  console.log(`isImgLoaded${post.id} 포스트 아이디`);
-  console.log(isImgLoaded);
-  console.log("isImgLoaded");
-
   return (
     <PostDivWrapper>
       <PostWrapper>

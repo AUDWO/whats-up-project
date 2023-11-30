@@ -83,6 +83,7 @@ const PostInfoCp = ({ postInfo }) => {
   const [fetch, setFetch] = useState(false);
 
   useEffect(() => {
+    console.log("useEffecttttttttt");
     const fetchPostInfo = async () => {
       try {
         const response = await axios.get(
@@ -96,7 +97,7 @@ const PostInfoCp = ({ postInfo }) => {
           }
         });
         console.log("check");
-        console.log(check);
+        console.log(likeCheck);
         console.log("check");
         setLikeCheck(check);
         setPostCountInfo({ ...response.data });

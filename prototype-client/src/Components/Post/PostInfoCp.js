@@ -54,7 +54,7 @@ const PostInfoCp = ({ postInfo }) => {
 
   //게시물에 좋아요를 눌렀는지 알려주는 함수
 
-  const [likeCheck, setLikeCheck] = useState("");
+  const [likeCheck, setLikeCheck] = useState(false);
 
   const handleSubmitLike = async () => {
     try {
@@ -90,18 +90,19 @@ const PostInfoCp = ({ postInfo }) => {
           `page/render-only-post-info/${postInfo.id}`
         );
         console.log(response.data);
-
-        const check = response.data.postLikeCount.forEach((info) => {
-          if (info.id === userInfo.id) {
-            return true;
-          } else {
-            return false;
-          }
-        });
-        console.log("check");
-        console.log(likeCheck);
-        console.log("check");
-        setLikeCheck(check);
+        if (response.data.postLikeCount.length >= 1) {
+          const check = response.data.postLikeCount.forEach((info) => {
+            if (info.id === userInfo.id) {
+              return true;
+            } else {
+              return false;
+            }
+          });
+          console.log("check");
+          console.log(check);
+          console.log("check");
+          setLikeCheck(check);
+        }
         setPostCountInfo({ ...response.data });
       } catch (error) {
         console.error(error);

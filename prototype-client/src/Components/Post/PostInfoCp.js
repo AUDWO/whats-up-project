@@ -91,7 +91,7 @@ const PostInfoCp = ({ postInfo }) => {
         handleSubmitUnLike();
       }
     };
-  }, [commentCountUpdate, postCountInfo]);
+  }, [commentCountUpdate]);
 
   //[likeCountUpdate, commentCountUpdate]
   //postInfo update 함수
@@ -113,6 +113,7 @@ const PostInfoCp = ({ postInfo }) => {
   };
 
   const handleUnLike = () => {
+    setLikeCheck(false);
     setPostCountInfo((prev) => ({
       ...prev,
       postLikeCount: {
@@ -120,10 +121,10 @@ const PostInfoCp = ({ postInfo }) => {
         length: prev.postLikeCount.length - 1,
       },
     }));
-    setLikeCheck(false);
   };
 
   const handleLike = () => {
+    setLikeCheck(true);
     setPostCountInfo((prev) => ({
       ...prev,
       postLikeCount: {
@@ -131,7 +132,6 @@ const PostInfoCp = ({ postInfo }) => {
         length: prev.postLikeCount.length + 1,
       },
     }));
-    setLikeCheck(true);
   };
 
   if (

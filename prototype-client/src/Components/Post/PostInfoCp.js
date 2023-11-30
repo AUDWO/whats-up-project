@@ -89,6 +89,8 @@ const PostInfoCp = ({ postInfo }) => {
         const response = await axios.get(
           `page/render-only-post-info/${postInfo.id}`
         );
+        console.log(response.data);
+
         const check = response.data.postLikeCount.forEach((info) => {
           if (info.id === userInfo.id) {
             return true;

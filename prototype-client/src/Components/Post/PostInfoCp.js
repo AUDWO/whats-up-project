@@ -91,17 +91,11 @@ const PostInfoCp = ({ postInfo }) => {
         );
         console.log(response.data);
         if (response.data.postLikeCount.length >= 1) {
-          const check = response.data.postLikeCount.forEach((info) => {
+          response.data.postLikeCount.forEach((info) => {
             if (info.id === userInfo.id) {
-              return true;
-            } else {
-              return false;
+              setLikeCheck(true);
             }
           });
-          console.log("check");
-          console.log(check);
-          console.log("check");
-          setLikeCheck(check);
         }
         setPostCountInfo({ ...response.data });
       } catch (error) {

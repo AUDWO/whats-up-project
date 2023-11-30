@@ -73,6 +73,8 @@ const PostInfoCp = ({ postInfo }) => {
     }
   };
 
+  const [fetch, setFetch] = useState(false);
+
   useEffect(() => {
     const fetchPostInfo = async () => {
       try {
@@ -81,6 +83,7 @@ const PostInfoCp = ({ postInfo }) => {
         );
 
         setPostCountInfo({ ...response.data });
+        setFetch(true);
       } catch (error) {
         console.error(error);
       }
@@ -100,7 +103,7 @@ const PostInfoCp = ({ postInfo }) => {
   }, [commentCountUpdate]);
 
   useEffect(() => {
-    if (Object.keys(postCountInfo.postLikeCount) >= 1) {
+    if (fetch) {
       console.log("다른 useEffect");
       const handleLikeCheck = () => {
         console.log("postCountInfo 포스트 포스트 포스트 ");

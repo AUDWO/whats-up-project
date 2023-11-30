@@ -100,7 +100,8 @@ const PostInfoCp = ({ postInfo }) => {
   }, [commentCountUpdate]);
 
   useEffect(() => {
-    if (Object.keys(postCountInfo).length > 0) {
+    if (Object.keys(postCountInfo).length >= 1) {
+      console.log("다른 useEffect");
       const handleLikeCheck = () => {
         let check = false;
         postCountInfo.postLikeCount.forEach((info) => {

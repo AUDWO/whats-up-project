@@ -65,6 +65,22 @@ const PostInfoCp = ({ postInfo }) => {
 
   const [likeCheck, setLikeCheck] = useState("");
 
+  const handleSubmitLike = async () => {
+    try {
+      const response = await axios.post(`/post/like/${postInfo.id}`);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleSubmitUnLike = async () => {
+    try {
+      const response = await axios.post(`/post/unlike/${postInfo.id}`);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     const fetchPostInfo = async () => {
       try {
@@ -93,25 +109,6 @@ const PostInfoCp = ({ postInfo }) => {
     };
   }, [commentCountUpdate]);
 
-  //[likeCountUpdate, commentCountUpdate]
-  //postInfo update 함수
-
-  const handleSubmitLike = async () => {
-    try {
-      const response = await axios.post(`/post/like/${postInfo.id}`);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleSubmitUnLike = async () => {
-    try {
-      const response = await axios.post(`/post/unlike/${postInfo.id}`);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const handleUnLike = () => {
     setLikeCheck(false);
     setPostCountInfo((prev) => ({
@@ -133,6 +130,10 @@ const PostInfoCp = ({ postInfo }) => {
       },
     }));
   };
+
+  console.log("likeCheck");
+  console.log(likeCheck);
+  console.log("likeCheck");
 
   if (Object.keys(postCountInfo).length >= 1) {
     return (

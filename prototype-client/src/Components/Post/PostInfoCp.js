@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import axios from "axios";
 
+//custom hook
+import useOnlyByDepsEffect from "../../customHooks/useOnlyByDepsEffect";
+
 //Styled-Component
 import {
   PostInfoWrapper,
@@ -23,15 +26,23 @@ import stateUpdateAtom from "../../store/stateUpdateAtom";
 import userInfoAtom from "../../store/userState/userAtom";
 
 const PostInfoCp = ({ postInfo }) => {
+  const userInfo = useRecoilValue(userInfoAtom);
   const [postCountInfo, setPostCountInfo] = useState({});
 
+  //댓글 업데이트 알림 atom
   const commentCountUpdate = useRecoilValue(stateUpdateAtom("comment"));
-  const userInfo = useRecoilValue(userInfoAtom);
+  //게시물 좋아요 업데이트 알림 atom
+  const [likeCountUpdate, setLikeCountUpdate] = useRecoilState(
+    stateUpdateAtom(`postInfo${postInfo.id}`)
+  );
+
   //게시물 댓글 기능 해제 여부
-  const [postComment, setPostComment] = useState(postInfo.commentControl);
+  const [postCommentControl, setPostCommentControl] = useState(
+    postInfo.commentControl
+  );
   //게시물 좋아요 기능 해제 여부
-  const [postInfoUpdate, setPostInfoUpdate] = useRecoilState(
-    stateUpdateAtom(`postInfo${postInfo.ID}`)
+  const [postLikeControl, setPostLikeControl] = useState(
+    postInfo.likeCountControl
   );
   const [click, setClick] = useRecoilState(
     ModalOpenAtom(`commentModalOpen${postInfo.id}`)
@@ -41,6 +52,9 @@ const PostInfoCp = ({ postInfo }) => {
     setClick(!click);
   };
 
+  const [likeCheck, setLikeCheck] = useState(handleClick());
+
+  //게시물에 좋아요를 눌렀는지 알려주는 함수
   const handleLikeCheck = () => {
     let check = false;
     postCountInfo.postLikeCount.forEach((info) => {
@@ -64,31 +78,63 @@ const PostInfoCp = ({ postInfo }) => {
       }
     };
     fetchPostInfo();
-  }, [postInfoUpdate, commentCountUpdate]);
 
-  const handleLikePost = async () => {
+    return () => {
+      if (likeCheck) {
+        handleSubmitLike();
+      }
+      if (!likeCheck) {
+        handleSubmitUnLike();
+      }
+    };
+  }, [commentCountUpdate]);
+
+  //[likeCountUpdate, commentCountUpdate]
+  //postInfo update 함수
+
+  const handleSubmitLike = async () => {
     try {
       const response = await axios.post(`/post/like/${postInfo.id}`);
-      setPostInfoUpdate(!postInfoUpdate);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handleUnLikePost = async () => {
+  const handleSubmitUnLike = async () => {
     try {
       const response = await axios.post(`/post/unlike/${postInfo.id}`);
-      setPostInfoUpdate(!postInfoUpdate);
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handleUnLike = () => {
+    setPostCountInfo((prev) => ({
+      ...prev,
+      commentCount: {
+        ...prev.commentCount,
+        length: prev.commentCount.length - 1,
+      },
+    }));
+    setLikeCheck(false);
+  };
+
+  const handleLike = () => {
+    setPostCountInfo((prev) => ({
+      ...prev,
+      commentCount: {
+        ...prev.commentCount,
+        length: prev.commentCount.length + 1,
+      },
+    }));
+    setLikeCheck(true);
   };
 
   if (Object.keys(postCountInfo).length >= 1) {
     return (
       <PostInfoWrapper click={click}>
         <IconWrapper>
-          {postComment ? (
+          {postCommentControl ? (
             <CommentIcon
               onClick={() => {
                 handleClick();
@@ -97,15 +143,15 @@ const PostInfoCp = ({ postInfo }) => {
           ) : (
             <NotCommentIcon />
           )}
-          {postComment && (
+          {postCommentControl && (
             <CountNumber>{postCountInfo.commentCount.length}</CountNumber>
           )}
         </IconWrapper>
-        {handleLikeCheck() ? (
+        {likeCheck ? (
           <IconWrapper>
             <LikeFillIcon
               onClick={() => {
-                handleUnLikePost();
+                handleUnLike();
               }}
             />
             <CountNumber>{postCountInfo.postLikeCount.length}</CountNumber>
@@ -113,10 +159,10 @@ const PostInfoCp = ({ postInfo }) => {
         ) : (
           <IconWrapper
             onClick={() => {
-              handleLikePost();
+              handleLike();
             }}
           >
-            <LikeIcon onClick={() => {}} />
+            <LikeIcon />
             <CountNumber>{postCountInfo.postLikeCount.length}</CountNumber>
           </IconWrapper>
         )}

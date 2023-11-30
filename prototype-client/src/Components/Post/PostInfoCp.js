@@ -91,6 +91,8 @@ const PostInfoCp = ({ postInfo }) => {
     fetchPostInfo();
 
     return () => {
+      console.log(likeCheck);
+      console.log("likeCheck in useEffect!!!");
       if (likeCheck) {
         console.log("clean-up check");
         handleSubmitLike();

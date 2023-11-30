@@ -73,12 +73,12 @@ const PostInfoCp = ({ postInfo }) => {
         );
 
         setPostCountInfo({ ...response.data });
+        setLikeCheck(handleLikeCheck());
       } catch (error) {
         console.error(error);
       }
     };
     fetchPostInfo();
-    setLikeCheck(handleLikeCheck());
 
     return () => {
       if (likeCheck) {

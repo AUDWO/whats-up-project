@@ -96,10 +96,6 @@ const PostInfoCp = ({ postInfo }) => {
     };
     fetchPostInfo();
 
-    if (Object.keys(postCountInfo).length > 1) {
-      setLikeCheck(handleLikeCheck());
-    }
-
     return () => {
       if (likeCheck) {
         console.log("clean-up check");
@@ -111,6 +107,10 @@ const PostInfoCp = ({ postInfo }) => {
       }
     };
   }, [commentCountUpdate]);
+
+  useEffect(() => {
+    setLikeCheck(handleLikeCheck());
+  }, [postCountInfo]);
 
   const handleUnLike = () => {
     setLikeCheck(false);

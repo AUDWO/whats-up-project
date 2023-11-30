@@ -134,10 +134,7 @@ const PostInfoCp = ({ postInfo }) => {
     }));
   };
 
-  if (
-    Object.keys(postCountInfo).length >= 1 &&
-    (likeCheck === true || likeCheck === false)
-  ) {
+  if (Object.keys(postCountInfo).length >= 1) {
     return (
       <PostInfoWrapper click={click}>
         <IconWrapper>

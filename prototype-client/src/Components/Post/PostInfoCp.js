@@ -58,7 +58,9 @@ const PostInfoCp = ({ postInfo }) => {
 
   const handleSubmitLike = async () => {
     try {
+      console.log("handleSubmitLike");
       const response = await axios.post(`/post/like/${postInfo.id}`);
+      return;
     } catch (error) {
       console.error(error);
     }
@@ -66,7 +68,9 @@ const PostInfoCp = ({ postInfo }) => {
 
   const handleSubmitUnLike = async () => {
     try {
+      console.log("handleSubmitUnLike");
       const response = await axios.post(`/post/unlike/${postInfo.id}`);
+      return;
     } catch (error) {
       console.error(error);
     }
@@ -110,6 +114,7 @@ const PostInfoCp = ({ postInfo }) => {
   };
 
   const handleUnLike = () => {
+    handleSubmitUnLike();
     setLikeCheck(false);
     setPostCountInfo((prev) => ({
       ...prev,
@@ -118,10 +123,10 @@ const PostInfoCp = ({ postInfo }) => {
         length: prev.postLikeCount.length - 1,
       },
     }));
-    handleSubmitUnLike();
   };
 
   const handleLike = () => {
+    handleSubmitLike();
     setLikeCheck(true);
     setPostCountInfo((prev) => ({
       ...prev,
@@ -130,7 +135,6 @@ const PostInfoCp = ({ postInfo }) => {
         length: prev.postLikeCount.length + 1,
       },
     }));
-    handleSubmitLike();
   };
 
   if (Object.keys(postCountInfo).length >= 1) {

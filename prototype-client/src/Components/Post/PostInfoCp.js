@@ -60,7 +60,9 @@ const PostInfoCp = ({ postInfo }) => {
     try {
       console.log("handleSubmitLike");
       const response = await axios.post(`/post/like/${postInfo.id}`);
-      return;
+      console.log("response");
+      console.log(response);
+      console.log("response");
     } catch (error) {
       console.error(error);
     }
@@ -70,7 +72,9 @@ const PostInfoCp = ({ postInfo }) => {
     try {
       console.log("handleSubmitUnLike");
       const response = await axios.post(`/post/unlike/${postInfo.id}`);
-      return;
+      console.log("response");
+      console.log(response);
+      console.log("response");
     } catch (error) {
       console.error(error);
     }
@@ -99,19 +103,6 @@ const PostInfoCp = ({ postInfo }) => {
     };
     fetchPostInfo();
   }, [commentCountUpdate]);
-
-  const handleLikeCheck = () => {
-    console.log("postCountInfo 포스트 포스트 포스트 ");
-    console.log(postCountInfo);
-    console.log("postCountInfo 포스트 포스트 포스트 ");
-    let check = false;
-    postCountInfo.postLikeCount.forEach((info) => {
-      if (info.id === userInfo.id) {
-        check = true;
-      }
-    });
-    return check;
-  };
 
   const handleUnLike = () => {
     handleSubmitUnLike();

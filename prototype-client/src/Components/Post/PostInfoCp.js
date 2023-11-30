@@ -120,7 +120,7 @@ const PostInfoCp = ({ postInfo }) => {
       const check = handleLikeCheck();
       setLikeCheck(check);
     }
-  }, [postCountInfo]);
+  }, []);
 
   const handleUnLike = () => {
     setLikeCheck(false);

@@ -30,10 +30,8 @@ const PostInfoCp = ({ postInfo }) => {
   const [postCountInfo, setPostCountInfo] = useState({});
 
   //댓글 업데이트 알림 atom
-  const commentCountUpdate = useRecoilValue(stateUpdateAtom("comment"));
-  //게시물 좋아요 업데이트 알림 atom
-  const [likeCountUpdate, setLikeCountUpdate] = useRecoilState(
-    stateUpdateAtom(`postInfo${postInfo.id}`)
+  const commentCountUpdate = useRecoilValue(
+    stateUpdateAtom(`comment${postInfo.id}`)
   );
 
   //게시물 댓글 기능 해제 여부
@@ -48,21 +46,18 @@ const PostInfoCp = ({ postInfo }) => {
     ModalOpenAtom(`commentModalOpen${postInfo.id}`)
   );
 
+  //게시물 좋아요 여부
+  const [likeCheck, setLikeCheck] = useState(false);
+
   const handleClick = () => {
     setClick(!click);
   };
 
   //게시물에 좋아요를 눌렀는지 알려주는 함수
 
-  const [likeCheck, setLikeCheck] = useState(false);
-
   const handleSubmitLike = async () => {
     try {
-      console.log("handleSubmitLike");
-      const response = await axios.post(`/post/like/${postInfo.id}`);
-      console.log("response");
-      console.log(response);
-      console.log("response");
+      await axios.post(`/post/like/${postInfo.id}`);
     } catch (error) {
       console.error(error);
     }
@@ -70,38 +65,33 @@ const PostInfoCp = ({ postInfo }) => {
 
   const handleSubmitUnLike = async () => {
     try {
-      console.log("handleSubmitUnLike");
-      const response = await axios.post(`/post/unlike/${postInfo.id}`);
-      console.log("response");
-      console.log(response);
-      console.log("response");
+      await axios.post(`/post/unlike/${postInfo.id}`);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const [fetch, setFetch] = useState(false);
+  //postInfo fetch 함수
+  const fetchPostInfo = async () => {
+    try {
+      const response = await axios.get(
+        `page/render-only-post-info/${postInfo.id}`
+      );
+      console.log(response.data);
+      if (response.data.postLikeCount.length >= 1) {
+        response.data.postLikeCount.forEach((info) => {
+          if (info.id === userInfo.id) {
+            setLikeCheck(true);
+          }
+        });
+      }
+      setPostCountInfo({ ...response.data });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
-    console.log("useEffecttttttttt");
-    const fetchPostInfo = async () => {
-      try {
-        const response = await axios.get(
-          `page/render-only-post-info/${postInfo.id}`
-        );
-        console.log(response.data);
-        if (response.data.postLikeCount.length >= 1) {
-          response.data.postLikeCount.forEach((info) => {
-            if (info.id === userInfo.id) {
-              setLikeCheck(true);
-            }
-          });
-        }
-        setPostCountInfo({ ...response.data });
-      } catch (error) {
-        console.error(error);
-      }
-    };
     fetchPostInfo();
   }, [commentCountUpdate]);
 

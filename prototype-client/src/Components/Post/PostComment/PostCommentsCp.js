@@ -25,7 +25,7 @@ import toggleValueAtom from "../../../store/ToggleValueAtom";
 
 const CommentModalCp = ({ postId }) => {
   const [commentCountUpdate, setCommentCountUpdate] = useRecoilState(
-    stateUpdateAtom("comment")
+    stateUpdateAtom(`comment${postId}`)
   );
   const [click, setClick] = useRecoilState(
     ModalOpenAtom(`commentModalOpen${postId}`)

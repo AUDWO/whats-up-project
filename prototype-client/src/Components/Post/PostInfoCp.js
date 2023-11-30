@@ -103,6 +103,9 @@ const PostInfoCp = ({ postInfo }) => {
     if (Object.keys(postCountInfo).length >= 1) {
       console.log("다른 useEffect");
       const handleLikeCheck = () => {
+        console.log("postCountInfo 포스트 포스트 포스트 ");
+        console.log(postCountInfo);
+        console.log("postCountInfo 포스트 포스트 포스트 ");
         let check = false;
         postCountInfo.postLikeCount.forEach((info) => {
           if (info.id === userInfo.id) {

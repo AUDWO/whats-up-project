@@ -67,6 +67,7 @@ const PostInfoCp = ({ postInfo }) => {
 
   const handleSubmitLike = async () => {
     try {
+      console.log("handleSubmitLike");
       const response = await axios.post(`/post/like/${postInfo.id}`);
     } catch (error) {
       console.error(error);
@@ -101,9 +102,11 @@ const PostInfoCp = ({ postInfo }) => {
 
     return () => {
       if (likeCheck) {
+        console.log("clean-up check");
         handleSubmitLike();
       }
       if (!likeCheck) {
+        console.log("clean-up uncheck");
         handleSubmitUnLike();
       }
     };

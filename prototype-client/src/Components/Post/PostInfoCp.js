@@ -73,12 +73,15 @@ const PostInfoCp = ({ postInfo }) => {
         );
 
         setPostCountInfo({ ...response.data });
-        setLikeCheck(handleLikeCheck());
       } catch (error) {
         console.error(error);
       }
     };
     fetchPostInfo();
+
+    if (Object.keys(postCountInfo).length > 1) {
+      setLikeCheck(handleLikeCheck());
+    }
 
     return () => {
       if (likeCheck) {
@@ -88,7 +91,7 @@ const PostInfoCp = ({ postInfo }) => {
         handleSubmitUnLike();
       }
     };
-  }, [commentCountUpdate]);
+  }, [commentCountUpdate, postCountInfo]);
 
   //[likeCountUpdate, commentCountUpdate]
   //postInfo update 함수
@@ -112,9 +115,9 @@ const PostInfoCp = ({ postInfo }) => {
   const handleUnLike = () => {
     setPostCountInfo((prev) => ({
       ...prev,
-      commentCount: {
-        ...prev.commentCount,
-        length: prev.commentCount.length - 1,
+      postLikeCount: {
+        ...prev.postLikeCount,
+        length: prev.postLikeCount.length - 1,
       },
     }));
     setLikeCheck(false);
@@ -123,15 +126,18 @@ const PostInfoCp = ({ postInfo }) => {
   const handleLike = () => {
     setPostCountInfo((prev) => ({
       ...prev,
-      commentCount: {
-        ...prev.commentCount,
-        length: prev.commentCount.length + 1,
+      postLikeCount: {
+        ...prev.postLikeCount,
+        length: prev.postLikeCount.length + 1,
       },
     }));
     setLikeCheck(true);
   };
 
-  if (Object.keys(postCountInfo).length >= 1) {
+  if (
+    Object.keys(postCountInfo).length >= 1 &&
+    (likeCheck === true || likeCheck === false)
+  ) {
     return (
       <PostInfoWrapper click={click}>
         <IconWrapper>
@@ -149,12 +155,12 @@ const PostInfoCp = ({ postInfo }) => {
           )}
         </IconWrapper>
         {likeCheck ? (
-          <IconWrapper>
-            <LikeFillIcon
-              onClick={() => {
-                handleUnLike();
-              }}
-            />
+          <IconWrapper
+            onClick={() => {
+              handleUnLike();
+            }}
+          >
+            <LikeFillIcon />
             <CountNumber>{postCountInfo.postLikeCount.length}</CountNumber>
           </IconWrapper>
         ) : (

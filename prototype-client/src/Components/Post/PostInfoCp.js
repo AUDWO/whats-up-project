@@ -95,6 +95,9 @@ const PostInfoCp = ({ postInfo }) => {
             return false;
           }
         });
+        console.log("check");
+        console.log(check);
+        console.log("check");
         setLikeCheck(check);
         setPostCountInfo({ ...response.data });
       } catch (error) {

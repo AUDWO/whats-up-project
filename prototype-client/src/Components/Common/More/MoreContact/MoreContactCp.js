@@ -176,7 +176,7 @@ const MoreContactCp = ({ contentInfo, reactType: moreType }) => {
     if (reactInfo.length >= 1) {
       /*원래는 proClick === reactInfo[0].type 이어여 함
       setState의 비동기 방식으로 nextClick이 바로 반영이 안됨*/
-      if (nextClick === reactInfo[0].type) {
+      if (prevClick === reactInfo[0].type) {
         const response = await axios.delete(
           `/delete/${moreType}-react/${contentInfo.id}`
         );

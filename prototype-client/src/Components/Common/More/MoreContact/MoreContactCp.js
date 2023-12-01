@@ -116,12 +116,12 @@ const MoreContactCp = ({ contentInfo, reactType: moreType }) => {
     if (nextClick === type) {
       setNextClick("");
       setPrevClick("");
-      updateReactionArr(type, "subtract");
       handleUnReact();
 
       return;
     }
     if (nextClick !== type && nextClick !== "") {
+      updateReactionArr(nextClick, "subtract");
       setPrevClick(nextClick);
     }
     setNextClick(type);

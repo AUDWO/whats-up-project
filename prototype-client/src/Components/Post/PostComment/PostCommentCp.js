@@ -103,6 +103,7 @@ const PostCommentCp = ({ comment, myComment }) => {
         const response = await axios.get(
           `/page/render-post-replycomment/${comment.id}`
         );
+
         setReplies(response.data);
       } catch (error) {}
     };
@@ -117,6 +118,13 @@ const PostCommentCp = ({ comment, myComment }) => {
         const postCommentLikeInfoResponse = await axios.get(`
         /page/render-only-postcomment-likeinfo/${comment.id}
         `);
+        postCommentLikeInfoResponse.data.postCommentLikeCount.forEach(
+          (info) => {
+            if (info.id === userInfo.id) {
+              setCommentLikeCheck(true);
+            }
+          }
+        );
         setPostCommentLikeInfo({ ...postCommentLikeInfoResponse.data });
       } catch (error) {
         console.error(error);
@@ -154,7 +162,7 @@ const PostCommentCp = ({ comment, myComment }) => {
             <CommentUserNicknameWrapper>
               <CommentUserNickname>{comment.User.nickname}</CommentUserNickname>
               <LikeButtonWrapper>
-                {handleLikeCheck() ? (
+                {commentLikeCheck ? (
                   <CommentLikeFillIcon
                     onClick={() => {
                       handleCommentUnlike();

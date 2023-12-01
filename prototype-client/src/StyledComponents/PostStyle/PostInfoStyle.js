@@ -20,6 +20,7 @@ export const PostInfoWrapper = styled.div`
 
 export const IconWrapper = styled.div`
   display: flex;
+  align-items: center;
   height: 30px;
   width: 90px;
   margin-top: 30px;

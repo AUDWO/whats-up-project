@@ -35,7 +35,7 @@ const CommentModalCp = ({ postId }) => {
   };
 
   const [postCommentUpdate, setPostCommentUpdate] = useRecoilState(
-    stateUpdateAtom("postComment")
+    stateUpdateAtom(`postComment${postId}`)
   );
 
   const replyUpdate = useRecoilValue(stateUpdateAtom("postReply"));

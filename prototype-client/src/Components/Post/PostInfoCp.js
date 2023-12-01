@@ -74,23 +74,32 @@ const PostInfoCp = ({ postInfo }) => {
       const response = await axios.get(
         `page/render-only-post-info/${postInfo.id}`
       );
-      console.log(response.data);
-      if (response.data.postLikeCount.length >= 1) {
-        response.data.postLikeCount.forEach((info) => {
-          if (info.id === userInfo.id) {
-            setLikeCheck(true);
-          }
-        });
-      }
-      setPostCountInfo({ ...response.data });
+      return response;
+      /*
+      response.data.postLikeCount.forEach((info) => {
+        if (info.id === userInfo.id) {
+          setLikeCheck(true);
+        }
+      });
+      setPostCountInfo({ ...response.data });*/
     } catch (error) {
       console.error(error);
     }
   };
 
   useEffect(() => {
-    fetchPostInfo();
+    processPostInfoData();
   }, [commentCountUpdate]);
+
+  const processPostInfoData = async () => {
+    const postInfoDataResponse = await fetchPostInfo();
+    postInfoDataResponse.data.postLikeCount.forEach((info) => {
+      if (info.id === userInfo.id) {
+        setLikeCheck(true);
+      }
+    });
+    setPostCountInfo({ ...postInfoDataResponse.data });
+  };
 
   const handleUnLike = () => {
     handleSubmitUnLike();

@@ -38,6 +38,7 @@ const MoreContactCp = ({ contentInfo, reactType: moreType }) => {
   //react의 업데이트 된 정보를 참조하기 때문에
 
   useEffect(() => {
+    console.log("diaryInfoUpdate!!!!");
     const fetchOnlyDiaryInfoData = async () => {
       try {
         const response = await axios.get(
@@ -107,13 +108,15 @@ const MoreContactCp = ({ contentInfo, reactType: moreType }) => {
       if (actType === "add") reactionArr((prev) => prev + 1);
       if (actType === "subtract") reactionArr((prev) => prev - 1);
     }
+    return new Promise((resolve) => resolve);
   };
 
   //처음 아이콘을 클릭하면 nextclick state에 type이 담기고 새로운 아이콘을 클릭하면
   //새로 클릭한 아이콘은 clicked state에 담기게 된다.
-  const handleReactFilterType = (type) => {
+  const handleReactFilterType = async (type) => {
     //기존에 클릭했던 반응을 재클릭하면 반응이 삭제됨.
     if (nextClick === type) {
+      updateReactionArr(nextClick, "subtract");
       setNextClick("");
       setPrevClick("");
       handleUnReact();
@@ -121,12 +124,29 @@ const MoreContactCp = ({ contentInfo, reactType: moreType }) => {
       return;
     }
     if (nextClick !== type && nextClick !== "") {
-      updateReactionArr(nextClick, "subtract");
+      const a = await updateReactionArr(nextClick, "subtract");
       setPrevClick(nextClick);
     }
     setNextClick(type);
-    updateReactionArr(type, "add");
+    const a = await updateReactionArr(type, "add");
     handleReact(type);
+  };
+
+  //다이어리는 배열필터 때문에 반응수가 필요함 => 다이어리 반응 수는 정보를 실시간으로 전달해주는 함수
+  //(api폴더로 이동 예정)
+  const handleSubmitDiaryReactInfo = async (type) => {
+    try {
+      if (type === "add")
+        await axios.patch(`/update/${moreType}-react-info/${contentInfo.id}`, {
+          reactCount: onlyDiaryInfo.reactCount + 1,
+        });
+      if (type === "subtract")
+        await axios.patch(`/update/${moreType}-react-info/${contentInfo.id}`, {
+          reactCount: onlyDiaryInfo.reactCount - 1,
+        });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleUnReact = async () => {
@@ -151,23 +171,6 @@ const MoreContactCp = ({ contentInfo, reactType: moreType }) => {
     }
   };
 
-  //다이어리는 배열필터 때문에 반응수가 필요함 => 다이어리 반응 수는 정보를 실시간으로 전달해주는 함수
-  //(api폴더로 이동 예정)
-  const handleSubmitDiaryReactInfo = async (type) => {
-    try {
-      if (type === "add")
-        await axios.patch(`/update/${moreType}-react-info/${contentInfo.id}`, {
-          reactCount: onlyDiaryInfo.reactCount + 1,
-        });
-      if (type === "subtract")
-        await axios.patch(`/update/${moreType}-react-info/${contentInfo.id}`, {
-          reactCount: onlyDiaryInfo.reactCount - 1,
-        });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const handleReact = async (type) => {
     //기존에 반응이 있을때만 동작
     if (reactInfo.length >= 1) {
@@ -178,7 +181,7 @@ const MoreContactCp = ({ contentInfo, reactType: moreType }) => {
           `/delete/${moreType}-react/${contentInfo.id}`
         );
 
-        setDiaryInfoUpdate(!diaryInfoUpdate);
+        if (moreType === "diary") setDiaryInfoUpdate(!diaryInfoUpdate);
       }
     }
 
@@ -204,6 +207,7 @@ const MoreContactCp = ({ contentInfo, reactType: moreType }) => {
   };
 
   //api 폴더로 이동 예정
+  /*
   const handleSubmitReact = async (reactType, contentInfo, type) => {
     try {
       await axios.post(`/post/${reactType}-react/${contentInfo.id}`, {
@@ -212,10 +216,10 @@ const MoreContactCp = ({ contentInfo, reactType: moreType }) => {
     } catch (error) {
       console.error(error);
     }
-  };
+  };*/
 
   //api 폴더로 이동 예정
-  const handleSubmitUnReact = async (reactType, contentInfo) => {
+  /*const handleSubmitUnReact = async (reactType, contentInfo) => {
     try {
       const response = await axios.delete(
         `/delete/${reactType}-react/${contentInfo.id}`
@@ -223,7 +227,7 @@ const MoreContactCp = ({ contentInfo, reactType: moreType }) => {
     } catch (error) {
       console.error(error);
     }
-  };
+  };*/
 
   return (
     <MoreContact>

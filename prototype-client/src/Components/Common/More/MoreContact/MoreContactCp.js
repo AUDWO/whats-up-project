@@ -63,12 +63,12 @@ const MoreContactCp = ({ contentInfo, reactType: moreType }) => {
           (react) => react.reacter === userInfo.id
         );
 
-        setReactInfo([...myResponse]);
+        setReactInfo([...myResponse].length);
 
         const sadReact = reactsResponse.data.filter(
           (react) => react.type === "sad"
         );
-        setSadReactionArr([...sadReact]);
+        setSadReactionArr([...sadReact].length);
 
         const smileReact = reactsResponse.data.filter(
           (react) => react.type === "smile"
@@ -78,12 +78,12 @@ const MoreContactCp = ({ contentInfo, reactType: moreType }) => {
         const heartReact = reactsResponse.data.filter(
           (react) => react.type === "heart"
         );
-        setHeartReactionArr([...heartReact]);
+        setHeartReactionArr([...heartReact].length);
 
         const likeReact = reactsResponse.data.filter(
           (react) => react.type === "like"
         );
-        setLikeReactionArr([...likeReact]);
+        setLikeReactionArr([...likeReact].length);
 
         if (myResponse.length > 0 && myResponse[0].type) {
           setNextClick(myResponse[0].type);
@@ -236,7 +236,7 @@ const MoreContactCp = ({ contentInfo, reactType: moreType }) => {
       >
         <GoodIcon />
         <ContactIconCountNumber nextClick={nextClick} backC={"#a64eff"}>
-          {likeReactionArr.length}
+          {likeReactionArr}
         </ContactIconCountNumber>
       </ContactIconWrapper>
       <ContactIconWrapper
@@ -248,7 +248,7 @@ const MoreContactCp = ({ contentInfo, reactType: moreType }) => {
       >
         <HearIcon />
         <ContactIconCountNumber nextClick={nextClick} backC={"#a64eff"}>
-          {heartReactionArr.length}
+          {heartReactionArr}
         </ContactIconCountNumber>
       </ContactIconWrapper>
       <ContactIconWrapper
@@ -260,7 +260,7 @@ const MoreContactCp = ({ contentInfo, reactType: moreType }) => {
       >
         <SmileIcon />
         <ContactIconCountNumber nextClick={nextClick} backC={"#a64eff"}>
-          {smileReactionArr.length}
+          {smileReactionArr}
         </ContactIconCountNumber>
       </ContactIconWrapper>
       <ContactIconWrapper
@@ -272,7 +272,7 @@ const MoreContactCp = ({ contentInfo, reactType: moreType }) => {
       >
         <SadIcon />
         <ContactIconCountNumber nextClick={nextClick} backC={"#a64eff"}>
-          {sadReactionArr.length}
+          {sadReactionArr}
         </ContactIconCountNumber>
       </ContactIconWrapper>
     </MoreContact>

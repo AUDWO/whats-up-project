@@ -54,6 +54,7 @@ const MoreContactCp = ({ contentInfo, reactType: moreType }) => {
   }, [diaryInfoUpdate]);
 
   useEffect(() => {
+    console.log("MORE MORE MORE MORE");
     const fetchStoryReacts = async () => {
       try {
         const reactsResponse = await axios.get(

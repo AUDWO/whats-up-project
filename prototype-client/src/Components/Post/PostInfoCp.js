@@ -2,9 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import axios from "axios";
 
-//custom hook
-import useOnlyByDepsEffect from "../../customHooks/useOnlyByDepsEffect";
-
 //Styled-Component
 import {
   PostInfoWrapper,

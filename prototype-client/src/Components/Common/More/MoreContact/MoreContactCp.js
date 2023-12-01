@@ -123,10 +123,16 @@ const MoreContactCp = ({ contentInfo, reactType: moreType }) => {
 
       return;
     }
+    console.log(nextClick, "nextClick1");
+    console.log(prevClick, "prevClick1");
     if (nextClick !== type && nextClick !== "") {
+      console.log(nextClick, "nextClick2");
+      console.log(prevClick, "prevClick2");
       const a = await updateReactionArr(nextClick, "subtract");
       setPrevClick(nextClick);
     }
+    console.log(nextClick, "nextClick3");
+    console.log(prevClick, "prevClick3");
     setNextClick(type);
     const a = await updateReactionArr(type, "add");
     handleReact(type);

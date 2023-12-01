@@ -63,7 +63,7 @@ const MoreContactCp = ({ contentInfo, reactType: moreType }) => {
           (react) => react.reacter === userInfo.id
         );
 
-        setReactInfo([...myResponse].length);
+        setReactInfo([...myResponse]);
 
         const sadReact = reactsResponse.data.filter(
           (react) => react.type === "sad"
@@ -73,7 +73,7 @@ const MoreContactCp = ({ contentInfo, reactType: moreType }) => {
         const smileReact = reactsResponse.data.filter(
           (react) => react.type === "smile"
         );
-        setSmileReactionArr([...smileReact]);
+        setSmileReactionArr([...smileReact].length);
 
         const heartReact = reactsResponse.data.filter(
           (react) => react.type === "heart"

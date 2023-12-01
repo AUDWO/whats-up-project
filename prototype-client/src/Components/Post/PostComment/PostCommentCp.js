@@ -53,6 +53,8 @@ const PostCommentCp = ({ comment, myComment }) => {
     stateUpdateAtom(`comment${comment.id}`)
   );
 
+  const [commentLikeCheck, setCommentLikeCheck] = useState(false);
+
   const handlePostReplyComment = async () => {
     try {
       await axios.post("/comment/post", {
@@ -77,7 +79,7 @@ const PostCommentCp = ({ comment, myComment }) => {
   };
 
   //좋아요 버튼 함수
-  const handleLikePost = async () => {
+  const handleSubitCommentLike = async () => {
     try {
       const response = await axios.post(`/comment/post/like/${comment.id}`);
       setPostCommentInfoUpdate(!postCommentInfoUpdate);
@@ -86,7 +88,7 @@ const PostCommentCp = ({ comment, myComment }) => {
     }
   };
   //좋아요 버튼 취소 함수
-  const handleUnLikePost = async () => {
+  const handleSubmitCommentUnlike = async () => {
     try {
       const response = await axios.post(`/comment/post/unlike/${comment.id}`);
       setPostCommentInfoUpdate(!postCommentInfoUpdate);
@@ -109,7 +111,7 @@ const PostCommentCp = ({ comment, myComment }) => {
   }, [replyUpdate, postCommentUpdate]);
 
   useEffect(() => {
-    //댓글 좋아요 누르면 댓글 정보 업데이트 시켜주는 함수
+    //댓글 좋아요 정보를 불러오는 함수
     const fetchPostInfo = async () => {
       try {
         const postCommentLikeInfoResponse = await axios.get(`
@@ -122,7 +124,25 @@ const PostCommentCp = ({ comment, myComment }) => {
     };
 
     fetchPostInfo();
-  }, [postCommentInfoUpdate]);
+  }, []);
+
+  const handleCommentLike = () => {
+    handleSubitCommentLike();
+    setCommentLikeCheck(true);
+    setPostCommentLikeInfo((prev) => ({
+      ...prev,
+      postCommentLikeCount: { length: prev.postCommentLikeCount.length + 1 },
+    }));
+  };
+
+  const handleCommentUnlike = () => {
+    handleSubmitCommentUnlike();
+    setCommentLikeCheck(false);
+    setPostCommentLikeInfo((prev) => ({
+      ...prev,
+      postCommentLikeCount: { length: prev.postCommentLikeCount.length - 1 },
+    }));
+  };
 
   //postCommentUpdate
   if (Object.keys(postCommentLikeInfo).length >= 1) {
@@ -137,13 +157,13 @@ const PostCommentCp = ({ comment, myComment }) => {
                 {handleLikeCheck() ? (
                   <CommentLikeFillIcon
                     onClick={() => {
-                      handleUnLikePost();
+                      handleCommentUnlike();
                     }}
                   />
                 ) : (
                   <CommentLikeIcon
                     onClick={() => {
-                      handleLikePost();
+                      handleCommentLike();
                     }}
                   />
                 )}

@@ -68,28 +68,17 @@ const PostInfoCp = ({ postInfo }) => {
     }
   };
 
-  //postInfo fetch 함수
+  //postInfo fetch 함수 (api 폴더에서 따로 관리 할 예정)
   const fetchPostInfo = async () => {
     try {
       const response = await axios.get(
         `page/render-only-post-info/${postInfo.id}`
       );
       return response;
-      /*
-      response.data.postLikeCount.forEach((info) => {
-        if (info.id === userInfo.id) {
-          setLikeCheck(true);
-        }
-      });
-      setPostCountInfo({ ...response.data });*/
     } catch (error) {
       console.error(error);
     }
   };
-
-  useEffect(() => {
-    processPostInfoData();
-  }, [commentCountUpdate]);
 
   const processPostInfoData = async () => {
     const postInfoDataResponse = await fetchPostInfo();
@@ -100,6 +89,10 @@ const PostInfoCp = ({ postInfo }) => {
     });
     setPostCountInfo({ ...postInfoDataResponse.data });
   };
+
+  useEffect(() => {
+    processPostInfoData();
+  }, [commentCountUpdate]);
 
   const handleUnLike = () => {
     handleSubmitUnLike();

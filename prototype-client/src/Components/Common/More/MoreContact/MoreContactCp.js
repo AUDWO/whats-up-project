@@ -16,11 +16,11 @@ import {
 //Atom
 import userInfoAtom from "../../../../store/userState/userAtom";
 
-const MoreContactCp = ({ contentInfo, reactType }) => {
-  const [likeReactArr, setLikeReactArr] = useState([]);
-  const [heartReactArr, setHeartReactArr] = useState([]);
-  const [smileReactArr, setSmileReactArr] = useState([]);
-  const [sadReactArr, setSadReactArr] = useState([]);
+const MoreContactCp = ({ contentInfo, reactType: moreType }) => {
+  const [likeReactionArr, setLikeReactionArr] = useState([]);
+  const [heartReactionArr, setHeartReactionArr] = useState([]);
+  const [smileReactionArr, setSmileReactionArr] = useState([]);
+  const [sadReactionArr, setSadReactionArr] = useState([]);
 
   const [onlyDiaryInfo, setOnlyDiaryInfo] = useState({});
 
@@ -56,7 +56,7 @@ const MoreContactCp = ({ contentInfo, reactType }) => {
     const fetchStoryReacts = async () => {
       try {
         const reactsResponse = await axios.get(
-          `/page/render-${reactType}-react/${contentInfo.id}`
+          `/page/render-${moreType}-react/${contentInfo.id}`
         );
 
         const myResponse = reactsResponse.data.filter(
@@ -68,22 +68,22 @@ const MoreContactCp = ({ contentInfo, reactType }) => {
         const sadReact = reactsResponse.data.filter(
           (react) => react.type === "sad"
         );
-        setSadReactArr([...sadReact]);
+        setSadReactionArr([...sadReact]);
 
         const smileReact = reactsResponse.data.filter(
           (react) => react.type === "smile"
         );
-        setSmileReactArr([...smileReact]);
+        setSmileReactionArr([...smileReact]);
 
         const heartReact = reactsResponse.data.filter(
           (react) => react.type === "heart"
         );
-        setHeartReactArr([...heartReact]);
+        setHeartReactionArr([...heartReact]);
 
         const likeReact = reactsResponse.data.filter(
           (react) => react.type === "like"
         );
-        setLikeReactArr([...likeReact]);
+        setLikeReactionArr([...likeReact]);
 
         if (myResponse.length > 0 && myResponse[0].type) {
           setNextClick(myResponse[0].type);
@@ -93,7 +93,21 @@ const MoreContactCp = ({ contentInfo, reactType }) => {
       }
     };
     fetchStoryReacts();
-  }, [reactUpdate]);
+  }, []);
+
+  const updateReactionArr = (type, actType) => {
+    const reactionArr = {
+      smile: setSmileReactionArr,
+      like: setLikeReactionArr,
+      heart: setHeartReactionArr,
+      sad: setSadReactionArr,
+    }[type];
+
+    if (reactionArr) {
+      if (actType === "add") reactionArr((prev) => prev + 1);
+      if (actType === "subtract") reactionArr((prev) => prev - 1);
+    }
+  };
 
   //처음 아이콘을 클릭하면 nextclick state에 type이 담기고 새로운 아이콘을 클릭하면
   //새로 클릭한 아이콘은 clicked state에 담기게 된다.
@@ -102,26 +116,29 @@ const MoreContactCp = ({ contentInfo, reactType }) => {
     if (nextClick === type) {
       setNextClick("");
       setPrevClick("");
+      updateReactionArr(type, "subtract");
       handleUnReact();
+
       return;
     }
     if (nextClick !== type && nextClick !== "") {
       setPrevClick(nextClick);
     }
     setNextClick(type);
+    updateReactionArr(type, "add");
     handleReact(type);
   };
 
   const handleUnReact = async () => {
     try {
       const response = await axios.delete(
-        `/delete/${reactType}-react/${contentInfo.id}`
+        `/delete/${moreType}-react/${contentInfo.id}`
       );
 
       //story는 반응 수를 알 필요가 없기 때문에 reactCount정보는 오직 diary를 다룰때만 다룸.
-      if (reactType === "diary") {
+      if (moreType === "diary") {
         const response2 = await axios.patch(
-          `/update/${reactType}-react-info/${contentInfo.id}`,
+          `/update/${moreType}-react-info/${contentInfo.id}`,
           {
             reactCount: onlyDiaryInfo.reactCount - 1,
           }
@@ -134,6 +151,23 @@ const MoreContactCp = ({ contentInfo, reactType }) => {
     }
   };
 
+  //다이어리는 배열필터 때문에 반응수가 필요함 => 다이어리 반응 수는 정보를 실시간으로 전달해주는 함수
+  //(api폴더로 이동 예정)
+  const handleSubmitDiaryReactInfo = async (type) => {
+    try {
+      if (type === "add")
+        await axios.patch(`/update/${moreType}-react-info/${contentInfo.id}`, {
+          reactCount: onlyDiaryInfo.reactCount + 1,
+        });
+      if (type === "subtract")
+        await axios.patch(`/update/${moreType}-react-info/${contentInfo.id}`, {
+          reactCount: onlyDiaryInfo.reactCount - 1,
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleReact = async (type) => {
     //기존에 반응이 있을때만 동작
     if (reactInfo.length >= 1) {
@@ -141,7 +175,7 @@ const MoreContactCp = ({ contentInfo, reactType }) => {
       setState의 비동기 방식으로 nextClick이 바로 반영이 안됨*/
       if (nextClick === reactInfo[0].type) {
         const response = await axios.delete(
-          `/delete/${reactType}-react/${contentInfo.id}`
+          `/delete/${moreType}-react/${contentInfo.id}`
         );
 
         setDiaryInfoUpdate(!diaryInfoUpdate);
@@ -150,26 +184,42 @@ const MoreContactCp = ({ contentInfo, reactType }) => {
 
     try {
       const response = await axios.post(
-        `/post/${reactType}-react/${contentInfo.id}`,
+        `/post/${moreType}-react/${contentInfo.id}`,
         {
           type: type,
         }
       );
 
       //반응이 없었거나 없을때만 reactCount를 증가시킨다.
-      if (reactType === "diary") {
+      if (moreType === "diary") {
         if (!(reactInfo.length >= 1)) {
-          const response2 = await axios.patch(
-            `/update/${reactType}-react-info/${contentInfo.id}`,
-            {
-              reactCount: onlyDiaryInfo.reactCount + 1,
-            }
-          );
+          handleSubmitDiaryReactInfo("add");
         }
         setDiaryInfoUpdate(!diaryInfoUpdate);
       }
+      //setReactUpdate(!reactUpdate);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-      setReactUpdate(!reactUpdate);
+  //api 폴더로 이동 예정
+  const handleSubmitReact = async (reactType, contentInfo, type) => {
+    try {
+      await axios.post(`/post/${reactType}-react/${contentInfo.id}`, {
+        type: type,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  //api 폴더로 이동 예정
+  const handleSubmitUnReact = async (reactType, contentInfo) => {
+    try {
+      const response = await axios.delete(
+        `/delete/${reactType}-react/${contentInfo.id}`
+      );
     } catch (error) {
       console.error(error);
     }
@@ -186,7 +236,7 @@ const MoreContactCp = ({ contentInfo, reactType }) => {
       >
         <GoodIcon />
         <ContactIconCountNumber nextClick={nextClick} backC={"#a64eff"}>
-          {likeReactArr.length}
+          {likeReactionArr.length}
         </ContactIconCountNumber>
       </ContactIconWrapper>
       <ContactIconWrapper
@@ -198,7 +248,7 @@ const MoreContactCp = ({ contentInfo, reactType }) => {
       >
         <HearIcon />
         <ContactIconCountNumber nextClick={nextClick} backC={"#a64eff"}>
-          {heartReactArr.length}
+          {heartReactionArr.length}
         </ContactIconCountNumber>
       </ContactIconWrapper>
       <ContactIconWrapper
@@ -210,7 +260,7 @@ const MoreContactCp = ({ contentInfo, reactType }) => {
       >
         <SmileIcon />
         <ContactIconCountNumber nextClick={nextClick} backC={"#a64eff"}>
-          {smileReactArr.length}
+          {smileReactionArr.length}
         </ContactIconCountNumber>
       </ContactIconWrapper>
       <ContactIconWrapper
@@ -222,7 +272,7 @@ const MoreContactCp = ({ contentInfo, reactType }) => {
       >
         <SadIcon />
         <ContactIconCountNumber nextClick={nextClick} backC={"#a64eff"}>
-          {sadReactArr.length}
+          {sadReactionArr.length}
         </ContactIconCountNumber>
       </ContactIconWrapper>
     </MoreContact>

@@ -67,17 +67,6 @@ const PostCommentCp = ({ comment, myComment }) => {
     }
   };
 
-  //댓글 좋아요를 눌렀는지 확인해주는 함수
-  const handleLikeCheck = () => {
-    let check = false;
-    postCommentLikeInfo.postCommentLikeCount.forEach((info) => {
-      if (info.id === userInfo.id) {
-        check = true;
-      }
-    });
-    return check;
-  };
-
   //좋아요 버튼 함수
   const handleSubitCommentLike = async () => {
     try {
@@ -111,27 +100,30 @@ const PostCommentCp = ({ comment, myComment }) => {
     fetchReplyComments();
   }, [replyUpdate, postCommentUpdate]);
 
-  useEffect(() => {
-    //댓글 좋아요 정보를 불러오는 함수
-    const fetchPostInfo = async () => {
-      try {
-        const postCommentLikeInfoResponse = await axios.get(`
-        /page/render-only-postcomment-likeinfo/${comment.id}
-        `);
-        postCommentLikeInfoResponse.data.postCommentLikeCount.forEach(
-          (info) => {
-            if (info.id === userInfo.id) {
-              setCommentLikeCheck(true);
-            }
-          }
-        );
-        setPostCommentLikeInfo({ ...postCommentLikeInfoResponse.data });
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  //댓글 좋아요 정보를 불러오는 함수 (api 폴더에서 따로 관리 할 예정)
+  const fetchPostCommentInfo = async () => {
+    try {
+      const response = await axios.get(`
+      /page/render-only-postcomment-likeinfo/${comment.id}
+      `);
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-    fetchPostInfo();
+  const processPostCommentInfoData = async () => {
+    const postCommentInfoDataResponse = await fetchPostCommentInfo();
+    postCommentInfoDataResponse.data.postCommentLikeCount.forEach((info) => {
+      if (info.id === userInfo.id) {
+        setCommentLikeCheck(true);
+      }
+    });
+    setPostCommentLikeInfo({ ...postCommentInfoDataResponse.data });
+  };
+
+  useEffect(() => {
+    processPostCommentInfoData();
   }, []);
 
   const handleCommentLike = () => {

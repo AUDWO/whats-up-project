@@ -158,7 +158,7 @@ const MoreContactCp = ({ contentInfo, moreType }) => {
   };
 
   const handleReact = async (type) => {
-    handleSubmitReact();
+    handleSubmitReact(type);
     //반응이 없었거나 없을때만 reactCount를 증가시킨다.
     if (moreType === "diary") {
       if (!(reactInfo.length >= 1)) {

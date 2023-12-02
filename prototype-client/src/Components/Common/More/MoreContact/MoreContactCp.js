@@ -98,6 +98,7 @@ const MoreContactCp = ({ contentInfo, reactType: moreType }) => {
   }, []);
 
   const updateReactionArr = (type, actType) => {
+    console.log(type, "type type type type type");
     const reactionArr = {
       smile: setSmileReactionArr,
       like: setLikeReactionArr,
@@ -121,7 +122,6 @@ const MoreContactCp = ({ contentInfo, reactType: moreType }) => {
       setNextClick("");
       setPrevClick("");
       handleUnReact();
-
       return;
     }
     console.log(nextClick, "nextClick1");
@@ -134,6 +134,7 @@ const MoreContactCp = ({ contentInfo, reactType: moreType }) => {
     }
     console.log(nextClick, "nextClick3");
     console.log(prevClick, "prevClick3");
+    console.log(`prev click prev click ${prevClick}`);
     setNextClick(type);
     const a = await updateReactionArr(type, "add");
     handleReact(type);
@@ -164,15 +165,16 @@ const MoreContactCp = ({ contentInfo, reactType: moreType }) => {
 
       //story는 반응 수를 알 필요가 없기 때문에 reactCount정보는 오직 diary를 다룰때만 다룸.
       if (moreType === "diary") {
+        handleSubmitDiaryReactInfo("add");
+        /*
         const response2 = await axios.patch(
           `/update/${moreType}-react-info/${contentInfo.id}`,
           {
             reactCount: onlyDiaryInfo.reactCount - 1,
           }
-        );
+        );*/
         setDiaryInfoUpdate(!diaryInfoUpdate);
       }
-      setReactUpdate(!reactUpdate);
     } catch (error) {
       console.error(error);
     }
@@ -180,17 +182,19 @@ const MoreContactCp = ({ contentInfo, reactType: moreType }) => {
 
   const handleReact = async (type) => {
     //기존에 반응이 있을때만 동작
-    if (reactInfo.length >= 1) {
-      /*원래는 proClick === reactInfo[0].type 이어여 함
+
+    //if (reactInfo.length >= 1) {
+    /*원래는 proClick === reactInfo[0].type 이어여 함
       setState의 비동기 방식으로 nextClick이 바로 반영이 안됨*/
-      if (prevClick === reactInfo[0].type) {
+
+    /*if (prevClick === reactInfo[0].type) {
         const response = await axios.delete(
           `/delete/${moreType}-react/${contentInfo.id}`
         );
 
         if (moreType === "diary") setDiaryInfoUpdate(!diaryInfoUpdate);
       }
-    }
+    }*/
 
     try {
       const response = await axios.post(
@@ -200,12 +204,14 @@ const MoreContactCp = ({ contentInfo, reactType: moreType }) => {
         }
       );
 
+      console.log(`${reactInfo} in handleReact`);
+
       //반응이 없었거나 없을때만 reactCount를 증가시킨다.
       if (moreType === "diary") {
         if (!(reactInfo.length >= 1)) {
           handleSubmitDiaryReactInfo("add");
+          setDiaryInfoUpdate(!diaryInfoUpdate);
         }
-        setDiaryInfoUpdate(!diaryInfoUpdate);
       }
       //setReactUpdate(!reactUpdate);
     } catch (error) {
@@ -235,6 +241,9 @@ const MoreContactCp = ({ contentInfo, reactType: moreType }) => {
       console.error(error);
     }
   };*/
+
+  console.log(nextClick, "nextClick55");
+  console.log(prevClick, "prevClick55");
 
   return (
     <MoreContact>

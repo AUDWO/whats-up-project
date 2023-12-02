@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import "./App.css";
+import axios from "axios";
 
 // Styled-Components
 import GlobalStyles from "./StyledComponents/GlobalStyles";
@@ -26,6 +27,8 @@ import ModalOpenAtom from "./store/ModalOpenAtom";
 
 import PageWrapper from "./PageWrapper";
 import DashboardWrapper from "./DashboardWrapper";
+import { useEffect } from "react";
+import userInfoAtom from "./store/userState/userAtom";
 
 function App() {
   const StoryModalOpen = useRecoilValue(ModalOpenAtom("makeStoryModal"));
@@ -36,6 +39,20 @@ function App() {
   const ContentConfigModalOpen = useRecoilValue(
     ModalOpenAtom("profileContentConfigModal")
   );
+
+  const [userInfo, setUserInfo] = useRecoilState(userInfoAtom);
+
+  useEffect(() => {
+    const fetchuserInfoData = async () => {
+      try {
+        const response = await axios.get("/page/user-info");
+        setUserInfo({ ...response.data });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchuserInfoData();
+  });
 
   return (
     <BrowserRouter>

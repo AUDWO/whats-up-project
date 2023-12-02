@@ -61,7 +61,7 @@ const MoreStoryContentCp = ({ storyId }) => {
             </MoreStoyrImgWrapper>
             <MoreStoryContentWrapper>
               <MoreStoryContent>{storyInfo.content}</MoreStoryContent>
-              <MoreContactCp contentInfo={storyInfo} reactType={"story"} />
+              <MoreContactCp contentInfo={storyInfo} moreType={"story"} />
             </MoreStoryContentWrapper>
           </MoreStoryContentsWrapper>
         </MoreStoryContentDiv>

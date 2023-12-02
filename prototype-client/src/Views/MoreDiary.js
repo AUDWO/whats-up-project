@@ -70,7 +70,7 @@ const MoreDiary = () => {
               </DiaryImgWrapper>
               <DiaryContent>{diary.content}</DiaryContent>
               {diary.likeControl && (
-                <MoreContactCp contentInfo={diary} reactType={"diary"} />
+                <MoreContactCp contentInfo={diary} moreType={"diary"} />
               )}
             </DiaryContentsWrapper>
           </DiaryWrapper>

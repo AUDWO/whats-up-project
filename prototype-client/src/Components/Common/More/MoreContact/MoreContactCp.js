@@ -16,7 +16,7 @@ import {
 //Atom
 import userInfoAtom from "../../../../store/userState/userAtom";
 
-const MoreContactCp = ({ contentInfo, reactType: moreType }) => {
+const MoreContactCp = ({ contentInfo, moreType }) => {
   const [likeReactionArr, setLikeReactionArr] = useState([]);
   const [heartReactionArr, setHeartReactionArr] = useState([]);
   const [smileReactionArr, setSmileReactionArr] = useState([]);
@@ -244,6 +244,7 @@ const MoreContactCp = ({ contentInfo, reactType: moreType }) => {
 
   console.log(nextClick, "nextClick55");
   console.log(prevClick, "prevClick55");
+  console.log(reactInfo, "reactInfo");
 
   return (
     <MoreContact>

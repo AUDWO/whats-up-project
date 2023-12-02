@@ -130,7 +130,9 @@ const MoreContactCp = ({ contentInfo, moreType }) => {
       console.log(nextClick, "nextClick2");
       console.log(prevClick, "prevClick2");
       const a = await updateReactionArr(nextClick, "subtract");
+      console.log("promise 나왔나? 안나왔나");
       setPrevClick(nextClick);
+      console.log(prevClick, "prevClick2.5");
     }
     console.log(nextClick, "nextClick3");
     console.log(prevClick, "prevClick3");

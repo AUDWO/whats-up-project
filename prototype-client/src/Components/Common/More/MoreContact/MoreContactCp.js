@@ -149,7 +149,7 @@ const MoreContactCp = ({ contentInfo, moreType }) => {
   };
 
   const handleUnReact = async () => {
-    await handleSubmitUnReact();
+    handleSubmitUnReact();
     //story는 반응 수를 알 필요가 없기 때문에 reactCount정보는 오직 diary를 다룰때만 다룸.
     if (moreType === "diary") {
       handleSubmitDiaryReactInfo("subtract");
@@ -158,7 +158,7 @@ const MoreContactCp = ({ contentInfo, moreType }) => {
   };
 
   const handleReact = async (type) => {
-    await handleSubmitReact();
+    handleSubmitReact();
     //반응이 없었거나 없을때만 reactCount를 증가시킨다.
     if (moreType === "diary") {
       if (!(reactInfo.length >= 1)) {

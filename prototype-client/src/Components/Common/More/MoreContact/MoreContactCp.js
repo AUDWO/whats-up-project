@@ -128,6 +128,7 @@ const MoreContactCp = ({ contentInfo, moreType }) => {
     if (nextClick !== type && nextClick !== "") {
       console.log(nextClick, "nextClick2");
       console.log(prevClick, "prevClick2");
+      handleUnReact();
       updateReactionArr(nextClick, "subtract");
       console.log("promise 나왔나? 안나왔나");
       setPrevClick(nextClick);

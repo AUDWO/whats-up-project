@@ -170,9 +170,9 @@ const MoreContactCp = ({ contentInfo, moreType }) => {
 
   //api 폴더로 이동 예정
 
-  const handleSubmitReact = async (reactType, contentInfo, type) => {
+  const handleSubmitReact = async (type) => {
     try {
-      await axios.post(`/post/${reactType}-react/${contentInfo.id}`, {
+      await axios.post(`/post/${moreType}-react/${contentInfo.id}`, {
         type: type,
       });
     } catch (error) {
@@ -181,10 +181,10 @@ const MoreContactCp = ({ contentInfo, moreType }) => {
   };
 
   //api 폴더로 이동 예정
-  const handleSubmitUnReact = async (reactType, contentInfo) => {
+  const handleSubmitUnReact = async () => {
     try {
       const response = await axios.delete(
-        `/delete/${reactType}-react/${contentInfo.id}`
+        `/delete/${moreType}-react/${contentInfo.id}`
       );
     } catch (error) {
       console.error(error);

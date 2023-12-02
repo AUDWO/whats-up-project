@@ -52,7 +52,7 @@ function App() {
       }
     };
     fetchuserInfoData();
-  });
+  }, []);
 
   return (
     <BrowserRouter>

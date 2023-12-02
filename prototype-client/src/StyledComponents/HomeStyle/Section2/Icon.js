@@ -9,7 +9,7 @@ import Profile from "../../../Components/Profile";
 import ProfileWrapper from "../ProfileStyle/ProfileWrapper";
 import { AiOutlineHeart } from "react-icons/ai";
 import { AiFillHeart } from "react-icons/ai";
-import { CommentModalWrapper } from "../../../Posting";
+import { CommentModalWrapper } from "../../../PostCp";
 
 let fontSize35 = css`
   font-size: 25px;

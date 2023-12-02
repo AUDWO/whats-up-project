@@ -16,6 +16,7 @@ import stateUpdateAtom from "../store/stateUpdateAtom";
 
 const Home = () => {
   const setUserInfo = useSetRecoilState(userInfoAtom);
+  const userInfo = useRecoilValue(userInfoAtom);
   const contentChange = useRecoilValue(stateUpdateAtom("contentChange"));
   const postUpdate = useRecoilValue(stateUpdateAtom("post"));
   const userInfoUpdate = useRecoilValue(stateUpdateAtom("userInfo"));
@@ -32,6 +33,8 @@ const Home = () => {
 
     fetchuserInfoData();
   }, [contentChange, postUpdate, userInfoUpdate]);
+
+  console.log(userInfo, "userInfo");
 
   return (
     <HomeWraper>

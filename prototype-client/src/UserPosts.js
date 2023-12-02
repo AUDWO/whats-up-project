@@ -4,7 +4,7 @@ import { useRecoilValue } from "recoil";
 import { useQuery } from "@tanstack/react-query";
 
 //Component
-import PostCp from "./Posting";
+import PostCp from "./PostCp";
 
 //Atom
 import stateUpdateAtom from "./store/stateUpdateAtom";

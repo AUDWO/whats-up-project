@@ -171,8 +171,6 @@ const MoreContactCp = ({ contentInfo, moreType }) => {
   //api 폴더로 이동 예정
 
   const handleSubmitReact = async (type) => {
-    console.log(moreType, "moreType");
-    console.log(contentInfo, "contentInfo");
     try {
       const reponse = await axios.post(
         `/post/${moreType}-react/${contentInfo.id}`,

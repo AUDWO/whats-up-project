@@ -54,7 +54,6 @@ const MoreContactCp = ({ contentInfo, moreType }) => {
   }, [diaryInfoUpdate]);
 
   useEffect(() => {
-    console.log("MORE MORE MORE MORE");
     const fetchStoryReacts = async () => {
       try {
         const reactsResponse = await axios.get(
@@ -98,7 +97,6 @@ const MoreContactCp = ({ contentInfo, moreType }) => {
   }, []);
 
   const updateReactionArr = (type, actType) => {
-    console.log(type, "type type type type type");
     const reactionArr = {
       smile: setSmileReactionArr,
       like: setLikeReactionArr,
@@ -112,10 +110,8 @@ const MoreContactCp = ({ contentInfo, moreType }) => {
     }
   };
 
-  //처음 아이콘을 클릭하면 nextclick state에 type이 담기고 새로운 아이콘을 클릭하면
-  //새로 클릭한 아이콘은 clicked state에 담기게 된다.
   const handleReactFilterType = async (type) => {
-    //기존에 클릭했던 반응을 재클릭하면 반응이 삭제됨.
+    //기존에 클릭했던 반응을 재클릭할 때
     if (nextClick === type) {
       updateReactionArr(nextClick, "subtract");
       setNextClick("");
@@ -123,20 +119,13 @@ const MoreContactCp = ({ contentInfo, moreType }) => {
       handleUnReact();
       return;
     }
-    console.log(nextClick, "nextClick1");
-    console.log(prevClick, "prevClick1");
+    //기존에 이미 선택된 반응이 있고 다른 반응을 선택할 때
     if (nextClick !== type && nextClick !== "") {
-      console.log(nextClick, "nextClick2");
-      console.log(prevClick, "prevClick2");
       handleUnReact();
       updateReactionArr(nextClick, "subtract");
-      console.log("promise 나왔나? 안나왔나");
       setPrevClick(nextClick);
-      console.log(prevClick, "prevClick2.5");
     }
-    console.log(nextClick, "nextClick3");
-    console.log(prevClick, "prevClick3");
-    console.log(`prev click prev click ${prevClick}`);
+    //기존에 반응이 없고 새로운 반응을 추가할 때
     setNextClick(type);
     updateReactionArr(type, "add");
     handleReact(type);
@@ -160,69 +149,27 @@ const MoreContactCp = ({ contentInfo, moreType }) => {
   };
 
   const handleUnReact = async () => {
-    try {
-      const response = await axios.delete(
-        `/delete/${moreType}-react/${contentInfo.id}`
-      );
-
-      //story는 반응 수를 알 필요가 없기 때문에 reactCount정보는 오직 diary를 다룰때만 다룸.
-      if (moreType === "diary") {
-        handleSubmitDiaryReactInfo("add");
-        /*
-        const response2 = await axios.patch(
-          `/update/${moreType}-react-info/${contentInfo.id}`,
-          {
-            reactCount: onlyDiaryInfo.reactCount - 1,
-          }
-        );*/
-        setDiaryInfoUpdate(!diaryInfoUpdate);
-      }
-    } catch (error) {
-      console.error(error);
+    await handleSubmitUnReact();
+    //story는 반응 수를 알 필요가 없기 때문에 reactCount정보는 오직 diary를 다룰때만 다룸.
+    if (moreType === "diary") {
+      handleSubmitDiaryReactInfo("subtract");
+      setDiaryInfoUpdate(!diaryInfoUpdate);
     }
   };
 
   const handleReact = async (type) => {
-    //기존에 반응이 있을때만 동작
-
-    //if (reactInfo.length >= 1) {
-    /*원래는 proClick === reactInfo[0].type 이어여 함
-      setState의 비동기 방식으로 nextClick이 바로 반영이 안됨*/
-
-    /*if (prevClick === reactInfo[0].type) {
-        const response = await axios.delete(
-          `/delete/${moreType}-react/${contentInfo.id}`
-        );
-
-        if (moreType === "diary") setDiaryInfoUpdate(!diaryInfoUpdate);
+    await handleSubmitReact();
+    //반응이 없었거나 없을때만 reactCount를 증가시킨다.
+    if (moreType === "diary") {
+      if (!(reactInfo.length >= 1)) {
+        handleSubmitDiaryReactInfo("add");
+        setDiaryInfoUpdate(!diaryInfoUpdate);
       }
-    }*/
-
-    try {
-      const response = await axios.post(
-        `/post/${moreType}-react/${contentInfo.id}`,
-        {
-          type: type,
-        }
-      );
-
-      console.log(`${reactInfo} in handleReact`);
-
-      //반응이 없었거나 없을때만 reactCount를 증가시킨다.
-      if (moreType === "diary") {
-        if (!(reactInfo.length >= 1)) {
-          handleSubmitDiaryReactInfo("add");
-          setDiaryInfoUpdate(!diaryInfoUpdate);
-        }
-      }
-      //setReactUpdate(!reactUpdate);
-    } catch (error) {
-      console.error(error);
     }
   };
 
   //api 폴더로 이동 예정
-  /*
+
   const handleSubmitReact = async (reactType, contentInfo, type) => {
     try {
       await axios.post(`/post/${reactType}-react/${contentInfo.id}`, {
@@ -231,10 +178,10 @@ const MoreContactCp = ({ contentInfo, moreType }) => {
     } catch (error) {
       console.error(error);
     }
-  };*/
+  };
 
   //api 폴더로 이동 예정
-  /*const handleSubmitUnReact = async (reactType, contentInfo) => {
+  const handleSubmitUnReact = async (reactType, contentInfo) => {
     try {
       const response = await axios.delete(
         `/delete/${reactType}-react/${contentInfo.id}`
@@ -242,11 +189,7 @@ const MoreContactCp = ({ contentInfo, moreType }) => {
     } catch (error) {
       console.error(error);
     }
-  };*/
-
-  console.log(nextClick, "nextClick55");
-  console.log(prevClick, "prevClick55");
-  console.log(reactInfo, "reactInfo");
+  };
 
   return (
     <MoreContact>

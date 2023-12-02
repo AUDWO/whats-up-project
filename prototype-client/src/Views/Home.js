@@ -21,6 +21,7 @@ const Home = () => {
   const postUpdate = useRecoilValue(stateUpdateAtom("post"));
   const userInfoUpdate = useRecoilValue(stateUpdateAtom("userInfo"));
 
+  /*
   useEffect(() => {
     const fetchuserInfoData = async () => {
       try {
@@ -32,7 +33,7 @@ const Home = () => {
     };
 
     fetchuserInfoData();
-  }, [contentChange, postUpdate, userInfoUpdate]);
+  }, [contentChange, postUpdate, userInfoUpdate]);*/
 
   console.log(userInfo, "userInfo");
 

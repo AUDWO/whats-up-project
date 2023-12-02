@@ -172,9 +172,12 @@ const MoreContactCp = ({ contentInfo, moreType }) => {
 
   const handleSubmitReact = async (type) => {
     try {
-      await axios.post(`/post/${moreType}-react/${contentInfo.id}`, {
-        type: type,
-      });
+      const reponse = await axios.post(
+        `/post/${moreType}-react/${contentInfo.id}`,
+        {
+          type: type,
+        }
+      );
     } catch (error) {
       console.error(error);
     }

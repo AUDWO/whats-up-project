@@ -110,7 +110,6 @@ const MoreContactCp = ({ contentInfo, moreType }) => {
       if (actType === "add") reactionArr((prev) => prev + 1);
       if (actType === "subtract") reactionArr((prev) => prev - 1);
     }
-    return new Promise((resolve) => resolve);
   };
 
   //처음 아이콘을 클릭하면 nextclick state에 type이 담기고 새로운 아이콘을 클릭하면
@@ -129,7 +128,7 @@ const MoreContactCp = ({ contentInfo, moreType }) => {
     if (nextClick !== type && nextClick !== "") {
       console.log(nextClick, "nextClick2");
       console.log(prevClick, "prevClick2");
-      const a = await updateReactionArr(nextClick, "subtract");
+      updateReactionArr(nextClick, "subtract");
       console.log("promise 나왔나? 안나왔나");
       setPrevClick(nextClick);
       console.log(prevClick, "prevClick2.5");
@@ -138,7 +137,7 @@ const MoreContactCp = ({ contentInfo, moreType }) => {
     console.log(prevClick, "prevClick3");
     console.log(`prev click prev click ${prevClick}`);
     setNextClick(type);
-    const a = await updateReactionArr(type, "add");
+    updateReactionArr(type, "add");
     handleReact(type);
   };
 

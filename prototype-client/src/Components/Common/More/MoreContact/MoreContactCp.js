@@ -126,9 +126,9 @@ const MoreContactCp = ({ contentInfo, moreType }) => {
       setPrevClick(nextClick);
     }
     //기존에 반응이 없고 새로운 반응을 추가할 때
+    handleReact(type);
     setNextClick(type);
     updateReactionArr(type, "add");
-    handleReact(type);
   };
 
   //다이어리는 배열필터 때문에 반응수가 필요함 => 다이어리 반응 수는 정보를 실시간으로 전달해주는 함수
@@ -171,6 +171,8 @@ const MoreContactCp = ({ contentInfo, moreType }) => {
   //api 폴더로 이동 예정
 
   const handleSubmitReact = async (type) => {
+    console.log(moreType, "moreType");
+    console.log(contentInfo, "contentInfo");
     try {
       const reponse = await axios.post(
         `/post/${moreType}-react/${contentInfo.id}`,

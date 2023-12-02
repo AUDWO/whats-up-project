@@ -22,6 +22,7 @@ import ProfilePostCardCp from "./ProfileContentCard/ProfilePostCardCp";
 //Atoms
 import toggleValueAtom from "../../store/ToggleValueAtom";
 import stateUpdateAtom from "../../store/stateUpdateAtom";
+import userInfoAtom from "../../store/userState/userAtom";
 
 const ProfileContentsCp = ({ otherUserId, userInfo }) => {
   const [contents, setContents] = useState([]);
@@ -55,6 +56,9 @@ const ProfileContentsCp = ({ otherUserId, userInfo }) => {
       return "diaries";
     }
   };
+
+  //const userInfo = useRecoilValue(userInfoAtom);
+  console.log(userInfo, "userInfo in ProfileContentsCp");
 
   useEffect(() => {
     if (!diaryContentsOpen) {

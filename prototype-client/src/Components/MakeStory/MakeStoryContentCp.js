@@ -286,7 +286,15 @@ const MakeStoryContentCp = () => {
     }
   };
 
-  const { mutate } = useMutation(handlePostStory2);
+  const { mutate } = useMutation({
+    handlePostStory2,
+    onSuccess: (data) => {
+      console.log(data);
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
 
   const handleCreate = () => {
     mutate();

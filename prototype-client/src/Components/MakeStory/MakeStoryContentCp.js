@@ -61,24 +61,32 @@ const MakeStoryContentCp = () => {
   handle();
   
   */
-
+  /*
   const handleSubmitPostStory = async () => {
     try {
-      const imgData = await axios.post("/post/storyimg", formData);
+      // const imgData = await axios.post("/post/storyimg", formData);
 
-      const response = await axios.post("/post/story", {
-        content: content,
-        url: imgData.data.url,
-      });
+      //onst response = await axios.post("/post/story", newStory);
     } catch (error) {
       console.error("게시 중 오류 발생:", error);
+    }
+  };*/
+
+  const handleSubmitPostStoryImg = async () => {
+    try {
+      const imgData = await axios.post("/post/storyimg", formData);
+      return imgData;
+    } catch (error) {
+      console.error(error);
     }
   };
 
   const userInfo = useRecoilValue(userInfoAtom);
 
   const mutation = useMutation({
-    handleSubmitPostStory,
+    mutationFn: (newStory) => {
+      return axios.post("/post/story", newStory);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries("storyContents");
     },
@@ -90,7 +98,8 @@ const MakeStoryContentCp = () => {
   const handlePostStory = async () => {
     if (storyImgUrl) {
       try {
-        await mutation.mutateAsync();
+        const imgData = await handleSubmitPostStoryImg();
+        mutation.mutate({ content: content, url: imgData });
         setStoryModalOpen(!StoryModalOpen);
         setStoryImgUrl(null);
       } catch (error) {

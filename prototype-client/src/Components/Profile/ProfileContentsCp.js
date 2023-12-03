@@ -58,7 +58,6 @@ const ProfileContentsCp = ({ otherUserId, userInfo }) => {
   };
 
   //const userInfo = useRecoilValue(userInfoAtom);
-  console.log(userInfo, "userInfo in ProfileContentsCp");
 
   useEffect(() => {
     if (!diaryContentsOpen) {

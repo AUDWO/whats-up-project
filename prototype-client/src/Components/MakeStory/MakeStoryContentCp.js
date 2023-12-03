@@ -109,16 +109,18 @@ const MakeStoryContentCp = () => {
   const { mutate } = useMutation(
     // 비동기 함수 정의
     async () => {
-      try {
-        // 첫 번째 API 호출: 이미지 업로드
-        const imgData = await axios.post("/post/storyimg", formData);
+      if (storyImgUrl) {
+        try {
+          // 첫 번째 API 호출: 이미지 업로드
+          const imgData = await axios.post("/post/storyimg", formData);
 
-        // 두 번째 API 호출: 스토리 게시
-        const response = await axios.post("/post/story", imgData);
+          // 두 번째 API 호출: 스토리 게시
+          const response = await axios.post("/post/story", imgData);
 
-        return response; // 성공 시 반환값
-      } catch (error) {
-        throw error; // 에러가 발생하면 해당 에러를 처리
+          return response; // 성공 시 반환값
+        } catch (error) {
+          throw error; // 에러가 발생하면 해당 에러를 처리
+        }
       }
     },
     {

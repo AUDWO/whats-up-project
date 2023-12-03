@@ -220,7 +220,7 @@ import {
 import postImgAtom from "../../store/PostImgAtom";
 import stateUpdateAtom from "../../store/stateUpdateAtom";
 import ModalOpenAtom from "../../store/ModalOpenAtom";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, QueryClient } from "@tanstack/react-query";
 
 const MakeStoryContentCp = () => {
   const [StoryModalOpen, setStoryModalOpen] = useRecoilState(
@@ -253,7 +253,7 @@ const MakeStoryContentCp = () => {
       console.error(error);
     }
   };
-
+  /*
   const handlePostStory = async () => {
     if (storyImgUrl) {
       try {
@@ -272,9 +272,9 @@ const MakeStoryContentCp = () => {
         console.error("게시 중 오류 발생:", error);
       }
     }
-  };
+  };*/
 
-  const handlePostStory2 = async () => {
+  const handlePostStory = async () => {
     if (storyImgUrl) {
       try {
         const imgData = await handleSubmitImg(formData);
@@ -287,8 +287,9 @@ const MakeStoryContentCp = () => {
   };
 
   const { mutate } = useMutation({
-    mutationFn: handlePostStory2,
+    mutationFn: handlePostStory,
     onSuccess: (data) => {
+      QueryClient.invalidateQueries(["storyContents"]);
       console.log(data);
     },
     onError: (error) => {

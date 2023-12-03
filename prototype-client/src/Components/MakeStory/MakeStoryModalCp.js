@@ -30,6 +30,7 @@ const MakeStoryModalCp = () => {
       }}
     >
       <MakeStoryWrapper>
+        <MakeStoryImgCp />
         <MakeStoryContentCp />
       </MakeStoryWrapper>
     </MakeStoryModal>

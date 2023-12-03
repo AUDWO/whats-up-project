@@ -274,7 +274,19 @@ const MakeStoryContentCp = () => {
     }
   };
 
-  const { mutate } = useMutation(handlePostStory);
+  const handlePostStory2 = async () => {
+    if (storyImgUrl) {
+      try {
+        const imgData = await handleSubmitImg(formData);
+        const response = await handleSubmitStory(content, imgData);
+        return response;
+      } catch (error) {
+        console.error("게시 중 오류 발생:", error);
+      }
+    }
+  };
+
+  const { mutate } = useMutation(handlePostStory2);
 
   const handleCreate = () => {
     mutate();

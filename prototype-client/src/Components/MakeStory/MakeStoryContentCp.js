@@ -229,7 +229,7 @@ const MakeStoryContentCp = () => {
   const [storyImgUrl, setStoryImgUrl] = useRecoilState(postImgAtom("storyImg"));
 
   const [content, setContent] = useState(null);
-  /*
+
   const formData = new FormData();
   formData.append("img", storyImgUrl);
 
@@ -252,7 +252,7 @@ const MakeStoryContentCp = () => {
       }
     }
   };
-*/
+
   return (
     <MakeStoryContentWrapper>
       <MakeStoryProfileWrapper>
@@ -269,7 +269,7 @@ const MakeStoryContentCp = () => {
       <MakeStoryFormWrapper>
         <MakeStoryButton
           onClick={() => {
-            //handlePostStory();
+            handlePostStory();
             setStoryModalOpen(!StoryModalOpen);
             setStoryImgUrl(null);
           }}

@@ -220,7 +220,7 @@ import {
 import postImgAtom from "../../store/PostImgAtom";
 import stateUpdateAtom from "../../store/stateUpdateAtom";
 import ModalOpenAtom from "../../store/ModalOpenAtom";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
 const MakeStoryContentCp = () => {
   const [StoryModalOpen, setStoryModalOpen] = useRecoilState(
@@ -286,7 +286,7 @@ const MakeStoryContentCp = () => {
     }
   };
 
-  const queryClient = useQueryClient();
+  //const queryClient = useQueryClient();
   const { mutate } = useMutation({
     mutationFn: handlePostStory,
     onSuccess: (data) => {

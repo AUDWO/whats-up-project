@@ -73,7 +73,9 @@ const MakeStoryContentCp = () => {
   };*/
 
   const handleSubmitPostStoryImg = async () => {
+    console.log("handleSubmitPostStoryImg시작");
     try {
+      console.log("handleSubmitPostStoryImg 실행중");
       const imgData = await axios.post("/post/storyimg", formData);
       return imgData;
     } catch (error) {
@@ -96,8 +98,10 @@ const MakeStoryContentCp = () => {
   });
 
   const handlePostStory = async () => {
+    console.log("handlePostStory시작");
     if (storyImgUrl) {
       try {
+        console.log("handlePostStory 실행중");
         const imgData = await handleSubmitPostStoryImg();
         console.log(imgData, "imgData");
         mutation.mutateAsync({ content: content, url: imgData });

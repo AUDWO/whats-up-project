@@ -165,8 +165,8 @@ const MakeStoryContentCp = () => {
   return (
     <MakeStoryContentWrapper>
       <MakeStoryProfileWrapper>
-        <MakeStoryProfileImg src={userInfo.img} />
-        <MakeStoryNickname>{userInfo.nickname}</MakeStoryNickname>
+        <MakeStoryProfileImg />
+        <MakeStoryNickname></MakeStoryNickname>
       </MakeStoryProfileWrapper>
       <MakeStoryContent
         placeholder="내용을 입력하세요!"

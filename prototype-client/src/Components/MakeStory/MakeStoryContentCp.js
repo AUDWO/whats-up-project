@@ -38,7 +38,7 @@ const MakeStoryContentCp = () => {
   formData.append("img", storyImgUrl);
   const userInfo = useRecoilValue(userInfoAtom);
 
-  const handlePostStory = async () => {
+  const handlePostStory2 = async () => {
     if (storyImgUrl) {
       try {
         const imgData = await axios.post("/post/storyimg", formData);
@@ -52,6 +52,26 @@ const MakeStoryContentCp = () => {
       }
     }
     if (!storyImgUrl) alert("사진을 선택해주세요.");
+  };
+
+  const handlePostStory = async () => {
+    if (storyImgUrl) {
+      try {
+        const imgData = await axios.post("/post/storyimg", formData);
+
+        const response = await axios.post("/post/story", {
+          content: content,
+          url: imgData.data.url,
+        });
+
+        const handle = () => {
+          setStoryUdate(!storyUpdate);
+        };
+        handle();
+      } catch (error) {
+        console.error("게시 중 오류 발생:", error);
+      }
+    }
   };
 
   /*

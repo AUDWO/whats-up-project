@@ -38,7 +38,6 @@ const MakeStoryContentCp = () => {
   formData.append("img", storyImgUrl);
   const userInfo = useRecoilValue(userInfoAtom);
 
-  /*
   const handlePostStory = async () => {
     if (storyImgUrl) {
       try {
@@ -53,7 +52,7 @@ const MakeStoryContentCp = () => {
       }
     }
     if (!storyImgUrl) alert("사진을 선택해주세요.");
-  };*/
+  };
 
   /*
   const handle = () => {
@@ -158,7 +157,8 @@ const MakeStoryContentCp = () => {
       <MakeStoryFormWrapper>
         <MakeStoryButton
           onClick={() => {
-            handleButtonClick();
+            //handleButtonClick();
+            handlePostStory();
             /*
             setStoryModalOpen(!StoryModalOpen);
             setStoryImgUrl(null);

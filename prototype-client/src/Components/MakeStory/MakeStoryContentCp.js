@@ -105,6 +105,7 @@ const MakeStoryContentCp = () => {
     if (!storyImgUrl) alert("사진을 선택해주세요.");
   };*/
 
+  /*
   const { mutate } = useMutation(
     // 비동기 함수 정의
     async () => {
@@ -139,7 +140,7 @@ const MakeStoryContentCp = () => {
   // 클릭 시 mutation 실행
   const handleButtonClick = () => {
     mutate();
-  };
+  };*/
 
   return (
     <MakeStoryContentWrapper>

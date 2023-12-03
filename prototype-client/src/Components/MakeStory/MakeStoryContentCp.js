@@ -220,6 +220,7 @@ import {
 import postImgAtom from "../../store/PostImgAtom";
 import stateUpdateAtom from "../../store/stateUpdateAtom";
 import ModalOpenAtom from "../../store/ModalOpenAtom";
+import { useMutation } from "@tanstack/react-query";
 
 const MakeStoryContentCp = () => {
   const [StoryModalOpen, setStoryModalOpen] = useRecoilState(
@@ -232,6 +233,26 @@ const MakeStoryContentCp = () => {
 
   const formData = new FormData();
   formData.append("img", storyImgUrl);
+
+  const handleSubmitImg = async (formData) => {
+    try {
+      const imgData = await axios.post("/post/storyimg", formData);
+      return imgData;
+    } catch (error) {
+      console.error("handleSubmit Error", error);
+    }
+  };
+
+  const handleSubmitStory = async (content, imgData) => {
+    try {
+      const postStoryResponse = await axios.post("/post/story", {
+        content: content,
+        url: imgData.data.url,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handlePostStory = async () => {
     if (storyImgUrl) {
@@ -253,6 +274,12 @@ const MakeStoryContentCp = () => {
     }
   };
 
+  const { mutate } = useMutation(handlePostStory);
+
+  const handleCreate = () => {
+    mutate();
+  };
+
   return (
     <MakeStoryContentWrapper>
       <MakeStoryProfileWrapper>
@@ -269,7 +296,8 @@ const MakeStoryContentCp = () => {
       <MakeStoryFormWrapper>
         <MakeStoryButton
           onClick={() => {
-            handlePostStory();
+            handleCreate();
+            //handlePostStory();
             setStoryModalOpen(!StoryModalOpen);
             setStoryImgUrl(null);
           }}

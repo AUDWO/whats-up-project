@@ -102,7 +102,7 @@ const MakeStoryContentCp = () => {
     if (storyImgUrl) {
       try {
         console.log("handlePostStory 실행중");
-        const imgData = await handleSubmitPostStoryImg();
+        const imgData = handleSubmitPostStoryImg();
         console.log(imgData, "imgData");
         mutation.mutateAsync({ content: content, url: imgData });
         setStoryModalOpen(!StoryModalOpen);

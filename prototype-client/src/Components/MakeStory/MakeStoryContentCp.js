@@ -290,7 +290,7 @@ const MakeStoryContentCp = () => {
   const { mutate } = useMutation({
     mutationFn: handlePostStory,
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["storyContents"] });
+      //  queryClient.invalidateQueries({ queryKey: ["storyContents"] });
       console.log(data);
     },
     onError: (error) => {

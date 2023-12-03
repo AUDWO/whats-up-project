@@ -21,7 +21,7 @@ import ModalOpenAtom from "../../store/ModalOpenAtom";
 import userInfoAtom from "../../store/userState/userAtom";
 
 //Queries
-import { useQueryClient, useMutation } from "@tanstack/react-query";
+//import { useQueryClient, useMutation } from "@tanstack/react-query";
 
 const MakeStoryContentCp = () => {
   const [StoryModalOpen, setStoryModalOpen] = useRecoilState(
@@ -30,7 +30,7 @@ const MakeStoryContentCp = () => {
   const [storyUpdate, setStoryUdate] = useRecoilState(stateUpdateAtom("story"));
   const [storyImgUrl, setStoryImgUrl] = useRecoilState(postImgAtom("storyImg"));
 
-  const queryClient = useQueryClient();
+  //const queryClient = useQueryClient();
 
   const [content, setContent] = useState(null);
 
@@ -180,10 +180,9 @@ const MakeStoryContentCp = () => {
           onClick={() => {
             //handleButtonClick();
             handlePostStory();
-            /*
+
             setStoryModalOpen(!StoryModalOpen);
             setStoryImgUrl(null);
-            */
           }}
         >
           게시하기

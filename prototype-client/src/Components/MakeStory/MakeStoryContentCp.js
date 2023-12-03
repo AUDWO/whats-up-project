@@ -36,6 +36,7 @@ const MakeStoryContentCp = () => {
 
   const formData = new FormData();
   formData.append("img", storyImgUrl);
+  const userInfo = useRecoilValue(userInfoAtom);
 
   /*
   const handlePostStory = async () => {
@@ -61,16 +62,8 @@ const MakeStoryContentCp = () => {
   handle();
   
   */
-  /*
-  const handleSubmitPostStory = async () => {
-    try {
-      // const imgData = await axios.post("/post/storyimg", formData);
 
-      //onst response = await axios.post("/post/story", newStory);
-    } catch (error) {
-      console.error("게시 중 오류 발생:", error);
-    }
-  };*/
+  /*
 
   const handleSubmitPostStoryImg = async () => {
     console.log("handleSubmitPostStoryImg시작");
@@ -83,7 +76,6 @@ const MakeStoryContentCp = () => {
     }
   };
 
-  const userInfo = useRecoilValue(userInfoAtom);
 
   const mutation = useMutation({
     mutationFn: (newStory) => {
@@ -112,6 +104,40 @@ const MakeStoryContentCp = () => {
       }
     }
     if (!storyImgUrl) alert("사진을 선택해주세요.");
+  };*/
+
+  const { mutate } = useMutation(
+    // 비동기 함수 정의
+    async () => {
+      try {
+        // 첫 번째 API 호출: 이미지 업로드
+        const imgData = await axios.post("/post/storyimg", formData);
+
+        // 두 번째 API 호출: 스토리 게시
+        const response = await axios.post("/post/story", imgData);
+
+        return response; // 성공 시 반환값
+      } catch (error) {
+        throw error; // 에러가 발생하면 해당 에러를 처리
+      }
+    },
+    {
+      // 성공 시 실행되는 콜백 함수
+      onSuccess: (data) => {
+        console.log("게시 성공:", data);
+        // 성공 후 추가 작업 수행 가능
+      },
+      // 에러 시 실행되는 콜백 함수
+      onError: (error) => {
+        console.error("게시 중 오류 발생:", error);
+        // 에러 발생 후 추가 작업 수행 가능
+      },
+    }
+  );
+
+  // 클릭 시 mutation 실행
+  const handleButtonClick = () => {
+    mutate();
   };
 
   return (
@@ -130,7 +156,7 @@ const MakeStoryContentCp = () => {
       <MakeStoryFormWrapper>
         <MakeStoryButton
           onClick={() => {
-            handlePostStory();
+            handleButtonClick();
             /*
             setStoryModalOpen(!StoryModalOpen);
             setStoryImgUrl(null);

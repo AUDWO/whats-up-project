@@ -77,7 +77,8 @@ const MakeStoryContentCp = () => {
 
   const userInfo = useRecoilValue(userInfoAtom);
 
-  const mutation = useMutation(handleSubmitPostStory, {
+  const mutation = useMutation({
+    handleSubmitPostStory,
     onSuccess: () => {
       queryClient.invalidateQueries("storyContents");
     },

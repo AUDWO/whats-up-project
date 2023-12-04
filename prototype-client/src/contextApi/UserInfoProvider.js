@@ -15,18 +15,18 @@ export const UserInfoProvider = ({ children }) => {
     }
   };
 
-  useEffect(() => {
+  /*useEffect(() => {
     try {
       const response = fetchuserInfoData();
       setUserInfo({ ...response.data });
     } catch (error) {
       console.error("context useEffect fail", error);
     }
-  }, []);
+  }, []);*/
 
   if (Object.keys(userInfo).length >= 1) {
     return (
-      <UserInfoContext.Provider value={userInfo}>
+      <UserInfoContext.Provider value={{ data: 1 }}>
         {children}
       </UserInfoContext.Provider>
     );

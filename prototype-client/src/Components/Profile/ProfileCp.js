@@ -13,7 +13,7 @@ import ProfileContentsCp from "./ProfileContentsCp";
 //Atoms
 import userInfoAtom from "../../store/userState/userAtom";
 import stateUpdateAtom from "../../store/stateUpdateAtom";
-import { UserInfoProvider } from "../../contextApi/UserInfoProvider";
+//import { UserInfoProvider } from "../../contextApi/UserInfoProvider";
 
 const ProfileCp = ({ otherUserId }) => {
   const [userInfo, setUserInfo] = useRecoilState(userInfoAtom);
@@ -51,10 +51,8 @@ const ProfileCp = ({ otherUserId }) => {
   if (userInfo) {
     return (
       <ProfilePageWrapper>
-        <UserInfoProvider>
-          <ProfileImgCp userInfo={userInfo} />
-          <ProfileContentsCp userInfo={userInfo} />
-        </UserInfoProvider>
+        <ProfileImgCp userInfo={userInfo} />
+        <ProfileContentsCp userInfo={userInfo} />
       </ProfilePageWrapper>
     );
   }

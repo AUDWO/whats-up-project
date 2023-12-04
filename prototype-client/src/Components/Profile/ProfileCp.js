@@ -50,12 +50,12 @@ const ProfileCp = ({ otherUserId }) => {
 
   if (userInfo) {
     return (
-      <UserInfoProvider>
-        <ProfilePageWrapper>
+      <ProfilePageWrapper>
+        <UserInfoProvider>
           <ProfileImgCp userInfo={userInfo} />
           <ProfileContentsCp userInfo={userInfo} />
-        </ProfilePageWrapper>
-      </UserInfoProvider>
+        </UserInfoProvider>
+      </ProfilePageWrapper>
     );
   }
 };

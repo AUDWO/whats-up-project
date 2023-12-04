@@ -28,6 +28,7 @@ import { useUserInfoValue } from "../../contextApi/UserInfoProvider";
 const ProfileContentsCp = ({ otherUserId, userInfo }) => {
   const userInfo2 = useUserInfoValue();
   console.log("userInfo2", userInfo2);
+  console.log("profileContentsCp !!!???");
   const [contents, setContents] = useState([]);
   const [contentsInfo, setContentsInfo] = useState({});
 

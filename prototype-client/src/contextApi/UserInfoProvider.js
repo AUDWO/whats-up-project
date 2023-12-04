@@ -14,30 +14,23 @@ export const UserInfoProvider = ({ children }) => {
       console.error(error);
     }
   };
-  /*
+
   useEffect(() => {
-    const response = fetchuserInfoData();
-    setUserInfo({ ...response.data });
+    try {
+      const response = fetchuserInfoData();
+      setUserInfo({ ...response.data });
+    } catch (error) {
+      console.error("context useEffect fail", error);
+    }
   }, []);
-*/
-  return (
-    <UserInfoContext.Provider
-      value={{
-        createdAt: "2023-11-25T02:57:21.000Z",
-        diarieslength: 0,
-        email: "k1@naver.com",
-        follower: 2,
-        following: 0,
-        id: 2,
-        img: "https://whatsup1.s3.ap-northeast-2.amazonaws.com/original/1700881143211__%20%281%29.jpeg",
-        name: "리버풀",
-        nickname: "Liverpool",
-        postslength: 1,
-      }}
-    >
-      {children}
-    </UserInfoContext.Provider>
-  );
+
+  if (Object.keys(userInfo).length >= 1) {
+    return (
+      <UserInfoContext.Provider value={userInfo}>
+        {children}
+      </UserInfoContext.Provider>
+    );
+  }
 };
 
 export function useUserInfoValue() {

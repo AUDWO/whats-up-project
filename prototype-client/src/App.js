@@ -56,13 +56,13 @@ function App() {
   }, []);
 
   return (
-    <UserInfoProvider>
-      <BrowserRouter>
-        <GlobalStyles />
-        {PostModalOpen && <MakePostModalCp />}
-        {StoryModalOpen && <MakeStoryModalCp />}
-        {ProfileConfigModalOpen && <ProfileConfigModal />}
-        {ContentConfigModalOpen && <ProfileContentConfigModalCp />}
+    <BrowserRouter>
+      <GlobalStyles />
+      {PostModalOpen && <MakePostModalCp />}
+      {StoryModalOpen && <MakeStoryModalCp />}
+      {ProfileConfigModalOpen && <ProfileConfigModal />}
+      {ContentConfigModalOpen && <ProfileContentConfigModalCp />}
+      <UserInfoProvider>
         <Routes>
           <Route path="/" element={<PageWrapper />}>
             <Route index element={<Login />} />
@@ -82,8 +82,8 @@ function App() {
             </Route>
           </Route>
         </Routes>
-      </BrowserRouter>
-    </UserInfoProvider>
+      </UserInfoProvider>
+    </BrowserRouter>
   );
 }
 

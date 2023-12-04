@@ -29,6 +29,7 @@ import PageWrapper from "./PageWrapper";
 import DashboardWrapper from "./DashboardWrapper";
 import { useEffect } from "react";
 import userInfoAtom from "./store/userState/userAtom";
+import { UserInfoProvider } from "./contextApi/UserInfoProvider";
 
 function App() {
   const StoryModalOpen = useRecoilValue(ModalOpenAtom("makeStoryModal"));
@@ -55,32 +56,34 @@ function App() {
   }, []);
 
   return (
-    <BrowserRouter>
-      <GlobalStyles />
-      {PostModalOpen && <MakePostModalCp />}
-      {StoryModalOpen && <MakeStoryModalCp />}
-      {ProfileConfigModalOpen && <ProfileConfigModal />}
-      {ContentConfigModalOpen && <ProfileContentConfigModalCp />}
-      <Routes>
-        <Route path="/" element={<PageWrapper />}>
-          <Route index element={<Login />} />
-          <Route path="join" element={<SignUp />} />
-          <Route path="more-diary/:diaryId" element={<MoreDiary />} />
-          <Route path="more-story/:storyId" element={<MoreStory />} />
-          <Route path="home" element={<Home />} />
-          <Route path="/dashboard" element={<DashboardWrapper />}>
-            <Route path="diary" element={<Diary />} />
-            <Route path="make-diary" element={<MakeDiary />} />
-            <Route path="profile" element={<Profile />} />
-            <Route path="make-post" element={<MakePostModalCp />} />
-            <Route
-              path="profile/:userNickname/:otherUserId"
-              element={<Profile />}
-            />
+    <UserInfoProvider>
+      <BrowserRouter>
+        <GlobalStyles />
+        {PostModalOpen && <MakePostModalCp />}
+        {StoryModalOpen && <MakeStoryModalCp />}
+        {ProfileConfigModalOpen && <ProfileConfigModal />}
+        {ContentConfigModalOpen && <ProfileContentConfigModalCp />}
+        <Routes>
+          <Route path="/" element={<PageWrapper />}>
+            <Route index element={<Login />} />
+            <Route path="join" element={<SignUp />} />
+            <Route path="more-diary/:diaryId" element={<MoreDiary />} />
+            <Route path="more-story/:storyId" element={<MoreStory />} />
+            <Route path="home" element={<Home />} />
+            <Route path="/dashboard" element={<DashboardWrapper />}>
+              <Route path="diary" element={<Diary />} />
+              <Route path="make-diary" element={<MakeDiary />} />
+              <Route path="profile" element={<Profile />} />
+              <Route path="make-post" element={<MakePostModalCp />} />
+              <Route
+                path="profile/:userNickname/:otherUserId"
+                element={<Profile />}
+              />
+            </Route>
           </Route>
-        </Route>
-      </Routes>
-    </BrowserRouter>
+        </Routes>
+      </BrowserRouter>
+    </UserInfoProvider>
   );
 }
 

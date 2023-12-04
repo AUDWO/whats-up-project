@@ -13,6 +13,7 @@ import ProfileContentsCp from "./ProfileContentsCp";
 //Atoms
 import userInfoAtom from "../../store/userState/userAtom";
 import stateUpdateAtom from "../../store/stateUpdateAtom";
+import { useUserInfoValue } from "../../contextApi/UserInfoProvider";
 const ProfileCp = ({ otherUserId }) => {
   const [userInfo, setUserInfo] = useRecoilState(userInfoAtom);
 
@@ -22,6 +23,9 @@ const ProfileCp = ({ otherUserId }) => {
   const contentUpdate = useRecoilValue(stateUpdateAtom("contentUpdate"));
 
   const postUdate = useRecoilValue(stateUpdateAtom("post"));
+
+  const userInfo2 = useUserInfoValue();
+  console.log(userInfo2);
 
   useEffect(() => {
     const fetchUserInfoData = async () => {

@@ -249,6 +249,7 @@ const MakeStoryContentCp = () => {
         content: content,
         url: imgData.data.url,
       });
+      return postStoryResponse;
     } catch (error) {
       console.error(error);
     }
@@ -319,7 +320,6 @@ const MakeStoryContentCp = () => {
         <MakeStoryButton
           onClick={() => {
             handleCreate();
-            //handlePostStory();
             setStoryModalOpen(!StoryModalOpen);
             setStoryImgUrl(null);
           }}

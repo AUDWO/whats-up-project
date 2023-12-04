@@ -27,8 +27,6 @@ import { useUserInfoValue } from "../../contextApi/UserInfoProvider";
 
 const ProfileContentsCp = ({ otherUserId, userInfo }) => {
   const userInfo2 = useUserInfoValue();
-  console.log("userInfo2", userInfo2);
-  console.log("profileContentsCp !!!???");
   const [contents, setContents] = useState([]);
   const [contentsInfo, setContentsInfo] = useState({});
 
@@ -63,6 +61,8 @@ const ProfileContentsCp = ({ otherUserId, userInfo }) => {
 
   //const userInfo = useRecoilValue(userInfoAtom);
 
+  console.log("userInfo2", userInfo2);
+  console.log("profileContentsCp !!!???");
   useEffect(() => {
     if (!diaryContentsOpen) {
       setPostContentsOpen(true);

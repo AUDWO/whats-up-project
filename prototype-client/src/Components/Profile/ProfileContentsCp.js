@@ -23,8 +23,11 @@ import ProfilePostCardCp from "./ProfileContentCard/ProfilePostCardCp";
 import toggleValueAtom from "../../store/ToggleValueAtom";
 import stateUpdateAtom from "../../store/stateUpdateAtom";
 import userInfoAtom from "../../store/userState/userAtom";
+import { useUserInfoValue } from "../../contextApi/UserInfoProvider";
 
 const ProfileContentsCp = ({ otherUserId, userInfo }) => {
+  const userInfo2 = useUserInfoValue();
+  console.log("userInfo2", userInfo2);
   const [contents, setContents] = useState([]);
   const [contentsInfo, setContentsInfo] = useState({});
 

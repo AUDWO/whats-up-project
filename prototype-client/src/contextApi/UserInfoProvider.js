@@ -6,11 +6,6 @@ const UserInfoContext = createContext();
 export const UserInfoProvider = ({ children }) => {
   const [userInfo, setUserInfo] = useState({});
 
-  useEffect(() => {
-    const response = fetchuserInfoData();
-    setUserInfo({ ...response.data });
-  }, []);
-
   const fetchuserInfoData = async () => {
     try {
       const response = await axios.get("/page/user-info");
@@ -20,11 +15,18 @@ export const UserInfoProvider = ({ children }) => {
     }
   };
 
-  return (
-    <UserInfoContext.Provider value={userInfo}>
-      {children}
-    </UserInfoContext.Provider>
-  );
+  useEffect(() => {
+    const response = fetchuserInfoData();
+    setUserInfo({ ...response.data });
+  }, []);
+
+  if (Object.keys(userInfo).length >= 1) {
+    return (
+      <UserInfoContext.Provider value={userInfo}>
+        {children}
+      </UserInfoContext.Provider>
+    );
+  }
 };
 
 export function useUserInfoValue() {

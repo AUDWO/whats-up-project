@@ -25,7 +25,7 @@ const ProfileCp = ({ otherUserId }) => {
   const postUdate = useRecoilValue(stateUpdateAtom("post"));
 
   const userInfo2 = useUserInfoValue();
-  console.log(userInfo2);
+  console.log("userInfo2", userInfo2);
 
   useEffect(() => {
     const fetchUserInfoData = async () => {

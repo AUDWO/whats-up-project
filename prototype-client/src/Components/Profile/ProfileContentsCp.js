@@ -100,7 +100,7 @@ const ProfileContentsCp = ({ otherUserId, userInfo }) => {
     }
     fetchContentsData();
     //otherUserId : 다른사람 프로필에서 내 프로필로 이동 시 필요
-  }, []);
+  }, [postContentsOpen, diaryContentsOpen, contentUpdate, otherUserId]);
 
   //[postContentsOpen, diaryContentsOpen, contentUpdate, otherUserId]
   if (otherUserId && Object.keys(contentsInfo).length >= 1) {

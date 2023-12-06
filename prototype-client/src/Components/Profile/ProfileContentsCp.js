@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useQuery } from "@tanstack/react-query";
+import { useRecoilValue } from "recoil";
+
+//Context
+import { useUserInfoValue } from "../../contextApi/UserInfoProvider";
 
 //Styled-Components
 import {
@@ -22,121 +26,138 @@ import ProfilePostCardCp from "./ProfileContentCard/ProfilePostCardCp";
 //Atoms
 import toggleValueAtom from "../../store/ToggleValueAtom";
 import stateUpdateAtom from "../../store/stateUpdateAtom";
-import userInfoAtom from "../../store/userState/userAtom";
-import { useUserInfoValue } from "../../contextApi/UserInfoProvider";
+import defaultTrueToggleValueAtom from "../../store/defaultTrueToggleValueAtom";
 
-const ProfileContentsCp = ({ otherUserId, userInfo }) => {
-  const userInfo2 = useUserInfoValue();
-  const [contents, setContents] = useState([]);
-  const [contentsInfo, setContentsInfo] = useState({});
+const ProfileContentsCp = ({ otherUserId }) => {
+  //otherUserProfileContents
 
-  const [postContentsOpen, setPostContentsOpen] = useRecoilState(
-    toggleValueAtom("postContentsOpen")
+  const userInfo = useUserInfoValue();
+
+  //OtherUserProfile-Info--------------------------------------------------------
+  const [otherUserDiaryContents, setOhterUserDiaryContents] = useState([]);
+  const [otherUserPostContents, setOtherUserPostContents] = useState([]);
+  const [otherUserProfilecontentsInfo, setOtherUserProfileContentsInfo] =
+    useState({});
+
+  const postContentsOpen = useRecoilValue(
+    defaultTrueToggleValueAtom(
+      `postContentsOpen${otherUserId ? otherUserId : userInfo.id}`
+    )
   );
   const diaryContentsOpen = useRecoilValue(
-    toggleValueAtom("diaryContentsOpen")
+    toggleValueAtom(
+      `diaryContentsOpen${otherUserId ? otherUserId : userInfo.id}`
+    )
   );
-  const [contentLender, setContentLender] = useRecoilState(
-    toggleValueAtom("contentLender")
-  );
-  const contentUpdate = useRecoilValue(stateUpdateAtom("contentUpdate"));
 
+  //Inquiry otherUserProfile-Id
   const handleUser = () => {
     if (otherUserId) {
       return otherUserId;
     }
-    if (userInfo) {
-      return userInfo.id;
-    }
   };
 
-  const handleType = () => {
-    if (postContentsOpen) {
-      return "posts";
-    }
-    if (diaryContentsOpen) {
-      return "diaries";
-    }
-  };
-
-  //const userInfo = useRecoilValue(userInfoAtom);
-
-  console.log("userInfo2", userInfo2);
-  console.log("profileContentsCp !!!???");
+  //Get otherUserProfile-Info
   useEffect(() => {
-    if (!diaryContentsOpen) {
-      setPostContentsOpen(true);
-    }
-
-    const fetchContentsData = async () => {
-      try {
-        if (postContentsOpen || diaryContentsOpen) {
-          const contentsResponse = await axios.get(
-            `/page/render-${handleType()}/${handleUser()}`
-          );
-          if (diaryContentsOpen) {
-          }
-
-          setContents([...contentsResponse.data]);
-          setContentLender(true);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    const fetchContentsInfoData = async () => {
-      try {
-        const contentsInfoResponse = await axios.get(
-          `/page/user-info/${otherUserId}`
-        );
-        setContentsInfo({ ...contentsInfoResponse.data });
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
     if (otherUserId) {
-      fetchContentsInfoData();
+      getOtherUserProfileInfo();
     }
-    fetchContentsData();
-    //otherUserId : 다른사람 프로필에서 내 프로필로 이동 시 필요
-  }, [postContentsOpen, diaryContentsOpen, contentUpdate, otherUserId]);
+  }, [otherUserId]);
 
-  //[postContentsOpen, diaryContentsOpen, contentUpdate, otherUserId]
-  if (otherUserId && Object.keys(contentsInfo).length >= 1) {
+  //OtherUserProfile-Info-------------------------------------------------------
+
+  //MyProfile-Info--------------------------------------------------------------
+  const fetchPostContentsData = async () => {
+    try {
+      const response = await axios.get(`/page/render-posts/${userInfo.id}`);
+
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const fetchDiaryContentsData = async () => {
+    try {
+      const response = await axios.get(`/page/render-diaries/${userInfo.id}`);
+
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const contentsData = useQuery({
+    queryKey: ["postContentsInfo"],
+    queryFn: fetchPostContentsData,
+    // enabled: postContentsOpen,
+  });
+
+  const diaryContentsData = useQuery({
+    queryKey: ["diaryContentsInfo"],
+    queryFn: fetchDiaryContentsData,
+    //enabled: diaryContentsOpen,
+  });
+
+  const fetchOtherUserProfileContentsData = async () => {
+    try {
+      const contentsResponse = await axios.get(
+        `/page/render-posts/${handleUser()}`
+      );
+
+      const diaryContentsResponse = await axios.get(
+        `/page/render-diaries/${handleUser()}`
+      );
+      setOhterUserDiaryContents([...diaryContentsResponse.data]);
+      setOtherUserPostContents([...contentsResponse.data]);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchOtherUserProfileContentsInfoData = async () => {
+    try {
+      const contentsInfoResponse = await axios.get(
+        `/page/user-info/${otherUserId}`
+      );
+      setOtherUserProfileContentsInfo({ ...contentsInfoResponse.data });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getOtherUserProfileInfo = async () => {
+    await fetchOtherUserProfileContentsData();
+    await fetchOtherUserProfileContentsInfoData();
+  };
+
+  //MyProfile-Info--------------------------------------------------------
+
+  if (otherUserId && Object.keys(otherUserProfilecontentsInfo).length >= 1) {
     return (
       <>
-        <ProfilePostsInfoCp contentsInfo={contentsInfo} />
-        {contents.length >= 1 ? (
+        <ProfilePostsInfoCp contentsInfo={otherUserProfilecontentsInfo} />
+        {otherUserPostContents.length >= 1 ? (
           <>
             <ContentsWrapper>
               <ContentCardsWrapper>
-                {contents.map((content) => (
-                  <>
-                    {diaryContentsOpen ? (
-                      <>
-                        {content.publicControl ? (
-                          <ProfileDiaryCardCp
-                            content={content}
-                            myCard={false}
-                          />
-                        ) : (
-                          <ContentCardWrapper>
-                            {content.img ? (
-                              <ContentCard src={content.img} />
-                            ) : (
-                              <ContentCardNoImg>Diary</ContentCardNoImg>
-                            )}
-                            <DiaryPublicOffIcon />
-                          </ContentCardWrapper>
-                        )}
-                      </>
-                    ) : (
+                {diaryContentsOpen
+                  ? otherUserDiaryContents.map((content) =>
+                      content.publicControl ? (
+                        <ProfileDiaryCardCp content={content} myCard={false} />
+                      ) : (
+                        <ContentCardWrapper>
+                          {content.img ? (
+                            <ContentCard src={content.img} />
+                          ) : (
+                            <ContentCardNoImg>Diary</ContentCardNoImg>
+                          )}
+                          <DiaryPublicOffIcon />
+                        </ContentCardWrapper>
+                      )
+                    )
+                  : otherUserPostContents.map((content) => (
                       <ProfilePostCardCp content={content} myTrue={false} />
-                    )}
-                  </>
-                ))}
+                    ))}
               </ContentCardsWrapper>
             </ContentsWrapper>
             <SpaceCp />
@@ -163,23 +184,29 @@ const ProfileContentsCp = ({ otherUserId, userInfo }) => {
     );
   }
 
-  if (userInfo && contentLender) {
+  // if (userInfo && contentLender)
+
+  if (
+    !otherUserId &&
+    userInfo &&
+    (contentsData.data || diaryContentsData.data)
+  ) {
     return (
       <>
         <ProfilePostsInfoCp contentsInfo={userInfo} />
-        {contents.length >= 1 ? (
+
+        {contentsData.data.data.length >= 1 ||
+        diaryContentsData.data.data.length >= 1 ? (
           <>
             <ContentsWrapper>
               <ContentCardsWrapper>
-                {contents.map((content) => (
-                  <>
-                    {diaryContentsOpen ? (
+                {diaryContentsOpen
+                  ? diaryContentsData.data.data.map((content) => (
                       <ProfileDiaryCardCp content={content} myCard={true} />
-                    ) : (
+                    ))
+                  : contentsData.data.data.map((content) => (
                       <ProfilePostCardCp content={content} myCard={true} />
-                    )}
-                  </>
-                ))}
+                    ))}
               </ContentCardsWrapper>
             </ContentsWrapper>
             <SpaceCp />
@@ -210,3 +237,23 @@ const ProfileContentsCp = ({ otherUserId, userInfo }) => {
 };
 
 export default ProfileContentsCp;
+
+/*
+  <>
+                        {diaryContentsOpen ? (
+                          <ProfileDiaryCardCp content={content} myCard={true} />
+                        ) : (
+                          <ProfilePostCardCp content={content} myCard={true} />
+                        )}
+                      </>
+
+<>
+                        {diaryContentsOpen ? (
+                          <ProfileDiaryCardCp content={content} myCard={true} />
+                        ) : (
+                          <ProfilePostCardCp content={content} myCard={true} />
+                        )}
+                      </>
+
+
+*/

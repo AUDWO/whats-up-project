@@ -46,7 +46,6 @@ const CommentConfigModalCp = ({
     console.log("CommentConfigModalCp - useEffect");
     if (commentConfigModalOpen) {
     }
-
     const handleClick = (e) => {
       console.log("CommentConfigModalCp-handleClick");
       if (!CommentConfigModalRef.current.contains(e.target)) {
@@ -56,9 +55,7 @@ const CommentConfigModalCp = ({
       }
     };
     document.addEventListener("click", handleClick);
-    console.log("CommentConfigModLCp - useEffecr OFF");
     return () => {
-      console.log("mdal창 닫혀요~");
       document.removeEventListener("click", handleClick);
     };
   }, []);

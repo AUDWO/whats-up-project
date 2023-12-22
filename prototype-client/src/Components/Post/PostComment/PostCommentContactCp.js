@@ -39,9 +39,7 @@ const PostCommentContactCp = ({ postCommentLikeCount, myComment, comment }) => {
         <>
           <CommentConfigIcon
             onClick={() => {
-              setTimeout(() => {
-                setPostCommentConfigModalOpen(true);
-              }, 0);
+              setPostCommentConfigModalOpen(true);
             }}
           />
           {postCommentConfigModalOpen && (

@@ -18,13 +18,13 @@ import {
 } from "../StyledComponents/KeepDiaryStyle/KeepDiary";
 
 //Component
-import DiaryOptionCp from "../Components/KeepDiary/DiaryOptionCp";
+import DiaryOptionCp from "../Components/WriteDiary/DiaryOptionCp";
 
 //Atoms
 import toggleValueAtom from "../store/ToggleValueAtom";
 import imgUrlAtom from "../store/imgUrlAtom";
-import userInfoAtom from "../store/userState/userAtom";
 import stateUpdateAtom from "../store/stateUpdateAtom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const MakeDiary = () => {
   useEffect(() => {
@@ -79,7 +79,7 @@ const MakeDiary = () => {
   };
 
   //일기를 쓰기 위해 확인해야할 조건들 (모든 조건들을 만족하면 handlePostDiary가 실행됨)
-  const handleCheck = () => {
+  const handleWritingDiaryCheck = async () => {
     if (content.length < 1) {
       alert("내용을 작성해주세요!");
       return;
@@ -95,7 +95,7 @@ const MakeDiary = () => {
         return;
       }
     }
-    handlePostDiary();
+    mutate();
   };
 
   /*
@@ -103,15 +103,11 @@ const MakeDiary = () => {
     event.target.src = event.target.src.replace(/\/thumb\//, '/original/');
   };*/
 
-  const handlePostDiary = async () => {
+  const createDiary = async () => {
     try {
       //사진을 선택한 경우
       if (imgUrlData) {
         const imgDataResponse = await axios.post("/post/diaryimg", formData);
-
-        console.log("imgDataResponse");
-        console.log(imgDataResponse);
-        console.log("imgDataResponse");
 
         if (publicControl) {
           const postResponse = await axios.post("/post/diary", {
@@ -122,6 +118,7 @@ const MakeDiary = () => {
             content: content,
             title: title,
           });
+          return postResponse;
         }
 
         if (!publicControl) {
@@ -133,6 +130,7 @@ const MakeDiary = () => {
             content: content,
             title: title,
           });
+          return postResponse;
         }
       }
       //사진을 선택하지 않은 경우
@@ -145,6 +143,8 @@ const MakeDiary = () => {
             content: content,
             title: title,
           });
+
+          return postResponse;
         }
 
         if (!publicControl) {
@@ -155,10 +155,23 @@ const MakeDiary = () => {
             content: content,
             title: title,
           });
+          return postResponse;
         }
       }
-      setContentUpdate(!contentUpdate);
-      setUserInfoUpdate(!userInfoUpdate);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const queryClient = useQueryClient();
+  const { mutate } = useMutation({
+    mutationFn: createDiary,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["diaryContentsInfo"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["userInfo"],
+      });
       if (publicControl) {
         navigate("/dashboard/diary");
       }
@@ -166,10 +179,8 @@ const MakeDiary = () => {
         navigate("/dashboard/profile");
       }
       handleReset();
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    },
+  });
 
   return (
     <HomeWraper>
@@ -197,7 +208,7 @@ const MakeDiary = () => {
           <PostDiaryButton
             onClick={(e) => {
               e.preventDefault();
-              handleCheck();
+              handleWritingDiaryCheck();
             }}
           >
             일기쓰기

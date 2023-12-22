@@ -1,32 +1,28 @@
-import { useContext, createContext, useState, useEffect } from "react";
+import { useContext, createContext } from "react";
 import axios from "axios";
+
+import { useQuery } from "@tanstack/react-query";
 
 const UserInfoContext = createContext();
 
 export const UserInfoProvider = ({ children }) => {
-  const [userInfo, setUserInfo] = useState({});
-
   const fetchuserInfoData = async () => {
     try {
-      const response = await axios.get("/page/user-info");
-      return response;
+      return await axios.get("/page/user-info");
     } catch (error) {
       console.error(error);
     }
   };
 
-  /*useEffect(() => {
-    try {
-      const response = fetchuserInfoData();
-      setUserInfo({ ...response.data });
-    } catch (error) {
-      console.error("context useEffect fail", error);
-    }
-  }, []);*/
+  const userInfoResponse = useQuery({
+    queryKey: ["userInfo"],
+    queryFn: fetchuserInfoData,
+    staleTime: Infinity,
+  });
 
-  if (Object.keys(userInfo).length >= 1) {
+  if (userInfoResponse.data) {
     return (
-      <UserInfoContext.Provider value={{ data: 1 }}>
+      <UserInfoContext.Provider value={userInfoResponse.data.data}>
         {children}
       </UserInfoContext.Provider>
     );
@@ -40,3 +36,11 @@ export function useUserInfoValue() {
   }
   return value;
 }
+
+/*export function ActionUserInfo() {
+  const value = useContext(ActionUserInfoContext);
+  if (value === undefined) {
+    throw new Error("ActionUserInfo should be used within UserInfoProvider ");
+  }
+  return value;
+}*/

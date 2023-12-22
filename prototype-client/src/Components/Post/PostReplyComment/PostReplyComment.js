@@ -25,11 +25,11 @@ import CommentConfigModalCp from "../../Common/Comment/CommentConfigModalCp";
 //atoms
 import ModalOpenAtom from "../../../store/ModalOpenAtom";
 import stateUpdateAtom from "../../../store/stateUpdateAtom";
-import userInfoAtom from "../../../store/userState/userAtom";
+import { useUserInfoValue } from "../../../contextApi/UserInfoProvider";
 
-const PostReplyComment = ({ comment }) => {
-  const userInfo = useRecoilValue(userInfoAtom);
-
+const PostReplyComment = ({ comment, commentId }) => {
+  //const userInfo = useRecoilValue(userInfoAtom);
+  const userInfo = useUserInfoValue();
   const [postReplyCommentConfigModalOpen, setPostReplyCommentConfigModalOpen] =
     useRecoilState(ModalOpenAtom(`postCommentConfigModal${comment.id}`));
 
@@ -81,6 +81,9 @@ const PostReplyComment = ({ comment }) => {
       console.error(error);
     }
   };
+  if (Object.keys(postReplyCommentLikeInfo).length >= 1) {
+    console.log(comment, "postReplyComment - comment");
+  }
 
   if (Object.keys(postReplyCommentLikeInfo).length >= 1) {
     return (
@@ -121,9 +124,10 @@ const PostReplyComment = ({ comment }) => {
                 />
                 {postReplyCommentConfigModalOpen && (
                   <CommentConfigModalCp
-                    type={"post"}
-                    comment={comment}
+                    contentType={"post"}
                     commentId={comment.id}
+                    commentIdOfReplyComment={commentId}
+                    commentType={"replyComment"}
                     bottom={"-10px"}
                     right={"-10px"}
                   />

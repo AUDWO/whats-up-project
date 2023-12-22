@@ -81,7 +81,7 @@ exports.renderMain = async (req, res, next) => {
       res.send({
         id: user.dataValues.id,
         name: user.dataValues.name,
-        img: user.dataValues.profileImg,
+        profileImg: user.dataValues.profileImg,
         createdAt: user.dataValues.createdAt,
         nickname: user.dataValues.nickname,
         email: user.dataValues.email,
@@ -136,7 +136,13 @@ exports.checkUserNickname = async (req, res) => {
 };
 
 exports.renderPosts = async (req, res, next) => {
+  const { page, perPage } = req.query;
   const userId = req.params.userId;
+  //const page = parseInt(sPage);
+  //const perPage = parseInt(sPerPage);
+
+  //마지막 페이지 체크를 위해서
+  let lastPageCheck = false;
 
   if (userId) {
     try {
@@ -165,11 +171,35 @@ exports.renderPosts = async (req, res, next) => {
           model: User,
           attributes: ["id", "nickname"],
         },
+        order: [["createdAt", "DESC"]],
+        offset: parseInt(page * perPage),
+        limit: parseInt(perPage),
       });
 
-      const onlyInfoPosts = posts.map((post) => post.dataValues);
+      const currentCount = posts.length;
 
-      res.send(onlyInfoPosts);
+      // 마지막으로 데이
+
+      if (currentCount === 0) {
+        const additionalPosts = await Post.findAll({
+          include: {
+            model: User,
+            attributes: ["id", "nickname"],
+          },
+          order: [["createdAt", "DESC"]],
+          offset: parseInt(page * perPage),
+          limit: parseInt(parseInt(perPage) - currentCount),
+        });
+
+        //데이터의 총합이 5의 배수일때
+        lastPageCheck = true;
+        if (additionalPosts === 0) {
+          return res.send({ lastPageCheck });
+        }
+        posts.push(...additionalPosts);
+      }
+
+      res.send({ posts, page, lastPageCheck });
     } catch (err) {
       console.error(err);
       next(err);
@@ -236,6 +266,35 @@ exports.renderPostsComments = async (req, res, next) => {
   }
 };
 
+exports.renderPostsComments2 = async (req, res, next) => {
+  const postId = req.params.postId;
+  try {
+    const postComments = await PostComment.findAll({
+      where: {
+        PostId: postId,
+        PostCommentId: null,
+      },
+      include: [
+        {
+          model: User,
+          attributes: ["id", "nickname", "profileImg"],
+        },
+        {
+          model: Post,
+          attributes: ["id"],
+        },
+      ],
+    });
+
+    const onlyInfoPostsComments = postComments.map(
+      (comments) => comments.dataValues
+    );
+    res.send(onlyInfoPostsComments);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 exports.renderPostReplyComments = async (req, res, next) => {
   const postCommentId = req.params.commentId;
   try {
@@ -282,8 +341,16 @@ exports.renderOnlyPostCommentLikeInfo = async (req, res) => {
 
     const postCommentLike = await postComment.getUsers({ attributes: ["id"] });
 
+    let likeCheck = false;
+    postCommentLike.map((info) => {
+      if (info.id === req.user.id) {
+        likeCheck = true;
+      }
+    });
+
     res.send({
       postCommentLikeCount: postCommentLike,
+      likeCheck: likeCheck,
     });
   } catch (error) {
     console.error(error);
@@ -301,24 +368,6 @@ exports.renderStory = async (req, res, next) => {
 
     const onlyInfoStory = stories.map((story) => story.dataValues);
     res.send(onlyInfoStory);
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-exports.renderStoryComments = async (req, res, next) => {
-  const storyId = req.params.storyId;
-  try {
-    const storyComments = await StoryComment.findAll({
-      where: {
-        StoryId: storyId,
-      },
-      include: {
-        model: User,
-        attributes: ["id", "nickname"],
-      },
-    });
-    res.send(storyComments);
   } catch (error) {
     console.error(error);
   }
@@ -344,6 +393,25 @@ exports.renderMoreStory = async (req, res, next) => {
   }
 };
 
+exports.renderStoryComments = async (req, res, next) => {
+  const storyId = req.params.storyId;
+  try {
+    const storyComments = await StoryComment.findAll({
+      where: {
+        StoryId: storyId,
+        StoryCommentId: null,
+      },
+      include: {
+        model: User,
+        attributes: ["id", "nickname", "profileImg"],
+      },
+    });
+    res.send(storyComments);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 exports.renderStoryReplyComments = async (req, res, next) => {
   const storyCommentId = req.params.commentId;
 
@@ -352,7 +420,7 @@ exports.renderStoryReplyComments = async (req, res, next) => {
       where: { StoryCommentId: storyCommentId },
       include: {
         model: User,
-        attributes: ["id", "nickname"],
+        attributes: ["id", "nickname", "profileImg"],
       },
     });
     const onlyInfoStoryReplyComments = replyComments.map(
@@ -366,10 +434,11 @@ exports.renderStoryReplyComments = async (req, res, next) => {
 };
 
 exports.renderStoryReact = async (req, res) => {
+  const storyId = req.params.storyId;
   try {
     const storyReacts = await ContactStory.findAll({
       where: {
-        responseStoryId: req.params.storyId,
+        responseStoryId: storyId,
       },
     });
 
@@ -393,11 +462,11 @@ exports.renderDiaries = async (req, res, next) => {
           model: User,
           attributes: ["id", "nickname", "profileImg"],
         },
-        order: [["createdAt", "DESC"]],
+        order: [["createdAt", "ASC"]],
       });
 
       const onlyInfoDiaries = diaries.map((diary) => diary.dataValues);
-      res.send(onlyInfoDiaries);
+      res.send(diaries);
     } catch (error) {
       console.error(error);
     }
@@ -430,7 +499,7 @@ exports.renderMoreDiary = async (req, res, next) => {
       },
       include: {
         model: User,
-        attributes: ["id", "nickname"],
+        attributes: ["id", "nickname", "profileImg"],
       },
     });
 
@@ -446,10 +515,11 @@ exports.renderDiaryComments = async (req, res, next) => {
     const comments = await DiaryComment.findAll({
       where: {
         diaryId: diaryId,
+        DiaryCommentId: null,
       },
       include: {
         model: User,
-        attributes: ["id", "nickname"],
+        attributes: ["id", "nickname", "profileImg"],
       },
     });
     res.send(comments);
@@ -466,7 +536,7 @@ exports.renderDiaryReplyComments = async (req, res, next) => {
       where: { DiaryCommentId: diaryCommentId },
       include: {
         model: User,
-        attributes: ["id", "nickname"],
+        attributes: ["id", "nickname", "profileImg"],
       },
     });
     const onlyInfoDiaryReplyComments = replyComments.map(

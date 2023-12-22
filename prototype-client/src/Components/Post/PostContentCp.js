@@ -1,18 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { Link } from "react-router-dom";
-import styled from "styled-components";
 import axios from "axios";
 
 //Styled-Components
 import {
   PostImgWrapper,
-  ProfileWrapper,
-  Profile,
-  ProfileImg,
-  ProfileImgWrapper,
   PostImg,
-  ProfileUsername,
   PostContentsWrapper,
   PostTitleWrapper,
   PostUserInfoWrapper,
@@ -25,11 +19,12 @@ import {
 
 //Atom
 import ModalOpenAtom from "../../store/ModalOpenAtom";
-import userInfoAtom from "../../store/userState/userAtom";
 import toggleValueAtom from "../../store/ToggleValueAtom";
+import { useUserInfoValue } from "../../contextApi/UserInfoProvider";
+import ProfileCp from "../Common/Profile/ProfileCp";
 
 const PostContentCp = ({ postContent, userId }) => {
-  const click = useRecoilValue(
+  const [modalOpen, setModalOpen] = useRecoilState(
     ModalOpenAtom(`commentModalOpen${postContent.id}`)
   );
   const [postContentControl, setPostContent] = useState(
@@ -37,10 +32,9 @@ const PostContentCp = ({ postContent, userId }) => {
   );
   const [postContentOpen, setPostContentOpen] = useState(false);
 
-  const userInfo = useRecoilValue(userInfoAtom);
-
+  //const userInfo = useRecoilValue(userInfoAtom);
+  const userInfo = useUserInfoValue();
   const [postUserInfo, setPostUserInfo] = useState({});
-
   const [fetchSuccess, setFetchSuccess] = useState(false);
 
   const handleIconClick = () => {
@@ -64,6 +58,7 @@ const PostContentCp = ({ postContent, userId }) => {
 
     FindUerById(userId);
     return () => {
+      setModalOpen(false);
       setIsImgLoaded(false);
     };
   }, []);
@@ -74,7 +69,7 @@ const PostContentCp = ({ postContent, userId }) => {
 
   if (fetchSuccess) {
     return (
-      <PostImgWrapper click={click} ref={postRef}>
+      <PostImgWrapper click={modalOpen} ref={postRef}>
         <PostImg
           src={postContent.url}
           onLoad={() => updateImgLoadingStatus()}
@@ -82,25 +77,57 @@ const PostContentCp = ({ postContent, userId }) => {
         />
         {userInfo.id === postUserInfo.id ? (
           <Link to={`/dashboard/profile/`}>
-            <ProfileWrapper>
-              <Profile>
-                <ProfileImgWrapper>
-                  <ProfileImg src={postUserInfo.profileImg} />
-                </ProfileImgWrapper>
-                <ProfileUsername>{postUserInfo.nickname}</ProfileUsername>
-              </Profile>
-            </ProfileWrapper>
+            <ProfileCp
+              pfW={{ left: "20px", top: "15px", position: "absolute" }}
+              pfIW={{
+                width: "51px",
+                height: "51px",
+                margin: { r: "15" },
+                border: "on",
+              }}
+              pfI={{
+                width: "40px",
+                height: "40px",
+                zIndex: "4",
+                basic: "50px",
+              }}
+              pfN={{
+                backC: "black",
+                color: "#f7dd07",
+                fontS: "13px",
+                borderRadius: "10px",
+                height: "30px",
+                padding: { t: "5", r: "5", b: "5", l: "5" },
+              }}
+              pfInfo={postUserInfo}
+            />
           </Link>
         ) : (
           <Link to={`/dashboard/profile/${postUserInfo.nickname}/${userId}`}>
-            <ProfileWrapper>
-              <Profile>
-                <ProfileImgWrapper>
-                  <ProfileImg src={postUserInfo.profileImg} />
-                </ProfileImgWrapper>
-                <ProfileUsername>{postUserInfo.nickname}</ProfileUsername>
-              </Profile>
-            </ProfileWrapper>
+            <ProfileCp
+              pfW={{ left: "20px", top: "15px", position: "absolute" }}
+              pfIW={{
+                width: "51px",
+                height: "51px",
+                margin: { r: "15" },
+                border: "on",
+              }}
+              pfI={{
+                width: "40px",
+                height: "40px",
+                zIndex: "4",
+                basic: "50px",
+              }}
+              pfN={{
+                backC: "black",
+                color: "#f7dd07",
+                fontS: "13px",
+                borderRadius: "10px",
+                height: "30px",
+                padding: { t: "5", r: "5", b: "5", l: "5" },
+              }}
+              pfInfo={postUserInfo}
+            />
           </Link>
         )}
 

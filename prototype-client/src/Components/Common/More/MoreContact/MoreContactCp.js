@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useRecoilValue } from "recoil";
 
 //Styled-Component
 import {
@@ -13,8 +12,7 @@ import {
   SadIcon,
 } from "../../../../StyledComponents/CommonCpStyle/More/MoreContactCpSt";
 
-//Atom
-import userInfoAtom from "../../../../store/userState/userAtom";
+import { useUserInfoValue } from "../../../../contextApi/UserInfoProvider";
 
 const MoreContactCp = ({ contentInfo, moreType }) => {
   const [likeReactionArr, setLikeReactionArr] = useState([]);
@@ -30,10 +28,9 @@ const MoreContactCp = ({ contentInfo, moreType }) => {
   //reactInfo:content에 대하여 자신의 react 정보가 담겨 있는 객체
   //reactInfo를 통해 content에 자신이 반응을 했는지 알 수 있다.
   const [reactInfo, setReactInfo] = useState({});
-  const userInfo = useRecoilValue(userInfoAtom);
 
-  const [reactUpdate, setReactUpdate] = useState(false);
   const [diaryInfoUpdate, setDiaryInfoUpdate] = useState(false);
+  const userInfo = useUserInfoValue();
 
   //react의 업데이트 된 정보를 참조하기 때문에
 
@@ -59,10 +56,13 @@ const MoreContactCp = ({ contentInfo, moreType }) => {
         const reactsResponse = await axios.get(
           `/page/render-${moreType}-react/${contentInfo.id}`
         );
+        console.log(reactsResponse, "0-0-0-9-9-9-9-9-9-9--1-1-1-1-1-1");
 
         const myResponse = reactsResponse.data.filter(
           (react) => react.reacter === userInfo.id
         );
+
+        console.log(myResponse, "myResponseMyResponseMyResponse");
 
         setReactInfo([...myResponse]);
 

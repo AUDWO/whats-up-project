@@ -4,7 +4,7 @@ const StoryComment = require("../models/storyComment");
 const Story = require("../models/story");
 const Post = require("../models/post");
 
-exports.postPostsComment = async (req, res, next) => {
+exports.postPostsComment = async (req, res) => {
   if (req.body.PostCommentId === undefined) {
     req.body.PostCommentId = null;
   }
@@ -56,7 +56,7 @@ exports.postCommenUntLike = async (req, res) => {
   }
 };
 
-exports.postStoryComment = async (req, res, next) => {
+exports.postStoryComment = async (req, res) => {
   if (req.body.StoryCommentId === undefined) {
     req.body.StoryCommentId = null;
   }
@@ -74,7 +74,7 @@ exports.postStoryComment = async (req, res, next) => {
   }
 };
 
-exports.postDiaryComment = async (req, res, next) => {
+exports.postDiaryComment = async (req, res) => {
   if (req.body.DiaryCommentId === undefined) {
     req.body.DiaryCommentId = null;
   }

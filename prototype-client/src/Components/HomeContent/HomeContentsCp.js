@@ -6,7 +6,7 @@ import styled from "styled-components";
 import PostContentsWrapper from "../../StyledComponents/HomeStyle/Section2/PostContentsWrapper";
 
 //Component
-import StoryContentsCp from "./StoryContentsCp";
+import StoryContentsCp from "./StoryContents/StoryContentsCp";
 
 const HomeContentsCp = () => {
   return (

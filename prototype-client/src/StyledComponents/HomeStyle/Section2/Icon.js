@@ -5,11 +5,8 @@ import { BiUpArrow } from "react-icons/bi";
 
 import { FaRegComment } from "react-icons/fa";
 import { IoReorderThreeSharp } from "react-icons/io5";
-import Profile from "../../../Components/Profile";
-import ProfileWrapper from "../ProfileStyle/ProfileWrapper";
 import { AiOutlineHeart } from "react-icons/ai";
 import { AiFillHeart } from "react-icons/ai";
-import { CommentModalWrapper } from "../../../PostCp";
 
 let fontSize35 = css`
   font-size: 25px;
@@ -30,30 +27,14 @@ let marginT60 = css`
   margin-top: 60px;
 `;
 
-let marginT15 = css`
-  margin-top: 15px;
-`;
 let marginT30 = css`
   margin-top: 30px;
-`;
-
-let marginB15 = css`
-  margin-bottom: 15px;
 `;
 
 let marginB30 = css`
   margin-bottom: 30px;
 `;
-let marginB200 = css`
-  margin-bottom: 200px;
-`;
 
-export const ProfileIcon = styled(Profile)`
-  & ${ProfileWrapper} {
-    flex-direction: column;
-    ${marginT60};
-  }
-`;
 export const CommentIcon = styled(FaRegComment)`
   margin-left: 15px;
   ${fontSize25};
@@ -63,7 +44,7 @@ export const CommentIcon = styled(FaRegComment)`
   cursor: pointer;
 `;
 
-export const NotCommentIcon = styled(FaRegComment)`
+export const NoCommentIcon = styled(FaRegComment)`
   margin-left: 15px;
   cursor: pointer;
   ${fontSize25};
@@ -97,6 +78,13 @@ export const LikeIcon = styled(AiOutlineHeart)`
   margin-left: 15px;
   ${fontSize35};
   cursor: pointer;
+`;
+
+export const NoLikeIcon = styled(AiOutlineHeart)`
+  margin-left: 15px;
+  ${fontSize35};
+  cursor: pointer;
+  color: gray;
 `;
 
 export const LikeFillIcon = styled(AiFillHeart)`

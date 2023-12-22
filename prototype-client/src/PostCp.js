@@ -1,4 +1,4 @@
-import React, { Suspense, isValidElement } from "react";
+import React, { Suspense } from "react";
 
 import styled from "styled-components";
 
@@ -15,6 +15,7 @@ import PostContentCp from "./Components/Post/PostContentCp";
 import CommentModalCp from "./Components/Post/PostComment/PostCommentsCp";
 import { useRecoilValue } from "recoil";
 import toggleValueAtom from "./store/ToggleValueAtom";
+import { UserInfoProvider } from "./contextApi/UserInfoProvider";
 
 const PostCp = ({ post }) => {
   const postContent = {
@@ -27,7 +28,7 @@ const PostCp = ({ post }) => {
 
   const postInfo = {
     id: post.id,
-    likeCountControl: post.likeCountControl,
+    likeControl: post.likeControl,
     commentControl: post.commentControl,
   };
 
@@ -36,12 +37,20 @@ const PostCp = ({ post }) => {
   return (
     <PostDivWrapper>
       <PostWrapper>
-        <PostContentCp postContent={postContent} userId={post.UserId} />
-        {isImgLoaded && <CommentModalCp postId={post.id} />}
-        {isImgLoaded && <PostInfoCp postInfo={postInfo} />}
+        <UserInfoProvider>
+          <PostContentCp postContent={postContent} userId={post.UserId} />
+          {isImgLoaded && <CommentModalCp postId={post.id} />}
+          {isImgLoaded && <PostInfoCp postInfo={postInfo} />}
+        </UserInfoProvider>
       </PostWrapper>
     </PostDivWrapper>
   );
 };
 
 export default PostCp;
+
+const P = styled.div`
+  background-color: blue;
+  width: 30px;
+  height: 50px;
+`;

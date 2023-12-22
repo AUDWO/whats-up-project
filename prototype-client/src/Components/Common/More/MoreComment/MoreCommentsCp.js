@@ -1,147 +1,92 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
+//Styled-components
 import {
   MoreCommentContentsWrapper,
   MoreCommentWrapper,
-  MoreCommentTitle,
-  MoreCommnetInputWrapper,
-  MoreCommentInputIcon,
-  MoreCommentInput,
-  MoreComment,
-  ProfileWrapper,
-  WolfIcon,
-  CommentWrapper,
-  ProfileInfoWrapper,
-  ProfileName,
-  OfficialBadgeIcon,
-  CommentContent,
-  CommentContact,
-  CommentContactIcon,
-  CommentContactReply,
   CommentSpace,
-  CommentPostButton,
-  ProfileNameWrapper,
 } from "../../../../StyledComponents/CommonCpStyle/More/MoreComment/MoreCommentCpSt";
 
-import axios from "axios";
-import { useRecoilState } from "recoil";
-import stateUpdateAtom from "../../../../store/stateUpdateAtom";
+//Components
 import MoreCommentCp from "./MoreCommentCp";
-import { GiPunchBlast } from "react-icons/gi";
-import styled from "styled-components";
+import MoreCommentInputCp from "./MoreCommentInputCp";
+import NoMoreCommentCp from "./NoMoreCommentCp";
 
-const MoreCommentsCp = ({ storyId, diaryId }) => {
-  const [content, setContent] = useState("");
-
-  const [commentUpdate, setCommentUpdate] = useRecoilState(
-    stateUpdateAtom(`moreCommentUpdate`)
-  );
-
-  const [type, setType] = useState("");
-
-  const [comments, setComments] = useState([]);
-
-  const handlePostStoryComment = async () => {
-    await axios.post("/comment/story", {
-      content: content,
-      StoryId: storyId,
-    });
+const MoreCommentsCp = ({ storyId, diaryId, moreType }) => {
+  const fetchStoryCommentsData = async () => {
+    try {
+      const response = await axios.get(
+        `/page/render-story-comments/${storyId}`
+      );
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const handlePostDiaryComment = async () => {
-    await axios.post("/comment/diary", {
-      content: content,
-      DiaryId: diaryId,
-    });
+  const fetchDiaryCommentsData = async () => {
+    try {
+      const response = await axios.get(
+        `/page/render-diary-comments/${diaryId}`
+      );
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  useEffect(() => {
-    //storyComment
-    const fetchStoryCommentsData = async () => {
-      try {
-        const response = await axios.get(
-          `/page/render-story-comments/${storyId}`
-        );
-        setComments([...response.data]);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    if (storyId) {
-      fetchStoryCommentsData();
-      setType("story");
+  const { data: moreStoryComments, isLoading: storyCommentsIsLoading } =
+    useQuery({
+      queryKey: [`storyComments-${storyId}`],
+      queryFn: fetchStoryCommentsData,
+      enabled: !diaryId,
+    });
+  const { data: moreDiaryComments, isLoading: diaryCommentsIsLoading } =
+    useQuery({
+      queryKey: [`diaryComments-${diaryId}`],
+      queryFn: fetchDiaryCommentsData,
+      enabled: !storyId,
+    });
+
+  /* 이렇게 한개로 합치기
+  const getComments = async () => {
+    try {
+      const response = await axios.get(
+        `/page/render-${moreType}-comments/${"contentId"}`
+      );
+      return response;
+    } catch (error) {
+      console.error(error, "getComments - Error");
     }
+  };
+  const { data } = useQuery({
+    queryKey: [`${moreType}Comments-${"contentId"}`],
+    queryFn: getComments,
+  });*/
 
-    //diaryComment
-    const fetchDiaryCommentsData = async () => {
-      try {
-        const response = await axios.get(
-          `/page/render-diary-comments/${diaryId}`
-        );
-        setComments([...response.data]);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  if (storyCommentsIsLoading || diaryCommentsIsLoading) {
+    return <div>안녕</div>;
+  }
 
-    if (diaryId) {
-      fetchDiaryCommentsData();
-      setType("diary");
-    }
-  }, [commentUpdate]);
-
-  if (comments.length >= 1) {
+  if ((diaryId ? moreDiaryComments.data : moreStoryComments.data).length >= 1) {
     return (
       <MoreCommentWrapper>
         <MoreCommentContentsWrapper>
-          <MoreCommentTitle>댓글</MoreCommentTitle>
-          <MoreCommnetInputWrapper>
-            <MoreCommentInputIcon />
-            <MoreCommentInput
-              placeholder="댓글을 입력하세요."
-              value={content}
-              onChange={(e) => {
-                setContent(e.target.value);
-              }}
-            />
-            <CommentPostButton
-              comment={content}
-              onClick={() => {
-                if (diaryId) {
-                  handlePostDiaryComment();
-                }
-                if (storyId) {
-                  handlePostStoryComment();
-                }
-                setCommentUpdate(!commentUpdate);
-                setContent("");
-              }}
-            >
-              게시
-            </CommentPostButton>
-          </MoreCommnetInputWrapper>
-          {!comments && (
-            <MoreComment>
-              <ProfileWrapper>
-                <WolfIcon />
-              </ProfileWrapper>
-
-              <CommentWrapper>
-                <ProfileInfoWrapper>
-                  <ProfileNameWrapper>
-                    <ProfileName>WHAT'S UP</ProfileName>
-                    <OfficialBadgeIcon />
-                  </ProfileNameWrapper>
-                </ProfileInfoWrapper>
-                <CommentContent>댓글을 남겨보세요!</CommentContent>
-              </CommentWrapper>
-            </MoreComment>
+          <MoreCommentInputCp storyId={storyId} diaryId={diaryId} />
+          {!(diaryId ? moreDiaryComments : moreStoryComments) && (
+            <NoMoreCommentCp />
           )}
-
-          {comments.map((comment) => (
-            <MoreCommentCp comment={comment} key={comment.id} type={type} />
-          ))}
-
+          {(diaryId ? moreDiaryComments.data : moreStoryComments.data).map(
+            (comment) => (
+              <MoreCommentCp
+                comment={comment}
+                key={comment.id}
+                moreType={moreType}
+              />
+            )
+          )}
           <CommentSpace></CommentSpace>
         </MoreCommentContentsWrapper>
       </MoreCommentWrapper>
@@ -151,49 +96,8 @@ const MoreCommentsCp = ({ storyId, diaryId }) => {
   return (
     <MoreCommentWrapper>
       <MoreCommentContentsWrapper>
-        <MoreCommentTitle>댓글</MoreCommentTitle>
-        <MoreCommnetInputWrapper>
-          <MoreCommentInputIcon />
-          <MoreCommentInput
-            placeholder="댓글을 입력하세요."
-            value={content}
-            onChange={(e) => {
-              setContent(e.target.value);
-            }}
-          />
-          <CommentPostButton
-            comment={content}
-            onClick={() => {
-              if (diaryId) {
-                handlePostDiaryComment();
-              }
-              if (storyId) {
-                handlePostStoryComment();
-              }
-              setContent("");
-              setCommentUpdate(!commentUpdate);
-            }}
-          >
-            게시
-          </CommentPostButton>
-        </MoreCommnetInputWrapper>
-
-        <MoreComment>
-          <ProfileWrapper>
-            <MainIcon />
-          </ProfileWrapper>
-
-          <CommentWrapper>
-            <ProfileInfoWrapper>
-              <ProfileNameWrapper>
-                <ProfileName>WHAT'S UP</ProfileName>
-                <OfficialBadgeIcon />
-              </ProfileNameWrapper>
-            </ProfileInfoWrapper>
-            <CommentContent>댓글을 남겨보세요!</CommentContent>
-          </CommentWrapper>
-        </MoreComment>
-
+        <MoreCommentInputCp diaryId={diaryId} storyId={storyId} />
+        <NoMoreCommentCp />
         <CommentSpace></CommentSpace>
       </MoreCommentContentsWrapper>
     </MoreCommentWrapper>
@@ -201,9 +105,3 @@ const MoreCommentsCp = ({ storyId, diaryId }) => {
 };
 
 export default MoreCommentsCp;
-
-export const MainIcon = styled(GiPunchBlast)`
-  color: #f7dd07;
-  font-size: 50px;
-  background-color: #f8f9fa;
-`;

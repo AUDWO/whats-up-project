@@ -21,6 +21,7 @@ import { Input } from "../../../StyledComponents/CommonCpStyle/Input/Input";
 //Atoms
 import ModalOpenAtom from "../../../store/ModalOpenAtom";
 import stateUpdateAtom from "../../../store/stateUpdateAtom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const PostContentConfigOptionCp = ({ contentInfo }) => {
   const [postTitle, setPostTitle] = useState(contentInfo.title);
@@ -37,12 +38,7 @@ const PostContentConfigOptionCp = ({ contentInfo }) => {
     ModalOpenAtom("profileContentConfigModal")
   );
 
-  //프로필 컨텐츠 정보 변경 후 업데이트 된 contents 받아오기
-  const [contentUpdate, setContentUpdate] = useRecoilState(
-    stateUpdateAtom("contentUpdate")
-  );
-
-  const handleChangePostInfo = async () => {
+  const updatePost = async () => {
     try {
       if (postContent) {
         const response = await axios.patch(
@@ -55,6 +51,7 @@ const PostContentConfigOptionCp = ({ contentInfo }) => {
             contentControl: true,
           }
         );
+        return response;
       }
       if (!postContent) {
         const response = await axios.patch(
@@ -66,13 +63,21 @@ const PostContentConfigOptionCp = ({ contentInfo }) => {
             commentControl: toggleCommentValue,
           }
         );
+        return response;
       }
-      setContentConfigModalOpen(false);
-      setContentUpdate(!contentUpdate);
     } catch (error) {
       console.error(error);
     }
   };
+  const queryClient = useQueryClient();
+
+  const { mutate } = useMutation({
+    mutationFn: updatePost,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["postss"] });
+      setContentConfigModalOpen(false);
+    },
+  });
   return (
     <ConfigWrapper>
       <ConfigOptionWrapper height={"auto"} flexD={"column"}>
@@ -143,7 +148,7 @@ const PostContentConfigOptionCp = ({ contentInfo }) => {
       <PostButtonWrapper>
         <PostButton
           onClick={() => {
-            handleChangePostInfo();
+            mutate();
           }}
         >
           저장하기

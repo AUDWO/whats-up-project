@@ -8,7 +8,7 @@ import {
 } from "../../StyledComponents/CommonCpStyle/AddvancedSetUp/AddvancedSetupCpSt";
 
 //Component
-import ToggleAbleSwitchComponent from "../KeepDiary/ToggleAbleSwitchComponent";
+import ToggleAbleSwitchComponent from "../WriteDiary/ToggleAbleSwitchComponent";
 
 const PostAdvancedSetupCp = () => {
   return (
@@ -17,7 +17,7 @@ const PostAdvancedSetupCp = () => {
         <AbleButtonTitle>좋아요 수 기능 해제</AbleButtonTitle>
         <ToggleAbleSwitchComponent
           inputId={"likeCount"}
-          atomName={"postLikeCount"}
+          atomName={"postLike"}
         />
       </ToggleAbleButtonWrapper>
       <ToggleAbleButtonWrapper>

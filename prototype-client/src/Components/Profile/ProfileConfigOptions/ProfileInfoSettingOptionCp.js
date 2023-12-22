@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 
 //Atoms
-import toggleValueAtom from "../../../store/ToggleValueAtom";
 import ModalOpenAtom from "../../../store/ModalOpenAtom";
-import stateUpdateAtom from "../../../store/stateUpdateAtom";
 
 //Styled-Components
 import {
@@ -26,19 +24,14 @@ import {
 } from "../../../StyledComponents/ProfileStyle/ProfileConfig/ProfileInfoSettingOptionCpSt";
 
 import { Input } from "../../../StyledComponents/CommonCpStyle/Input/Input";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const ProfileInfoSettingOptionCp = ({ userInfo }) => {
-  const [profileImg, setProfileImg] = useState(userInfo.img);
+  const [profileImg, setProfileImg] = useState(userInfo.profileImg);
   const [newProfileImg, setNewProfileImg] = useState(null);
   const [userName, setUserName] = useState(userInfo.name);
   const [userNickname, setUserNickname] = useState(userInfo.nickname);
-  const [userInfoChange, setUserInfoChange] = useRecoilState(
-    toggleValueAtom("userInfoChange")
-  );
 
-  const [userInfoUpdate, setUserInfoUpdate] = useRecoilState(
-    stateUpdateAtom("userInfo")
-  );
   const setProfileConfigModalOpen = useSetRecoilState(
     ModalOpenAtom("profileConfigModal")
   );
@@ -55,7 +48,8 @@ const ProfileInfoSettingOptionCp = ({ userInfo }) => {
     }
   }
 
-  const handlePost = async () => {
+  //api
+  const updateProfileInfo = async () => {
     try {
       if (newProfileImg) {
         const imgData = await axios.post("/post/profile-img", formData);
@@ -64,20 +58,28 @@ const ProfileInfoSettingOptionCp = ({ userInfo }) => {
           nickname: userNickname,
           name: userName,
         });
+        return response;
       }
-
       if (!newProfileImg) {
         const response = await axios.patch("/update/user/profile-info", {
           nickname: userNickname,
           name: userName,
         });
+        return response;
       }
-      setProfileConfigModalOpen(false);
-      setUserInfoUpdate(!userInfoUpdate);
     } catch (error) {
-      console.error(error);
+      console.error(error, "프로필 정보 수정 변경 실패");
     }
   };
+
+  const queryClient = useQueryClient();
+  const { mutate } = useMutation({
+    mutationFn: updateProfileInfo,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["userInfo"] });
+      setProfileConfigModalOpen(false);
+    },
+  });
 
   return (
     <ConfigWrapper>
@@ -161,8 +163,7 @@ const ProfileInfoSettingOptionCp = ({ userInfo }) => {
       <PostButtonWrapper>
         <PostButton
           onClick={() => {
-            handlePost();
-            setUserInfoChange(!userInfoChange);
+            mutate();
           }}
         >
           저장하기

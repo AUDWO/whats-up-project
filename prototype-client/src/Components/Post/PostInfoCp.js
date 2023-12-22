@@ -11,20 +11,21 @@ import {
 
 import {
   CommentIcon,
-  MoreIcon,
   LikeIcon,
   LikeFillIcon,
-  NotCommentIcon,
+  NoCommentIcon,
+  NoLikeIcon,
 } from "../../StyledComponents/HomeStyle/Section2/Icon";
 
 //Atoms
 import ModalOpenAtom from "../../store/ModalOpenAtom";
 import stateUpdateAtom from "../../store/stateUpdateAtom";
-import userInfoAtom from "../../store/userState/userAtom";
+import { useUserInfoValue } from "../../contextApi/UserInfoProvider";
 
 const PostInfoCp = ({ postInfo }) => {
-  const userInfo = useRecoilValue(userInfoAtom);
+  //const userInfo = useRecoilValue(userInfoAtom);
   const [postCountInfo, setPostCountInfo] = useState({});
+  const userInfo = useUserInfoValue();
 
   //댓글 업데이트 알림 atom
   const commentCountUpdate = useRecoilValue(
@@ -36,9 +37,8 @@ const PostInfoCp = ({ postInfo }) => {
     postInfo.commentControl
   );
   //게시물 좋아요 기능 해제 여부
-  const [postLikeControl, setPostLikeControl] = useState(
-    postInfo.likeCountControl
-  );
+  const [postLikeControl, setPostLikeControl] = useState(postInfo.likeControl);
+
   const [click, setClick] = useRecoilState(
     ModalOpenAtom(`commentModalOpen${postInfo.id}`)
   );
@@ -129,33 +129,33 @@ const PostInfoCp = ({ postInfo }) => {
               }}
             />
           ) : (
-            <NotCommentIcon />
+            <NoCommentIcon />
           )}
           {postCommentControl && (
             <CountNumber>{postCountInfo.commentCount.length}</CountNumber>
           )}
         </IconWrapper>
-        {likeCheck ? (
-          <IconWrapper
-            onClick={() => {
-              handleUnLike();
-            }}
-          >
-            <LikeFillIcon />
-            <CountNumber>{postCountInfo.postLikeCount.length}</CountNumber>
-          </IconWrapper>
-        ) : (
-          <IconWrapper
-            onClick={() => {
-              handleLike();
-            }}
-          >
-            <LikeIcon />
-            <CountNumber>{postCountInfo.postLikeCount.length}</CountNumber>
-          </IconWrapper>
-        )}
         <IconWrapper>
-          <MoreIcon />
+          {postLikeControl ? (
+            likeCheck ? (
+              <LikeFillIcon
+                onClick={() => {
+                  handleUnLike();
+                }}
+              />
+            ) : (
+              <LikeIcon
+                onClick={() => {
+                  handleLike();
+                }}
+              />
+            )
+          ) : (
+            <NoLikeIcon />
+          )}
+          {postLikeControl && (
+            <CountNumber>{postCountInfo.postLikeCount.length}</CountNumber>
+          )}
         </IconWrapper>
       </PostInfoWrapper>
     );

@@ -13,6 +13,7 @@ import MakeStoryContentCp from "./MakeStoryContentCp";
 
 //Atom
 import ModalOpenAtom from "../../store/ModalOpenAtom";
+import { UserInfoProvider } from "../../contextApi/UserInfoProvider";
 
 const MakeStoryModalCp = () => {
   const setMakeStoryModalOpen = useSetRecoilState(
@@ -30,19 +31,13 @@ const MakeStoryModalCp = () => {
       }}
     >
       <MakeStoryWrapper>
-        <MakeStoryImgCp />
-        <MakeStoryContentCp />
+        <UserInfoProvider>
+          <MakeStoryImgCp />
+          <MakeStoryContentCp />
+        </UserInfoProvider>
       </MakeStoryWrapper>
     </MakeStoryModal>
   );
 };
 
 export default MakeStoryModalCp;
-
-/*
-  <MakeStoryWrapper>
-        <MakeStoryImgCp />
-        <MakeStoryContentCp />
-      </MakeStoryWrapper>
-    </MakeStoryModal>
-*/

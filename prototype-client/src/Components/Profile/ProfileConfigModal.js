@@ -19,13 +19,13 @@ import ProfileInfoOptionCp from "./ProfileConfigOptions/ProfileInfoOptionCp";
 import ProfilePasswordOptionCp from "./ProfileConfigOptions/ProfilePasswordOptionCp";
 
 //Atoms
-import userInfoAtom from "../../store/userState/userAtom";
 import ModalOpenAtom from "../../store/ModalOpenAtom";
+import { useUserInfoValue } from "../../contextApi/UserInfoProvider";
 
 const ProfileConfigModal = () => {
   const profileConfigModalBackground = useRef();
 
-  const userInfo = useRecoilValue(userInfoAtom);
+  const userInfo = useUserInfoValue();
   const setConfigModalOpen = useSetRecoilState(
     ModalOpenAtom("profileConfigModal")
   );

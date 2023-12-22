@@ -39,6 +39,8 @@ const ProfileContentsCp = ({ otherUserId }) => {
   const [otherUserProfilecontentsInfo, setOtherUserProfileContentsInfo] =
     useState({});
 
+  const [otherUserLoading, setOtherUserLoading] = useState(false);
+
   const postContentsOpen = useRecoilValue(
     defaultTrueToggleValueAtom(
       `postContentsOpen${otherUserId ? otherUserId : userInfo.id}`
@@ -86,16 +88,16 @@ const ProfileContentsCp = ({ otherUserId }) => {
     }
   };
 
-  const contentsData = useQuery({
+  const postContentsData = useQuery({
     queryKey: ["postContentsInfo"],
     queryFn: fetchPostContentsData,
-    // enabled: postContentsOpen,
+    enabled: !otherUserId,
   });
 
   const diaryContentsData = useQuery({
     queryKey: ["diaryContentsInfo"],
     queryFn: fetchDiaryContentsData,
-    //enabled: diaryContentsOpen,
+    enabled: !otherUserId,
   });
 
   const fetchOtherUserProfileContentsData = async () => {
@@ -128,15 +130,18 @@ const ProfileContentsCp = ({ otherUserId }) => {
   const getOtherUserProfileInfo = async () => {
     await fetchOtherUserProfileContentsData();
     await fetchOtherUserProfileContentsInfoData();
+    setOtherUserLoading(true);
   };
 
-  //MyProfile-Info--------------------------------------------------------
-
-  if (otherUserId && Object.keys(otherUserProfilecontentsInfo).length >= 1) {
+  if (otherUserId && otherUserLoading) {
     return (
       <>
         <ProfilePostsInfoCp contentsInfo={otherUserProfilecontentsInfo} />
-        {otherUserPostContents.length >= 1 ? (
+        {(
+          diaryContentsOpen
+            ? otherUserDiaryContents.length >= 1
+            : otherUserPostContents.length >= 1
+        ) ? (
           <>
             <ContentsWrapper>
               <ContentCardsWrapper>
@@ -184,19 +189,21 @@ const ProfileContentsCp = ({ otherUserId }) => {
     );
   }
 
-  // if (userInfo && contentLender)
-
   if (
     !otherUserId &&
     userInfo &&
-    (contentsData.data || diaryContentsData.data)
+    postContentsData.data &&
+    diaryContentsData.data
   ) {
     return (
       <>
         <ProfilePostsInfoCp contentsInfo={userInfo} />
 
-        {contentsData.data.data.length >= 1 ||
-        diaryContentsData.data.data.length >= 1 ? (
+        {(
+          diaryContentsOpen
+            ? diaryContentsData?.data?.data.length >= 1
+            : postContentsData?.data?.data.length >= 1
+        ) ? (
           <>
             <ContentsWrapper>
               <ContentCardsWrapper>
@@ -204,7 +211,7 @@ const ProfileContentsCp = ({ otherUserId }) => {
                   ? diaryContentsData.data.data.map((content) => (
                       <ProfileDiaryCardCp content={content} myCard={true} />
                     ))
-                  : contentsData.data.data.map((content) => (
+                  : postContentsData.data.data.map((content) => (
                       <ProfilePostCardCp content={content} myCard={true} />
                     ))}
               </ContentCardsWrapper>
@@ -237,23 +244,3 @@ const ProfileContentsCp = ({ otherUserId }) => {
 };
 
 export default ProfileContentsCp;
-
-/*
-  <>
-                        {diaryContentsOpen ? (
-                          <ProfileDiaryCardCp content={content} myCard={true} />
-                        ) : (
-                          <ProfilePostCardCp content={content} myCard={true} />
-                        )}
-                      </>
-
-<>
-                        {diaryContentsOpen ? (
-                          <ProfileDiaryCardCp content={content} myCard={true} />
-                        ) : (
-                          <ProfilePostCardCp content={content} myCard={true} />
-                        )}
-                      </>
-
-
-*/

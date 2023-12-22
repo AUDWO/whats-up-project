@@ -70,12 +70,13 @@ exports.updateUserInfo = async (req, res, next) => {
 exports.updatePostInfo = async (req, res, next) => {
   try {
     const postId = req.params.postId;
-    const updatePost = await Post.update(
+    await Post.update(
       {
         title: req.body.title,
         content: req.body.content,
-        lkeControl: req.body.likeControl,
+        likeControl: req.body.likeControl,
         commentControl: req.body.commentControl,
+        contentControl: req.body.contentControl,
       },
       {
         where: { id: postId },

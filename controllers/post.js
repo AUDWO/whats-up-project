@@ -16,7 +16,7 @@ exports.uploadPost = async (req, res, next) => {
       img: req.body.url,
       UserId: req.user.id,
       title: req.body.title,
-      likeCountControl: req.body.likeCountControl,
+      likeControl: req.body.likeControl,
       likeCount: req.body.likeCount,
       commentControl: req.body.commentControl,
       commentCount: req.body.commentCount,

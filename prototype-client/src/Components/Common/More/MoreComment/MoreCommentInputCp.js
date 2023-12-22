@@ -13,14 +13,14 @@ const MoreCommentInputCp = ({ storyId, diaryId }) => {
   const [commentContent, setCommentContent] = useState("");
 
   const createStoryComment = async () => {
-    await axios.post("/comment/story", {
+    return await axios.post("/comment/story", {
       content: commentContent,
       StoryId: storyId,
     });
   };
 
   const createDiaryComment = async () => {
-    await axios.post("/comment/diary", {
+    return await axios.post("/comment/diary", {
       content: commentContent,
       DiaryId: diaryId,
     });
@@ -32,7 +32,7 @@ const MoreCommentInputCp = ({ storyId, diaryId }) => {
     mutationFn: createDiaryComment,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [`moreDiaryComments${diaryId}`],
+        queryKey: [`diaryComments-${diaryId}`],
       });
       setCommentContent("");
     },
@@ -42,7 +42,7 @@ const MoreCommentInputCp = ({ storyId, diaryId }) => {
     mutationFn: createStoryComment,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [`moreStoryComments${storyId}`],
+        queryKey: [`storyComments-${storyId}`],
       });
       setCommentContent("");
     },

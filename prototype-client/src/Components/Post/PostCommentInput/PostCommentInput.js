@@ -20,7 +20,7 @@ const PostCommentInput = ({ postId }) => {
   const { mutate } = useMutation({
     mutationFn: handlePostComment,
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: [`postComments${postId}`] });
+      queryClient.invalidateQueries({ queryKey: [`postComments-${postId}`] });
       setCommentContent("");
     },
   });

@@ -36,5 +36,5 @@ export const MoreOption = styled.div`
   &:hover {
     background-color: #efefef;
   }
-  cursorpointer;
+  cursor: pointer;
 `;

@@ -94,29 +94,6 @@ export const MakePostContentWrapper = styled.div`
   height: auto;
 `;
 
-export const MakePostProfileWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  padding: 10px;
-`;
-
-export const MakePostProfileImg = styled.img`
-  background-color: black;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  margin-right: 15px;
-  object-fit: cover;
-`;
-
-export const MakePostNickname = styled.div`
-  font-size: 16px;
-  font-weight: 600;
-`;
-
 export const MakePostContent = styled.textarea`
   width: 100%;
   height: 200px;

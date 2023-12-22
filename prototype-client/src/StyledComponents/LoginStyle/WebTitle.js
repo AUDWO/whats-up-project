@@ -7,27 +7,6 @@ let marginDirection = {
   marginT: "margin-top",
 };
 
-let paddingDirection = {
-  paddingT: "padding-top",
-  paddingL: "padding-left",
-  paddingB: "padding-bottom",
-  paddingR: "padding-right",
-};
-
-let paddingDynamic = (props) => {
-  let paddingValue = ``;
-
-  for (const key in props) {
-    if (paddingDirection[key]) {
-      paddingValue += `
-      ${paddingDirection[key]} : ${props[key]}px
-      `;
-    }
-  }
-
-  return paddingValue;
-};
-
 let marginDynamic = (props) => {
   let marginValue = ``;
 

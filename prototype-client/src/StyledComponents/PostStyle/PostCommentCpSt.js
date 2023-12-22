@@ -33,9 +33,12 @@ export const CommentWrapper2 = styled(CommentWrapper)`
   width: 360px;
 `;
 
-export const CommentLikeIcon = styled(AiOutlineHeart)``;
+export const CommentLikeIcon = styled(AiOutlineHeart)`
+  cursor: pointer;
+`;
 
 export const CommentLikeFillIcon = styled(AiFillHeart)`
+  cursor: pointer;
   color: #f7dd07;
 `;
 
@@ -50,6 +53,7 @@ export const CommentProfileImg = styled.img`
   border-radius: 50%;
   background-color: black;
   margin-right: 15px;
+  object-fit: cover;
 `;
 
 export const CommentProfileInfo = styled.div`

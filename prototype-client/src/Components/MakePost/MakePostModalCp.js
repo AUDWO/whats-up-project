@@ -1,14 +1,11 @@
 import React, { useRef, useState } from "react";
 import axios from "axios";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 
 //Styled-Component
 import {
   MakePostModal,
   MakePostWrapper,
-  MakePostProfileWrapper,
-  MakePostProfileImg,
-  MakePostNickname,
   MakePostContentWrapper,
   MakePostContent,
   MakePostFormWrapper,
@@ -27,8 +24,10 @@ import PostAdvancedSetupCp from "./PostAdvancedSetupCp";
 import ModalOpenAtom from "../../store/ModalOpenAtom";
 import toggleValueAtom from "../../store/ToggleValueAtom";
 import imgUrlAtom from "../../store/imgUrlAtom";
-import userInfoAtom from "../../store/userState/userAtom";
-import stateUpdateAtom from "../../store/stateUpdateAtom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import { useUserInfoValue } from "../../contextApi/UserInfoProvider";
+import ProfileCp from "../Common/Profile/ProfileCp";
 
 const MakePostModalCp = () => {
   const setMakePostModalOpen = useSetRecoilState(
@@ -39,8 +38,9 @@ const MakePostModalCp = () => {
   const postModalBackground = useRef();
   const [content, setContent] = useState(null);
   const [title, setTitle] = useState(null);
-  const [likeCountControl, setLikeCountControl] = useRecoilState(
-    toggleValueAtom("postLikeCount")
+
+  const [likeControl, setLikeCountControl] = useRecoilState(
+    toggleValueAtom("postLike")
   );
   const [commentControl, setCommentControl] = useRecoilState(
     toggleValueAtom("postCommentForbid")
@@ -48,11 +48,8 @@ const MakePostModalCp = () => {
   const [contentControl, setContentControl] = useRecoilState(
     toggleValueAtom("postContent")
   );
-  const [contentUpdate, setContentUpdate] = useRecoilState(
-    stateUpdateAtom("contentUpdate")
-  );
 
-  const userInfo = useRecoilValue(userInfoAtom);
+  const userInfo = useUserInfoValue();
 
   const formData = new FormData();
   formData.append("img", postimgUrl);
@@ -64,31 +61,63 @@ const MakePostModalCp = () => {
     setPostImgUrl(false);
   };
 
-  const handlePost = async () => {
-    if (!postimgUrl) {
-      return;
-    }
+  const handleSubmitPostImg = async () => {
     try {
       const imgDataResponse = await axios.post("/post/img", formData);
+      console.log(imgDataResponse, "imgDataResponse");
 
+      return imgDataResponse;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const handleSubmitPost = async (imgDataResponse) => {
+    try {
       const postResponse = await axios.post("/post", {
         url: imgDataResponse.data.url,
         content: content,
         title: title,
-        likeCountControl: likeCountControl,
+        likeControl: !likeControl,
         commentControl: !commentControl,
         contentControl: !contentControl,
         likeCount: 0,
         commentCount: 0,
       });
 
-      setContentUpdate(!contentUpdate);
-      setMakePostModalOpen(false);
-      handleReset();
+      return postResponse;
     } catch (error) {
       console.error(error);
     }
   };
+
+  const handlePost = async () => {
+    if (!postimgUrl) {
+      return;
+    }
+    try {
+      const imgDataResponse = await handleSubmitPostImg();
+      const response = await handleSubmitPost(imgDataResponse);
+      setMakePostModalOpen(false);
+      handleReset();
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const queryClient = useQueryClient();
+
+  const { mutate } = useMutation({
+    mutationFn: handlePost,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: ["postContentsInfo"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["userInfo"],
+      });
+    },
+  });
 
   return (
     <MakePostModal
@@ -100,10 +129,18 @@ const MakePostModalCp = () => {
       }}
     >
       <MakePostWrapper>
-        <MakePostProfileWrapper>
-          <MakePostProfileImg>{userInfo.profileImg}</MakePostProfileImg>
-          <MakePostNickname>{userInfo.nickname}</MakePostNickname>
-        </MakePostProfileWrapper>
+        <ProfileCp
+          pfI={{ width: "50px", height: "50px", basic: "50px" }}
+          pfIW={{}}
+          pfW={{
+            margin: { t: "20", b: "20" },
+            padding: { t: "10", l: "10", r: "10", b: "10" },
+            justifyC: "flex-start",
+          }}
+          pfN={{ fontS: "16px", fontW: "600" }}
+          pfInfo={userInfo}
+        />
+
         <MakePostDragDownImgCp />
         <div>
           <MakePostTitle
@@ -132,7 +169,7 @@ const MakePostModalCp = () => {
           <MakePostButton
             onClick={(e) => {
               e.preventDefault();
-              handlePost();
+              mutate();
             }}
           >
             게시하기

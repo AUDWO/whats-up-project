@@ -12,35 +12,29 @@ import {
 
 //Atoms
 import ModalOpenAtom from "../../../store/ModalOpenAtom";
-import stateUpdateAtom from "../../../store/stateUpdateAtom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-const CommentConfigModalCp = ({ type, comment, top, left, right, bottom }) => {
+const CommentConfigModalCp = ({
+  contentType,
+  commentId,
+  commentType,
+  contentId,
+  commentIdOfReplyComment,
+  top,
+  left,
+  right,
+  bottom,
+}) => {
   const [commentConfigModalOpen, setCommentConfigModalOpen] = useRecoilState(
-    ModalOpenAtom(`${type}CommentConfigModal${comment.id}`)
-  );
-
-  const [commentCountUpdate, setCommentCountUpdate] = useRecoilState(
-    stateUpdateAtom("comment")
-  );
-  //moreDiaryComment || moreStoryComment
-  const [moreCommentUpdate, setMoreCommentUpdate] = useRecoilState(
-    stateUpdateAtom(`moreCommentUpdate`)
-  );
-  const [postCommentUpdate, setPostCommentUpdate] = useRecoilState(
-    stateUpdateAtom("postComment")
+    ModalOpenAtom(`${contentType}CommentConfigModal${commentId}`)
   );
 
   const handleDelete = async () => {
     try {
       const response = await axios.delete(
-        `/delete/${type}-comment/${comment.id}`
+        `/delete/${contentType}-comment/${commentId}`
       );
-      if (type === "post") {
-        setPostCommentUpdate(!postCommentUpdate);
-        setCommentCountUpdate(!commentCountUpdate);
-      }
-      //type === diary || type === story
-      if (!(type === "post")) setMoreCommentUpdate(!moreCommentUpdate);
+      return response;
     } catch (error) {
       console.error(error);
     }
@@ -49,19 +43,43 @@ const CommentConfigModalCp = ({ type, comment, top, left, right, bottom }) => {
   const CommentConfigModalRef = useRef(null);
 
   useEffect(() => {
+    console.log("CommentConfigModalCp - useEffect");
     if (commentConfigModalOpen) {
-      const handleClick = (e) => {
-        if (!CommentConfigModalRef.current.contains(e.target)) {
-          setCommentConfigModalOpen(false);
-        }
-        e.stopPropagation();
-      };
-      document.addEventListener("click", handleClick);
-      return () => {
-        document.removeEventListener("click", handleClick);
-      };
     }
+
+    const handleClick = (e) => {
+      console.log("CommentConfigModalCp-handleClick");
+      if (!CommentConfigModalRef.current.contains(e.target)) {
+        setCommentConfigModalOpen(false);
+      } else {
+        e.stopPropagation();
+      }
+    };
+    document.addEventListener("click", handleClick);
+    console.log("CommentConfigModLCp - useEffecr OFF");
+    return () => {
+      console.log("mdal창 닫혀요~");
+      document.removeEventListener("click", handleClick);
+    };
   }, []);
+
+  const queryClient = useQueryClient();
+
+  const { mutate } = useMutation({
+    mutationFn: handleDelete,
+    onSuccess: () => {
+      if (commentType === "comment") {
+        queryClient.invalidateQueries({
+          queryKey: [`${contentType}Comments-${contentId}`],
+        });
+      }
+      if (commentType === "replyComment") {
+        queryClient.invalidateQueries({
+          queryKey: [`${contentType}ReplyComments-${commentIdOfReplyComment}`],
+        });
+      }
+    },
+  });
 
   return (
     <CommentConfigModal
@@ -73,7 +91,7 @@ const CommentConfigModalCp = ({ type, comment, top, left, right, bottom }) => {
     >
       <CommentConfigModalOption
         onClick={() => {
-          handleDelete();
+          mutate();
         }}
       >
         <CommentDeleteIcon />

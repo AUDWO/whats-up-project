@@ -21,14 +21,13 @@ import MakeStoryModalCp from "./Components/MakeStory/MakeStoryModalCp";
 import MakePostModalCp from "./Components/MakePost/MakePostModalCp";
 import ProfileContentConfigModalCp from "./Components/Profile/ProfileContentConfigModalCp";
 import ProfileConfigModal from "./Components/Profile/ProfileConfigModal";
+import Error from "./Views/Error";
 
 //Atom
 import ModalOpenAtom from "./store/ModalOpenAtom";
 
 import PageWrapper from "./PageWrapper";
 import DashboardWrapper from "./DashboardWrapper";
-import { useEffect } from "react";
-import userInfoAtom from "./store/userState/userAtom";
 import { UserInfoProvider } from "./contextApi/UserInfoProvider";
 
 function App() {
@@ -41,28 +40,15 @@ function App() {
     ModalOpenAtom("profileContentConfigModal")
   );
 
-  const [userInfo, setUserInfo] = useRecoilState(userInfoAtom);
-
-  useEffect(() => {
-    const fetchuserInfoData = async () => {
-      try {
-        const response = await axios.get("/page/user-info");
-        setUserInfo({ ...response.data });
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchuserInfoData();
-  }, []);
-
   return (
     <BrowserRouter>
       <GlobalStyles />
-      {PostModalOpen && <MakePostModalCp />}
-      {StoryModalOpen && <MakeStoryModalCp />}
-      {ProfileConfigModalOpen && <ProfileConfigModal />}
-      {ContentConfigModalOpen && <ProfileContentConfigModalCp />}
-
+      <UserInfoProvider>
+        {PostModalOpen && <MakePostModalCp />}
+        {StoryModalOpen && <MakeStoryModalCp />}
+        {ProfileConfigModalOpen && <ProfileConfigModal />}
+        {ContentConfigModalOpen && <ProfileContentConfigModalCp />}
+      </UserInfoProvider>
       <Routes>
         <Route path="/" element={<PageWrapper />}>
           <Route index element={<Login />} />
@@ -70,6 +56,7 @@ function App() {
           <Route path="more-diary/:diaryId" element={<MoreDiary />} />
           <Route path="more-story/:storyId" element={<MoreStory />} />
           <Route path="home" element={<Home />} />
+          <Route path="error" element={<Error />} />
           <Route path="/dashboard" element={<DashboardWrapper />}>
             <Route path="diary" element={<Diary />} />
             <Route path="make-diary" element={<MakeDiary />} />

@@ -4,6 +4,7 @@ const {
   renderMain,
   renderPosts,
   renderPostsComments,
+  renderPostsComments2,
   renderStory,
   renderStoryComments,
   renderStoryReplyComments,
@@ -54,9 +55,10 @@ router.get("/render-posts/:userId", renderPosts);
 router.get("/render-only-post-info/:postId", renderOnlyPostInfo);
 
 router.get("/render-post-comment", renderPostsComments);
+router.get("/render-post-comment/:postId", renderPostsComments2);
 
 router.get("/render-post-replycomment/:commentId", renderPostReplyComments);
-router.get("/render-only-comment-info/:commentId", renderOnlyComment);
+//router.get("/render-only-comment-info/:commentId", renderOnlyComment);
 
 //댓글 좋아요 클릭 후 댓글 좋아요수 업데이트
 router.get(

@@ -88,28 +88,3 @@ export const Input = styled.input`
     transition: background-color 5000s ease-in-out 0s;
   }
 `;
-
-/*
-
-export const Input = styled.input`
-  font-size: ${(props)=>props.fontSize};
-  height: ${(props)=>props.height};
-  width: ${(props) => props.width};
-  border-radius :${(props)=>props.borderR}
-  border: ${(props)=>props.border.borderPx} solid ${(props)=>props.border.color};
-  ${(props)=>borderDynamic(props)};
-  padding: ${(props)=>props.padding};
-  ${(props) => marginDynamic(props)};
-  background-color: ${(props)=>props.backC};
-  &:-webkit-autofill,
-  &:-webkit-autofill:hover,
-  &:-webkit-autofill:focus,
-  &:-webkit-autofill:active {
-    -webkit-text-fill-color: 글자색;
-    -webkit-box-shadow: 0 0 0px 1000px 배경색 inset;
-    transition: background-color 5000s ease-in-out 0s;
-  }
-`;
- */
-
-//Sign-

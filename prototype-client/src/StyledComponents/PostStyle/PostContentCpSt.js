@@ -2,51 +2,6 @@ import styled, { keyframes } from "styled-components";
 import { BiSolidArrowToBottom } from "react-icons/bi";
 import { BiSolidArrowToTop } from "react-icons/bi";
 
-export const ProfileWrapper = styled.div`
-  cursor: pointer;
-`;
-
-//---------
-export const Profile = styled.div`
-  position: absolute;
-  left: 20px;
-  top: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-export const ProfileImg = styled.img`
-  background-color: black;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-  z-index: 4;
-`;
-
-export const ProfileImgWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 15px;
-  border-radius: 50%;
-  width: 51px;
-  height: 51px;
-  border: 3px solid #f7dd07;
-`;
-
-export const ProfileUsername = styled.div`
-  display: flex;
-  align-items: center;
-  background-color: black;
-  border-radius: 10px;
-  height: 30px;
-  font-size: 13px;
-  padding: 5px;
-  color: #f7dd07;
-`;
-
 export const PostImgWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -60,7 +15,7 @@ export const PostImgWrapper = styled.div`
 `;
 
 export const PostImg = styled.img`
-  width: 100%;
+  width: 410px;
   height: 585px;
   background-color: white;
   object-fit: cover;
@@ -69,7 +24,7 @@ export const PostImg = styled.img`
 export const PostContentsWrapper = styled.div`
   border: 3px solid #f7dd07;
   background-color: white;
-  width: 100%;
+  width: 410px;
   min-height: 20px;
   height: auto;
 `;
@@ -119,7 +74,7 @@ export const PostTitleWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
+  width: 410px;
   height: 40px;
   padding: 0px 10px 0px 10px;
 `;

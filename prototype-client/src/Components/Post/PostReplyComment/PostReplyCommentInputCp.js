@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useSetRecoilState, useRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 
 //Styled-Components
 import {
@@ -12,36 +12,45 @@ import {
 } from "../../../StyledComponents/PostStyle/PostReplyComment/PostReplyCommentInputSt";
 
 //Atoms
-import stateUpdateAtom from "../../../store/stateUpdateAtom";
 import ModalOpenAtom from "../../../store/ModalOpenAtom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const PostReplyCommentInputCp = ({ comment }) => {
-  const [reply, setReply] = useState("");
+  const [replyCommentContent, setReplyCommentContent] = useState("");
   const setReplyInputOpen = useSetRecoilState(
     ModalOpenAtom(`replyComment${comment.id}`)
   );
-  const [replyUpdate, setReplyUpdate] = useRecoilState(
-    stateUpdateAtom("postReply")
-  );
 
-  const handlePostReplyComment = async () => {
+  const createPostComment = async () => {
     try {
-      await axios.post("/comment/post", {
-        content: reply,
+      const response = await axios.post("/comment/post", {
+        content: replyCommentContent,
         PostId: comment.PostId,
         PostCommentId: comment.id,
       });
+      return response;
     } catch (error) {
       console.log(`PostReplyComments Error ${error}`);
     }
   };
 
+  const queryClient = useQueryClient();
+  const { mutate } = useMutation({
+    mutationFn: createPostComment,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [`postReplyComments-${comment.id}`],
+      });
+      setReplyCommentContent("");
+    },
+  });
+
   return (
     <PostReplyInputWrapper>
       <PostReplyInput
-        value={reply}
+        value={replyCommentContent}
         onChange={(e) => {
-          setReply(e.target.value);
+          setReplyCommentContent(e.target.value);
         }}
       />
       <ReplyButtonWrapper>
@@ -50,9 +59,7 @@ const PostReplyCommentInputCp = ({ comment }) => {
         </ReplyCancelButton>
         <ReplyInputButton
           onClick={() => {
-            handlePostReplyComment();
-            setReply("");
-            setReplyUpdate(!replyUpdate);
+            mutate();
           }}
         >
           게시

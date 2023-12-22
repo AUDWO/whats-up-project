@@ -34,9 +34,7 @@ const Login = () => {
     console.log("실행했음");
     try {
       let response = await axios.post("/auth/login", formData);
-      console.log("response.data");
-      console.log(response.data);
-      console.log("response.data");
+
       if (response.data === "discord" || response.data === "not exist") {
         setPasswCheck(true);
       } else {

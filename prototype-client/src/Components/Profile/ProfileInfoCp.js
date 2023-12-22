@@ -77,7 +77,6 @@ const ProfileInfoCp = ({ otherUserInfo, userInfo }) => {
   }, [otherUserInfo]);
 
   if (otherUserInfo && Object.keys(otherUserInfo).length >= 3) {
-    console.log("otherUserInfo-ProfileInfoCp");
     return (
       <ProfileInfoWrapper>
         <ProfileNameWrapper>

@@ -34,9 +34,9 @@ export const DiaryContentsWrapper = styled.div`
 `;
 
 export const DiaryImg = styled.img`
-  min-width: 500px;
+  min-width: 300px;
   max-width: 600px;
-  height: auto;
+  height: 400px;
 `;
 
 export const DiaryWrapper = styled.div`

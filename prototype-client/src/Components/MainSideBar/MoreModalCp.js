@@ -12,12 +12,16 @@ import {
 
 //Atom
 import ModalOpenAtom from "../../store/ModalOpenAtom";
+//import { ActionUserInfo } from "../../contextApi/UserInfoProvider";
 
 const MoreModalCp = forwardRef((props, ref) => {
   const navigate = useNavigate();
 
+  //const setUserInfo = ActionUserInfo();
+
   const handleLogOut = async () => {
     const response = await axios.get("/auth/logout");
+    //setUserInfo((prev) => {});
     setMoreModalOpen(false);
     navigate("/");
   };

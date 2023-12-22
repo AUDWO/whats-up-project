@@ -10,15 +10,15 @@ import {
 
 //Component
 import DiaryPostCp from "./DiaryPost/DiaryPostCp";
+import { useQuery } from "@tanstack/react-query";
 
 const DiaryContentsCp = ({ filterType }) => {
-  const [latestDiaries, setLatestDiaries] = useState([]);
-  const [trendingDiaries, setTrendingDiaries] = useState([]);
-
+  /*
   useEffect(() => {
-    const fetchDiariesData = async () => {
+    const fetchDiariesData2 = async () => {
       try {
         const response = await axios.get("/page/render-diaries");
+        console.log(response.data, "rererererererer");
 
         const dateDiaries = response.data.map((diary) => {
           const date = diary.createdAt;
@@ -44,14 +44,44 @@ const DiaryContentsCp = ({ filterType }) => {
       }
     };
 
-    fetchDiariesData();
-  }, []);
+    fetchDiariesData2();
+  }, []);*/
+
+  const fetchDiariesData = async () => {
+    try {
+      const response = await axios.get("/page/render-diaries");
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const { data } = useQuery({
+    queryKey: ["diaries"],
+    queryFn: fetchDiariesData,
+  });
+
+  const dateDiaries = data?.map((diary) => {
+    return { ...diary, createdAt: Date.parse(diary.createdAt) };
+  });
+
+  const publicDiaries = dateDiaries?.filter((diary) => {
+    return diary.publicControl === true;
+  });
+
+  const latelyDiaries = publicDiaries?.toSorted((a, b) => {
+    return b.createdAt - a.createdAt;
+  });
+
+  const trendingDiaries = publicDiaries?.toSorted((a, b) => {
+    return b.reactCount - a.reactCount;
+  });
 
   if (filterType === "latest") {
     return (
       <DiarysWrapper>
         <DiariesDiv>
-          {latestDiaries.map((diary) => (
+          {latelyDiaries?.map((diary) => (
             <StyledLink to={`/more-diary/${diary.id}`} key={diary.id}>
               <DiaryPostCp diary={diary} />
             </StyledLink>
@@ -64,7 +94,7 @@ const DiaryContentsCp = ({ filterType }) => {
     return (
       <DiarysWrapper>
         <DiariesDiv>
-          {trendingDiaries.map((diary) => (
+          {trendingDiaries?.map((diary) => (
             <StyledLink to={`/more-diary/${diary.id}`} key={diary.id}>
               <DiaryPostCp diary={diary} />
             </StyledLink>

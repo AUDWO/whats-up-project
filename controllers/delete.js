@@ -54,7 +54,10 @@ exports.deletePostComment = async (req, res, next) => {
 exports.deleteDiaryComment = async (req, res, next) => {
   try {
     const commentId = req.params.commentId;
-    const deleteComment = await DiaryComment.destroy({
+    await DiaryComment.destroy({
+      where: { DiaryCommentId: commentId },
+    });
+    await DiaryComment.destroy({
       where: { id: commentId },
     });
     return res.status(200).send("success");
@@ -80,9 +83,13 @@ exports.unReactDiary = async (req, res) => {
 exports.deleteStoryComment = async (req, res, next) => {
   try {
     const commentId = req.params.commentId;
-    const deleteComment = await StoryComment.destroy({
+    await StoryComment.destroy({
+      where: { StoryCommentId: commentId },
+    });
+    await StoryComment.destroy({
       where: { id: commentId },
     });
+
     return res.status(200).send("success");
   } catch (error) {
     console.error(error);

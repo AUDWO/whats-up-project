@@ -42,8 +42,10 @@ export const BasicProfileImg = styled(BiSolidUserCircle)`
   font-size: ${(props) => props.fS};
   z-index: ${(props) => (props.zI ? props.zI : "")};
   ${(props) => marginDynamic(props.mg)};
+
   border-radius: 50%;
   color: black;
+  background-color: white;
 `;
 
 export const ProfileNickname = styled.div`

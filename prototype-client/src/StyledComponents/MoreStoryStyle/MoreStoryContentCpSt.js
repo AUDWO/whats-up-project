@@ -69,12 +69,14 @@ export const MoreStoryTimepassDot = styled(BsDot)``;
 
 export const MoreStoyrImgWrapper = styled.div`
   width: 100%;
-  height: 800px;
+  height: 500px;
   background-color: black;
+  display: flex;
+  justify-content: center;
 `;
 
 export const MoreStoryImg = styled.img`
-  width: 100%;
-  height: 100%;
+  min-width: 400px;
+  height: 500px;
   object-fit: cover;
 `;

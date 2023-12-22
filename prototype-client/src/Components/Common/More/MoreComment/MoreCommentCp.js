@@ -25,35 +25,35 @@ import { useRecoilState } from "recoil";
 import ModalOpenAtom from "../../../../store/ModalOpenAtom";
 import ReplyCommentCp from "./ReplyCommentCp";
 import CommentConfigModalCp from "../../Comment/CommentConfigModalCp";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-const MoreCommentCp = ({ comment, type }) => {
+const MoreCommentCp = ({ comment, moreType }) => {
   const [replyOpen, setReplyOpen] = useState(false);
-  const [reply, setReply] = useState(null);
-  const [replies, setReplies] = useState([]);
-  const [replyUpdate, setReplyUpdate] = useState(false);
+  const [replyCommentContent, setReplyCommentContent] = useState("");
   const [replyInputOpen, setReplyInputOpen] = useState(false);
 
   const [commentConfigModalOpen, setCommentConfigModalOpen] = useRecoilState(
-    ModalOpenAtom(`${type}CommentConfigModal${comment.id}`)
+    ModalOpenAtom(`${moreType}CommentConfigModal${comment.id}`)
   );
 
   //대댓글 api
-  const handlePostStoryReplyComment = async () => {
+  const createStoryComment = async () => {
     try {
-      await axios.post("/comment/story", {
-        content: reply,
+      const response = await axios.post("/comment/story", {
+        content: replyCommentContent,
         StoryCommentId: comment.id,
         StoryId: comment.StoryId,
       });
+      return response;
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handlePostDiaryReplyComment = async () => {
+  const createDiaryComment = async () => {
     try {
-      await axios.post("/comment/diary", {
-        content: reply,
+      return await axios.post("/comment/diary", {
+        content: replyCommentContent,
         DiaryCommentId: comment.id,
         DiaryId: comment.diaryId,
       });
@@ -62,22 +62,74 @@ const MoreCommentCp = ({ comment, type }) => {
     }
   };
 
-  useEffect(() => {
-    //대댓글 불러오는 api
-    const fetchReplyComment = async () => {
-      try {
-        const response = await axios.get(
-          `/page/render-${type}-replycomments/${comment.id}`
-        );
+  /* 하나로 합치기
+  const createReplyComment = async () => {
+    const CommentIdType = (() => {
+      if (moreType === "story") return "StoryId";
+      if (moreType === "diary") return "DiaryId";
+    })();
+    try {
+      return await axios.post(`/comment/${moreType}`, {
+        content: replyCommentContent,
+        `${moreType}Id`: comment[`${moreType}Id`],
+      });
+    } catch (error) {
+      console.error(error, "createReplyComment - Error");
+    }
+  };*/
 
-        setReplies([...response.data]);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  const queryClient = useQueryClient();
+  const { mutate: handlePostDiaryReplyComment } = useMutation({
+    mutationFn: createDiaryComment,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [`${moreType}ReplyComments-${comment.id}`],
+      });
+      setReplyCommentContent("");
+    },
+  });
 
-    fetchReplyComment();
-  }, [replyUpdate]);
+  const { mutate: handlePostStoryReplyComment } = useMutation({
+    mutationFn: createStoryComment,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [`${moreType}ReplyComments-${comment.id}`],
+      });
+      setReplyCommentContent("");
+    },
+  });
+
+  const getReplyComments = async () => {
+    try {
+      const response = await axios.get(
+        `/page/render-${moreType}-replycomments/${comment.id}`
+      );
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const { data: replyComments, isLoading } = useQuery({
+    queryKey: [`${moreType}ReplyComments-${comment.id}`],
+    queryFn: getReplyComments,
+  });
+
+  const handleContentIdTypeCheck = (() => {
+    if (moreType === "story") return comment.StoryId;
+    if (moreType === "diary") return comment.diaryId;
+  })();
+
+  if (isLoading) {
+    return (
+      <MoreComment>
+        <ProfileWrapper>
+          <MoreCommentProfile></MoreCommentProfile>
+        </ProfileWrapper>
+        <CommentWrapper></CommentWrapper>
+      </MoreComment>
+    );
+  }
 
   return (
     <MoreComment>
@@ -87,7 +139,7 @@ const MoreCommentCp = ({ comment, type }) => {
       <CommentWrapper>
         <ProfileNameWrapper>
           <ProfileName>{comment.User.nickname}</ProfileName>
-          <StoryCommentConfigIcon
+          <CommentConfigIcon
             onClick={() => {
               setTimeout(() => {
                 setCommentConfigModalOpen(true);
@@ -96,23 +148,17 @@ const MoreCommentCp = ({ comment, type }) => {
           />
           {commentConfigModalOpen && (
             <CommentConfigModalCp
-              type={type}
+              moreType={moreType}
               top={"0"}
               right={"0"}
               comment={comment}
+              commentType={"comment"}
+              contentId={handleContentIdTypeCheck}
             />
-            /*
-            <CommentConfigModalCp
-              type={type}
-              top={"0"}
-              right={"0"}
-              comment={comment}
-            />*/
           )}
         </ProfileNameWrapper>
         <CommentContent>{comment.content}</CommentContent>
         <CommentContact>
-          <CommentContactIcon />
           <CommentContactReply
             onClick={() => {
               setReplyInputOpen(!replyInputOpen);
@@ -124,31 +170,29 @@ const MoreCommentCp = ({ comment, type }) => {
         {replyInputOpen && (
           <CommentReplyInputWrapper>
             <CommentReplyInput
-              value={reply}
+              value={replyCommentContent}
               onChange={(e) => {
-                setReply(e.target.value);
+                setReplyCommentContent(e.target.value);
               }}
             />
             <ReplyButtonWrapper>
               <CommentReplyCancelButton
                 onClick={() => {
-                  setReply("");
+                  setReplyCommentContent("");
                   setReplyInputOpen(false);
                 }}
               >
                 취소
               </CommentReplyCancelButton>
               <CommentReplyInputButton
-                replyCheck={reply}
+                replyCheck={replyCommentContent}
                 onClick={() => {
-                  if (type === "diary") {
+                  if (moreType === "diary") {
                     handlePostDiaryReplyComment();
                   }
-                  if (type === "story") {
+                  if (moreType === "story") {
                     handlePostStoryReplyComment();
                   }
-                  setReplyUpdate(!replyUpdate);
-                  setReply("");
                 }}
               >
                 답글
@@ -158,20 +202,29 @@ const MoreCommentCp = ({ comment, type }) => {
         )}
 
         <>
-          {replies.length > 0 && (
+          {replyComments.data.length > 0 && (
             <CommentContactReplyShowWrapper
               onClick={() => {
                 setReplyOpen(!replyOpen);
               }}
             >
-              <CommentReplyOpenIcon replyOpen={replyOpen} />
+              {replyOpen ? (
+                <CommentReplyOpenIcon replyOpen={replyOpen} />
+              ) : (
+                <CommentReplyCloseIcon />
+              )}
               <CommentContactReplyTitle>답글</CommentContactReplyTitle>
             </CommentContactReplyShowWrapper>
           )}
           {replyOpen && (
             <>
-              {replies.map((reply) => (
-                <ReplyCommentCp reply={reply} key={reply.id} />
+              {replyComments.data.map((reply) => (
+                <ReplyCommentCp
+                  reply={reply}
+                  key={reply.id}
+                  moreType={moreType}
+                  commentId={comment.id}
+                />
               ))}
             </>
           )}
@@ -183,7 +236,7 @@ const MoreCommentCp = ({ comment, type }) => {
 
 export default MoreCommentCp;
 
-export const MoreComment = styled.div`
+const MoreComment = styled.div`
   display: flex;
   width: 100%;
   min-height: 120px;
@@ -192,13 +245,13 @@ export const MoreComment = styled.div`
   border-bottom: 0.5px solid black;
 `;
 
-export const ProfileWrapper = styled.div`
+const ProfileWrapper = styled.div`
   width: 50px;
   height: 50px;
   margin-right: 10px;
 `;
 
-export const MoreCommentProfile = styled.div`
+const MoreCommentProfile = styled.div`
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -206,40 +259,40 @@ export const MoreCommentProfile = styled.div`
   margin-right: 20px;
 `;
 
-export const CommentWrapper = styled.div`
+const CommentWrapper = styled.div`
   width: 100%;
 `;
 
-export const ProfileName = styled.div`
+const ProfileName = styled.div`
   font-size: 15px;
   font-weight: 700;
   margin-bottom: 10px;
   margin-right: 6px;
 `;
 
-export const CommentContact = styled.div`
+const CommentContact = styled.div`
   display: flex;
   align-items: center;
   margin-top: 20px;
   margin-bottom: 10px;
 `;
 
-export const CommentContactIcon = styled(LuSmilePlus)`
+const CommentContactIcon = styled(LuSmilePlus)`
   margin-right: 20px;
   font-size: 25px;
   cursor: pointer;
 `;
 
-export const CommentContactReply = styled.div`
+const CommentContactReply = styled.div`
   cursor: pointer;
 `;
 
-export const CommentContent = styled.div`
+const CommentContent = styled.div`
   height: auto;
   line-height: 1.5;
 `;
 
-export const ProfileNameWrapper = styled.div`
+const ProfileNameWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   position: relative;
@@ -247,7 +300,7 @@ export const ProfileNameWrapper = styled.div`
 
 //---------------------------
 
-export const StoryCommentConfigIcon = styled(BsThreeDots)`
+const CommentConfigIcon = styled(BsThreeDots)`
   font-size: 20px;
   color: gray;
   &:hover {
@@ -258,7 +311,7 @@ export const StoryCommentConfigIcon = styled(BsThreeDots)`
 
 //--
 
-export const CommentContactReplyShowWrapper = styled.div`
+const CommentContactReplyShowWrapper = styled.div`
   width: 90px;
   height: 30px;
   display: flex;
@@ -272,18 +325,18 @@ export const CommentContactReplyShowWrapper = styled.div`
     background-color: #c5d5f5;
   }
 `;
-export const CommentContactReplyTitle = styled.div`
+const CommentContactReplyTitle = styled.div`
   font-size: 16px;
   margin-left: 12px;
 `;
 
-export const CommentReplyInputWrapper = styled.div`
+const CommentReplyInputWrapper = styled.div`
   width: 100%;
   height: 40px;
   display: flex;
 `;
 
-export const CommentReplyInput = styled.input`
+const CommentReplyInput = styled.input`
   width: 80%;
   height: 40px;
   border: none;
@@ -293,7 +346,7 @@ export const CommentReplyInput = styled.input`
   padding-left: 10px;
 `;
 
-export const ReplyButtonWrapper = styled.div`
+const ReplyButtonWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -301,8 +354,7 @@ export const ReplyButtonWrapper = styled.div`
   height: 40px;
   border-bottom: 1px solid black;
 `;
-
-export const CommentReplyInputButton = styled.div`
+const CommentReplyInputButton = styled.div`
   line-height: 40px;
   width: 50%;
   text-align: center;
@@ -315,7 +367,7 @@ export const CommentReplyInputButton = styled.div`
   cursor:pointer;
 `;
 
-export const CommentReplyCancelButton = styled.div`
+const CommentReplyCancelButton = styled.div`
   width: 50%;
   line-height: 40px;
   cursor: pointer;
@@ -326,11 +378,6 @@ export const CommentReplyCancelButton = styled.div`
   }
 `;
 
-export const CommentReplyOpenIcon = styled(BiSolidDownArrow)`
-  transform: ${(props) =>
-    props.replyOpen ? "  rotate(180deg)" : " rotate(0deg)"};
+const CommentReplyOpenIcon = styled(BiSolidDownArrow)``;
 
-  transition: transform 0.5s;
-`;
-
-export const CommentReplyCloseIcon = styled(BiSolidUpArrow)``;
+const CommentReplyCloseIcon = styled(BiSolidUpArrow)``;

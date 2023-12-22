@@ -1,4 +1,7 @@
 import React from "react";
+import { useRecoilState } from "recoil";
+
+//Styled-Components
 import {
   CommentContactWrapper,
   CommentContactDiv,
@@ -7,23 +10,26 @@ import {
   CommentConfigIcon,
 } from "../../../StyledComponents/PostStyle/PostCommentCpSt";
 
+//Component
 import CommentConfigModalCp from "../../Common/Comment/CommentConfigModalCp";
-import { useRecoilState } from "recoil";
+
+//Atom
 import ModalOpenAtom from "../../../store/ModalOpenAtom";
 
-const PostCommentContactCp = ({ postCommentLikeInfo, myComment, comment }) => {
+const PostCommentContactCp = ({ postCommentLikeCount, myComment, comment }) => {
   const [postCommentConfigModalOpen, setPostCommentConfigModalOpen] =
     useRecoilState(ModalOpenAtom(`postCommentConfigModal${comment.id}`));
 
   const [replyInputOpen, setReplyInputOpen] = useRecoilState(
     ModalOpenAtom(`replyComment${comment.id}`)
   );
+
+  console.log(postCommentConfigModalOpen, "postCommentConfigModalOpen");
+
   return (
     <CommentContactWrapper>
       <CommentContactDiv>
-        <CommentLikeCount>
-          좋아요 {postCommentLikeInfo.postCommentLikeCount.length}
-        </CommentLikeCount>
+        <CommentLikeCount>좋아요 {postCommentLikeCount}</CommentLikeCount>
         <CommentReplyButtom onClick={() => setReplyInputOpen(!replyInputOpen)}>
           답글 달기
         </CommentReplyButtom>
@@ -40,9 +46,10 @@ const PostCommentContactCp = ({ postCommentLikeInfo, myComment, comment }) => {
           />
           {postCommentConfigModalOpen && (
             <CommentConfigModalCp
-              type={"post"}
-              comment={comment}
+              contentType={"post"}
               commentId={comment.id}
+              commentType={"comment"}
+              contentId={comment.PostId}
               bottom={"-10px"}
               right={"-10px"}
             />
@@ -54,3 +61,14 @@ const PostCommentContactCp = ({ postCommentLikeInfo, myComment, comment }) => {
 };
 
 export default PostCommentContactCp;
+
+/*
+ onClick={() => {
+              setTimeout(() => {
+                setPostCommentConfigModalOpen(true);
+              }, 0);
+            }}
+
+
+
+*/

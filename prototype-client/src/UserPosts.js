@@ -7,6 +7,7 @@ import styled from "styled-components";
 
 //Component
 import PostCp from "./PostCp";
+import SpinnerCp from "./Components/Common/Spinner/SpinnerCp";
 
 const UserPosts = () => {
   const targetRef = useRef(null);
@@ -46,6 +47,17 @@ const UserPosts = () => {
       }
     };
   }, []);
+  /*
+  const getPosts = async () => {
+    try {
+      const response = await axios.get(`/page/render-posts/?page=0&perPage=5`);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    getPosts();
+  }, []);*/
 
   const { data, hasNextPage, fetchNextPage } = useInfiniteQuery({
     queryKey: ["postss"],
@@ -75,7 +87,7 @@ const UserPosts = () => {
         <PostWrapper>
           {hasNextPage ? (
             <SpinnerWrapper>
-              <ClipLoader color="#f7dd07" size="60px" />
+              <SpinnerCp color="#f7dd07" size="60px" />
             </SpinnerWrapper>
           ) : data ? (
             <NoPage>더 이상 게시물이 존재하지 않습니다.</NoPage>

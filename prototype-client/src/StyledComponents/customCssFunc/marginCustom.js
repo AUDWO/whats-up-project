@@ -15,7 +15,6 @@ const marginDynamic = (props) => {
         `;
     }
   }
-  console.log(marginValue, "marginValue-1-1-1-1-1-1-1");
 
   return marginValue;
 };

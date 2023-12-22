@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 
 //Styled-Components
 import {
@@ -17,17 +17,13 @@ import DiaryContentConfigOptionCp from "./ProfileContentConfig/DiaryContentConfi
 
 //Atoms
 import contentInfoAtom from "../../store/contentInfo/diaryContentInfoAtom";
-import stateUpdateAtom from "../../store/stateUpdateAtom";
 import ModalOpenAtom from "../../store/ModalOpenAtom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const ProfileContentConfigModalCp = () => {
   const profileContentConfigModalBackground = useRef();
   const setContentConfigModalOpen = useSetRecoilState(
     ModalOpenAtom("profileContentConfigModal")
-  );
-
-  const [contentUpdate, setContentUpdate] = useRecoilState(
-    stateUpdateAtom("contentUpdate")
   );
 
   const [diaryInfoOpen, setDiaryInfoOpen] = useState(false);
@@ -45,17 +41,61 @@ const ProfileContentConfigModalCp = () => {
     }
   }, []);
 
-  const handleDelete = async () => {
-    if (diaryInfoOpen) {
-      const response = await axios.delete(`/delete/diary/${contentInfo.id}`);
-    }
-
-    if (postInfoOpen) {
+  const deletePost = async () => {
+    try {
       const response = await axios.delete(`/delete/post/${contentInfo.id}`);
-      setContentConfigModalOpen(false);
+      console.log(response, "deletePostResponse-1-1-01--010-10-1");
+      return response;
+    } catch (error) {
+      console.error(error);
     }
-    setContentConfigModalOpen(false);
-    setContentUpdate(!contentUpdate);
+  };
+
+  const deleteDiary = async () => {
+    try {
+      return await axios.delete(`/delete/diary/${contentInfo.id}`);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const queryClient = useQueryClient();
+
+  const { mutate: postMutate } = useMutation({
+    mutationFn: deletePost,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["postContentsInfo"] });
+      setContentConfigModalOpen(false);
+    },
+    onError: (error) => {
+      console.log("onErro postMutate", error);
+    },
+  });
+
+  const { mutate: diaryMutate } = useMutation({
+    mutationFn: deleteDiary,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["diaryContentsInfo"] });
+      setContentConfigModalOpen(false);
+    },
+    onError: (error) => {
+      console.log("onErrorData diaryMutate", error);
+    },
+  });
+
+  const handleDelete = async () => {
+    console.log("handleDelete");
+    try {
+      if (diaryInfoOpen) {
+        diaryMutate();
+      }
+
+      if (postInfoOpen) {
+        postMutate();
+      }
+    } catch (error) {
+      console.error("Error during deletion:", error);
+    }
   };
 
   if (diaryInfoOpen || postInfoOpen) {

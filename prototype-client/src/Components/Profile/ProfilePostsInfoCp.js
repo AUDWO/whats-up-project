@@ -11,13 +11,14 @@ import {
 
 //Atom;
 import toggleValueAtom from "../../store/ToggleValueAtom";
+import defaultTrueToggleValueAtom from "../../store/defaultTrueToggleValueAtom";
 
-const ProfilePostsInfoCp = ({ contentsInfo }) => {
+const ProfilePostsInfoCp = ({ contentsInfo: userInfo }) => {
   const [diaryContentsOpen, setDiaryContentsOpen] = useRecoilState(
-    toggleValueAtom("diaryContentsOpen")
+    toggleValueAtom(`diaryContentsOpen${userInfo.id}`)
   );
   const [postContentsOpen, setPostContentsOpen] = useRecoilState(
-    toggleValueAtom("postContentsOpen")
+    defaultTrueToggleValueAtom(`postContentsOpen${userInfo.id}`)
   );
 
   return (
@@ -33,7 +34,7 @@ const ProfilePostsInfoCp = ({ contentsInfo }) => {
           게시물
         </CountTitle>
         <CountNumber marginL={"10"} paddingT={"10"}>
-          {contentsInfo.postslength}
+          {userInfo.postslength}
         </CountNumber>
       </CountWrapper>
       <CountWrapper marginL={"50"}>
@@ -47,7 +48,7 @@ const ProfilePostsInfoCp = ({ contentsInfo }) => {
           일기
         </CountTitle>
         <CountNumber marginL={"10"} paddingT={"10"}>
-          {contentsInfo.diarieslength}
+          {userInfo.diarieslength}
         </CountNumber>
       </CountWrapper>
     </PostsInfoWrapper>

@@ -12,7 +12,9 @@ import {
 
 //Atoms
 import ModalOpenAtom from "../../../store/ModalOpenAtom";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+//Component
+import CustomUseMutation from "../../../customHooks/CustomUseMutation";
 
 const CommentConfigModalCp = ({
   contentType,
@@ -29,7 +31,7 @@ const CommentConfigModalCp = ({
     ModalOpenAtom(`${contentType}CommentConfigModal${commentId}`)
   );
 
-  const handleDelete = async () => {
+  const deleteComments = async () => {
     try {
       const response = await axios.delete(
         `/delete/${contentType}-comment/${commentId}`
@@ -60,23 +62,16 @@ const CommentConfigModalCp = ({
     };
   }, []);
 
-  const queryClient = useQueryClient();
+  const queryKeyMadeByCommentTYPE = (() => {
+    if (commentType === "comment") return `${contentType}Comments-${contentId}`;
+    if (commentType === "replyComment")
+      return `${contentType}ReplyComments-${commentIdOfReplyComment}`;
+  })();
 
-  const { mutate } = useMutation({
-    mutationFn: handleDelete,
-    onSuccess: () => {
-      if (commentType === "comment") {
-        queryClient.invalidateQueries({
-          queryKey: [`${contentType}Comments-${contentId}`],
-        });
-      }
-      if (commentType === "replyComment") {
-        queryClient.invalidateQueries({
-          queryKey: [`${contentType}ReplyComments-${commentIdOfReplyComment}`],
-        });
-      }
-    },
-  });
+  const { mutate: handleCommentDelete } = CustomUseMutation(
+    deleteComments,
+    queryKeyMadeByCommentTYPE
+  );
 
   return (
     <CommentConfigModal
@@ -88,7 +83,7 @@ const CommentConfigModalCp = ({
     >
       <CommentConfigModalOption
         onClick={() => {
-          mutate();
+          handleCommentDelete();
         }}
       >
         <CommentDeleteIcon />

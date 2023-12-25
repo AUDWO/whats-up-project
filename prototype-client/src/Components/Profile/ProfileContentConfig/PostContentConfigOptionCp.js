@@ -74,7 +74,9 @@ const PostContentConfigOptionCp = ({ contentInfo }) => {
   const { mutate } = useMutation({
     mutationFn: updatePost,
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["postss"] });
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      queryClient.invalidateQueries({ queryKey: ["postContentsInfo"] });
+
       setContentConfigModalOpen(false);
     },
   });

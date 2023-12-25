@@ -41,7 +41,7 @@ const MoreDiaryContentCp = ({ diaryId }) => {
         <MoreDiaryTitle>{diary.title}</MoreDiaryTitle>
         <DiaryNav>
           <MoreProfileWrapper>
-            <MoreProfileImg />
+            <MoreProfileImg src={diary.User.profileImg} />
             <MoreProfileName>{diary.User.nickname}</MoreProfileName>
           </MoreProfileWrapper>
           <DiaryDate>2023.09.19</DiaryDate>

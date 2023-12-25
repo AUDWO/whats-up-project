@@ -36,11 +36,3 @@ export function useUserInfoValue() {
   }
   return value;
 }
-
-/*export function ActionUserInfo() {
-  const value = useContext(ActionUserInfoContext);
-  if (value === undefined) {
-    throw new Error("ActionUserInfo should be used within UserInfoProvider ");
-  }
-  return value;
-}*/

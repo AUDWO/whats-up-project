@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
+import { useQuery } from "@tanstack/react-query";
+import { useRecoilState } from "recoil";
+import axios from "axios";
 
 import { BiSolidDownArrow } from "react-icons/bi";
 import { BiSolidUpArrow } from "react-icons/bi";
 import { LuSmilePlus } from "react-icons/lu";
 import { BsThreeDots } from "react-icons/bs";
 
-import axios from "axios";
 /*
 import {
   MoreComment,
@@ -21,11 +23,13 @@ import {
   ProfileNameWrapper,
 } from "../../../StyledComponents/CommonCpStyle/MoreComment/MoreCommentCpSt";*/
 
-import { useRecoilState } from "recoil";
+//Atom
 import ModalOpenAtom from "../../../../store/ModalOpenAtom";
-import ReplyCommentCp from "./ReplyCommentCp";
+
+//Component
+import ReplyCommentCp from "./MoreReplyCommentCp";
 import CommentConfigModalCp from "../../Comment/CommentConfigModalCp";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import CustomUseMutation from "../../../../customHooks/CustomUseMutation";
 
 const MoreCommentCp = ({ comment, moreType }) => {
   const [replyOpen, setReplyOpen] = useState(false);
@@ -62,42 +66,20 @@ const MoreCommentCp = ({ comment, moreType }) => {
     }
   };
 
-  /* 하나로 합치기
-  const createReplyComment = async () => {
-    const CommentIdType = (() => {
-      if (moreType === "story") return "StoryId";
-      if (moreType === "diary") return "DiaryId";
-    })();
-    try {
-      return await axios.post(`/comment/${moreType}`, {
-        content: replyCommentContent,
-        `${moreType}Id`: comment[`${moreType}Id`],
-      });
-    } catch (error) {
-      console.error(error, "createReplyComment - Error");
+  const fnDeterminedByMoreType = (() => {
+    if (moreType === "story") return createStoryComment;
+    if (moreType === "diary") return createDiaryComment;
+  })();
+
+  const { mutate: handleCommentCreate } = CustomUseMutation(
+    fnDeterminedByMoreType,
+    `${moreType}ReplyComments-${comment.id}`,
+    () => {
+      setReplyCommentContent("");
     }
-  };*/
+  );
 
-  const queryClient = useQueryClient();
-  const { mutate: handlePostDiaryReplyComment } = useMutation({
-    mutationFn: createDiaryComment,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [`${moreType}ReplyComments-${comment.id}`],
-      });
-      setReplyCommentContent("");
-    },
-  });
-
-  const { mutate: handlePostStoryReplyComment } = useMutation({
-    mutationFn: createStoryComment,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [`${moreType}ReplyComments-${comment.id}`],
-      });
-      setReplyCommentContent("");
-    },
-  });
+  //---------------------------------------------------
 
   const getReplyComments = async () => {
     try {
@@ -110,12 +92,13 @@ const MoreCommentCp = ({ comment, moreType }) => {
     }
   };
 
+  //replyComments
   const { data: replyComments, isLoading } = useQuery({
     queryKey: [`${moreType}ReplyComments-${comment.id}`],
     queryFn: getReplyComments,
   });
 
-  const handleContentIdTypeCheck = (() => {
+  const commentIdDeterminedByContentType = (() => {
     if (moreType === "story") return comment.StoryId;
     if (moreType === "diary") return comment.diaryId;
   })();
@@ -131,10 +114,15 @@ const MoreCommentCp = ({ comment, moreType }) => {
     );
   }
 
+  const isReplyComment = (() => {
+    if (replyComments?.data.length >= 1) return true;
+    else return false;
+  })();
+
   return (
     <MoreComment>
       <ProfileWrapper>
-        <MoreCommentProfile></MoreCommentProfile>
+        <MoreCommentProfile src={comment.User.profileImg} />
       </ProfileWrapper>
       <CommentWrapper>
         <ProfileNameWrapper>
@@ -148,12 +136,12 @@ const MoreCommentCp = ({ comment, moreType }) => {
           />
           {commentConfigModalOpen && (
             <CommentConfigModalCp
-              moreType={moreType}
+              contentType={moreType}
               top={"0"}
               right={"0"}
-              comment={comment}
+              commentId={comment.id}
               commentType={"comment"}
-              contentId={handleContentIdTypeCheck}
+              contentId={commentIdDeterminedByContentType}
             />
           )}
         </ProfileNameWrapper>
@@ -186,23 +174,15 @@ const MoreCommentCp = ({ comment, moreType }) => {
               </CommentReplyCancelButton>
               <CommentReplyInputButton
                 replyCheck={replyCommentContent}
-                onClick={() => {
-                  if (moreType === "diary") {
-                    handlePostDiaryReplyComment();
-                  }
-                  if (moreType === "story") {
-                    handlePostStoryReplyComment();
-                  }
-                }}
+                onClick={handleCommentCreate}
               >
                 답글
               </CommentReplyInputButton>
             </ReplyButtonWrapper>
           </CommentReplyInputWrapper>
         )}
-
         <>
-          {replyComments.data.length > 0 && (
+          {isReplyComment && (
             <CommentContactReplyShowWrapper
               onClick={() => {
                 setReplyOpen(!replyOpen);
@@ -251,7 +231,7 @@ const ProfileWrapper = styled.div`
   margin-right: 10px;
 `;
 
-const MoreCommentProfile = styled.div`
+const MoreCommentProfile = styled.img`
   width: 40px;
   height: 40px;
   border-radius: 50%;

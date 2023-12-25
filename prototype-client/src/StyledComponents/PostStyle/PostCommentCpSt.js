@@ -21,9 +21,15 @@ export const MoreReplyButtonWrapper = styled.div`
       props.moreReplyOpen ? "rotate(180deg)" : "rotate(0deg)"};
   }
   color: #236bd8;
-
   margin-top: 7px;
   margin-bottom: 7px;
+  &:hover {
+    border-radius: 15px;
+    background-color: #c5d5f5;
+  }
+  width: 70px;
+  padding: 5px 10px;
+  cursor: pointer;
 `;
 
 export const MoreReplyTitle = styled.div``;

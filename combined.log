@@ -8,3 +8,11 @@
 {"level":"error","message":"DELETE /delete/undefined-comment/11 라우터가 없습니다."}
 {"level":"info","message":"hello"}
 {"level":"error","message":"DELETE /delete/undefined-comment/28 라우터가 없습니다."}
+{"level":"info","message":"hello"}
+{"level":"error","message":"DELETE /delete/undefined-comment/undefined 라우터가 없습니다."}
+{"level":"info","message":"hello"}
+{"level":"error","message":"DELETE /delete/undefined-comment/undefined 라우터가 없습니다."}
+{"level":"info","message":"hello"}
+{"level":"error","message":"DELETE /delete/undefined-comment/undefined 라우터가 없습니다."}
+{"level":"info","message":"hello"}
+{"level":"error","message":"DELETE /delete/undefined-comment/undefined 라우터가 없습니다."}

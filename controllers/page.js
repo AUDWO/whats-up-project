@@ -152,7 +152,7 @@ exports.renderPosts = async (req, res, next) => {
         },
         include: {
           model: User,
-          attributes: ["id", "nickname"],
+          attributes: ["id", "nickname", "profileImg"],
         },
         order: [["createdAt", "DESC"]],
       });
@@ -169,7 +169,7 @@ exports.renderPosts = async (req, res, next) => {
       const posts = await Post.findAll({
         include: {
           model: User,
-          attributes: ["id", "nickname"],
+          attributes: ["id", "nickname", "profileImg"],
         },
         order: [["createdAt", "DESC"]],
         offset: parseInt(page * perPage),
@@ -184,7 +184,7 @@ exports.renderPosts = async (req, res, next) => {
         const additionalPosts = await Post.findAll({
           include: {
             model: User,
-            attributes: ["id", "nickname"],
+            attributes: ["id", "nickname", "profileImg"],
           },
           order: [["createdAt", "DESC"]],
           offset: parseInt(page * perPage),
@@ -340,7 +340,7 @@ exports.renderOnlyPostCommentLikeInfo = async (req, res) => {
     });
 
     const postCommentLike = await postComment.getUsers({ attributes: ["id"] });
-
+    const aa = postCommentLike;
     let likeCheck = false;
     postCommentLike.map((info) => {
       if (info.id === req.user.id) {
@@ -351,6 +351,8 @@ exports.renderOnlyPostCommentLikeInfo = async (req, res) => {
     res.send({
       postCommentLikeCount: postCommentLike,
       likeCheck: likeCheck,
+      aa,
+      commentId,
     });
   } catch (error) {
     console.error(error);

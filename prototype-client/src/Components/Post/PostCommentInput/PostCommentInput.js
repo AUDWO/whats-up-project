@@ -1,29 +1,34 @@
 import React, { useState } from "react";
 import axios from "axios";
+
+//Styled-Components
 import {
   CommentInputWrapper,
   CommentInput,
   CommentPostButton,
 } from "../../../StyledComponents/PostStyle/PostComment/PostCommentsCpSt";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+//Component
+import CustomUseMutation from "../../../customHooks/CustomUseMutation";
 
 const PostCommentInput = ({ postId }) => {
   const [commentContent, setCommentContent] = useState("");
 
-  const handlePostComment = async () => {
+  const fetchPostComments = async () => {
     await axios.post("/comment/post", {
       content: commentContent,
       PostId: postId,
     });
   };
-  const queryClient = useQueryClient();
-  const { mutate } = useMutation({
-    mutationFn: handlePostComment,
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: [`postComments-${postId}`] });
+
+  const { mutate: getPostComments } = CustomUseMutation(
+    fetchPostComments,
+    `postComments-${postId}`,
+    () => {
       setCommentContent("");
-    },
-  });
+    }
+  );
+
   return (
     <CommentInputWrapper>
       <CommentInput
@@ -33,7 +38,7 @@ const PostCommentInput = ({ postId }) => {
       <CommentPostButton
         comment={commentContent}
         onClick={() => {
-          mutate();
+          getPostComments();
         }}
       >
         게시

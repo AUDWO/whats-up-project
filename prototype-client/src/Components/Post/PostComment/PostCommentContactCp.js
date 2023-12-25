@@ -24,8 +24,6 @@ const PostCommentContactCp = ({ postCommentLikeCount, myComment, comment }) => {
     ModalOpenAtom(`replyComment${comment.id}`)
   );
 
-  console.log(postCommentConfigModalOpen, "postCommentConfigModalOpen");
-
   return (
     <CommentContactWrapper>
       <CommentContactDiv>
@@ -39,7 +37,9 @@ const PostCommentContactCp = ({ postCommentLikeCount, myComment, comment }) => {
         <>
           <CommentConfigIcon
             onClick={() => {
-              setPostCommentConfigModalOpen(true);
+              setTimeout(() => {
+                setPostCommentConfigModalOpen(true);
+              }, 0);
             }}
           />
           {postCommentConfigModalOpen && (
@@ -59,14 +59,3 @@ const PostCommentContactCp = ({ postCommentLikeCount, myComment, comment }) => {
 };
 
 export default PostCommentContactCp;
-
-/*
- onClick={() => {
-              setTimeout(() => {
-                setPostCommentConfigModalOpen(true);
-              }, 0);
-            }}
-
-
-
-*/

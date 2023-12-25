@@ -1,6 +1,5 @@
 import { useRecoilValue } from "recoil";
 import { UserInfoProvider } from "../../contextApi/UserInfoProvider";
-import styled from "styled-components";
 
 //Styled-Components
 import {
@@ -17,12 +16,13 @@ import CommentModalCp from "./PostComment/PostCommentsCp";
 import toggleValueAtom from "../../store/ToggleValueAtom";
 
 const PostCp = ({ post }) => {
-  const postContent = {
+  const postContentInfo = {
     url: post.img,
     title: post.title,
     content: post.content,
     contentControl: post.contentControl,
     id: post.id,
+    userInfo: post.User,
   };
 
   const postInfo = {
@@ -33,13 +33,14 @@ const PostCp = ({ post }) => {
 
   const isImgLoaded = useRecoilValue(toggleValueAtom(`isImgLoaded${post.id}`));
 
-  console.log(post, "post - post - post - post - post");
-
   return (
     <PostDivWrapper>
       <PostWrapper>
         <UserInfoProvider>
-          <PostContentCp postContent={postContent} userId={post.UserId} />
+          <PostContentCp
+            postContentInfo={postContentInfo}
+            userId={post.UserId}
+          />
           {isImgLoaded && <CommentModalCp postId={post.id} />}
           {isImgLoaded && <PostInfoCp postInfo={postInfo} />}
         </UserInfoProvider>
@@ -49,9 +50,3 @@ const PostCp = ({ post }) => {
 };
 
 export default PostCp;
-
-const P = styled.div`
-  background-color: blue;
-  width: 30px;
-  height: 50px;
-`;

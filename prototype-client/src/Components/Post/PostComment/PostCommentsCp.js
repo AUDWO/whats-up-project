@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import React from "react";
 import axios from "axios";
+import { useRecoilState } from "recoil";
+import { useQuery } from "@tanstack/react-query";
 
 //Styled-Component
 import {
@@ -13,23 +14,23 @@ import {
 
 //Component
 import PostCommentCp from "./PostCommentCp";
+import PostCommentInput from "../PostCommentInput/PostCommentInput";
 
 //Atoms
 import ModalOpenAtom from "../../../store/ModalOpenAtom";
 
+//Context
 import { useUserInfoValue } from "../../../contextApi/UserInfoProvider";
-import { useQuery } from "@tanstack/react-query";
-import PostCommentInput from "../PostCommentInput/PostCommentInput";
 
 const CommentModalCp = ({ postId }) => {
+  const userInfo = useUserInfoValue();
+
   const [modalOpen, setModalOpen] = useRecoilState(
     ModalOpenAtom(`commentModalOpen${postId}`)
   );
   const handleClick = () => {
     setModalOpen(false);
   };
-
-  const userInfo = useUserInfoValue();
 
   const getPostComments = async () => {
     try {

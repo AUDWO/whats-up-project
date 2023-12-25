@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import axios from "axios";
+import styled from "styled-components";
+import { useQuery } from "@tanstack/react-query";
 
 //Styled-Component
 import {
@@ -17,62 +19,72 @@ import {
   NoLikeIcon,
 } from "../../StyledComponents/HomeStyle/Section2/Icon";
 
+//import postUnLike from "../../apis/post/postUnLike";
+//import postLike from "../../apis/post/postLike";
+
 //Atoms
 import ModalOpenAtom from "../../store/ModalOpenAtom";
-import stateUpdateAtom from "../../store/stateUpdateAtom";
+
+//Context
 import { useUserInfoValue } from "../../contextApi/UserInfoProvider";
 
+//useMutation hook
+import CustomUseMutation from "../../customHooks/CustomUseMutation";
+
 const PostInfoCp = ({ postInfo }) => {
-  //const userInfo = useRecoilValue(userInfoAtom);
-  const [postCountInfo, setPostCountInfo] = useState({});
+  const postInfoId = postInfo.id;
   const userInfo = useUserInfoValue();
 
-  //댓글 업데이트 알림 atom
-  const commentCountUpdate = useRecoilValue(
-    stateUpdateAtom(`comment${postInfo.id}`)
-  );
+  const [postLikeCount, setPostLikeCount] = useState(0);
+  const [postCommentCount, setPostCommentCount] = useState(0);
 
   //게시물 댓글 기능 해제 여부
-  const [postCommentControl, setPostCommentControl] = useState(
-    postInfo.commentControl
-  );
+  const [postCommentControl] = useState(postInfo.commentControl);
   //게시물 좋아요 기능 해제 여부
-  const [postLikeControl, setPostLikeControl] = useState(postInfo.likeControl);
+  const [postLikeControl] = useState(postInfo.likeControl);
 
-  const [click, setClick] = useRecoilState(
-    ModalOpenAtom(`commentModalOpen${postInfo.id}`)
+  const [commentModalOpen, setCommentModalOpen] = useRecoilState(
+    ModalOpenAtom(`commentModalOpen${postInfoId}`)
   );
 
   //게시물 좋아요 여부
   const [likeCheck, setLikeCheck] = useState(false);
 
-  const handleClick = () => {
-    setClick(!click);
+  const handleOpenClick = () => {
+    setCommentModalOpen(!commentModalOpen);
   };
 
-  //게시물에 좋아요를 눌렀는지 알려주는 함수
-
-  const handleSubmitLike = async () => {
+  const postLike = async () => {
     try {
-      await axios.post(`/post/like/${postInfo.id}`);
+      return await axios.post(`/post/like/${postInfo.id}`);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handleSubmitUnLike = async () => {
+  const postUnLike = async () => {
     try {
-      await axios.post(`/post/unlike/${postInfo.id}`);
+      return await axios.post(`/post/unlike/${postInfo.id}`);
     } catch (error) {
       console.error(error);
     }
   };
+
+  const { mutate: handlePostUnLike } = CustomUseMutation(
+    postUnLike,
+    `postInfo-${postInfoId}`
+  );
+
+  const { mutate: handlePostLike } = CustomUseMutation(
+    postLike,
+    `postInfo-${postInfoId}`
+  );
 
   //postInfo fetch 함수 (api 폴더에서 따로 관리 할 예정)
   const fetchPostInfo = async () => {
     try {
       const response = await axios.get(
-        `page/render-only-post-info/${postInfo.id}`
+        `page/render-only-post-info/${postInfoId}`
       );
       return response;
     } catch (error) {
@@ -80,86 +92,104 @@ const PostInfoCp = ({ postInfo }) => {
     }
   };
 
-  const processPostInfoData = async () => {
-    const postInfoDataResponse = await fetchPostInfo();
-    postInfoDataResponse.data.postLikeCount.forEach((info) => {
-      if (info.id === userInfo.id) {
-        setLikeCheck(true);
-      }
-    });
-    setPostCountInfo({ ...postInfoDataResponse.data });
-  };
+  //-----------------------------
+
+  const { data, isLoading } = useQuery({
+    queryKey: [`postInfo-${postInfo.id}`],
+    queryFn: fetchPostInfo,
+  });
+
+  const checkedLike = (() => {
+    let checkingLike = false;
+    if (data?.data) {
+      data.data.postLikeCount.forEach((info) => {
+        if (info.id === userInfo.id) {
+          checkingLike = true;
+        }
+      });
+    }
+    return checkingLike;
+  })();
 
   useEffect(() => {
-    processPostInfoData();
-  }, [commentCountUpdate]);
+    setLikeCheck(checkedLike);
+    setPostCommentCount(data?.data.commentCount.length);
+    setPostLikeCount(data?.data.postLikeCount.length);
+  }, [data?.data]);
+
+  //------------------------------
 
   const handleUnLike = () => {
-    handleSubmitUnLike();
     setLikeCheck(false);
-    setPostCountInfo((prev) => ({
-      ...prev,
-      postLikeCount: {
-        ...prev.postLikeCount,
-        length: prev.postLikeCount.length - 1,
-      },
-    }));
+    setPostLikeCount((prev) => prev - 1);
+    handlePostUnLike();
   };
 
   const handleLike = () => {
-    handleSubmitLike();
     setLikeCheck(true);
-    setPostCountInfo((prev) => ({
-      ...prev,
-      postLikeCount: {
-        ...prev.postLikeCount,
-        length: prev.postLikeCount.length + 1,
-      },
-    }));
+    setPostLikeCount((prev) => prev + 1);
+    handlePostLike();
   };
 
-  if (Object.keys(postCountInfo).length >= 1) {
+  if (isLoading) {
     return (
-      <PostInfoWrapper click={click}>
-        <IconWrapper>
-          {postCommentControl ? (
-            <CommentIcon
+      <FakePostInfoWrapper>
+        <FakePostInfo>.</FakePostInfo>
+        <FakePostInfo>.</FakePostInfo>
+      </FakePostInfoWrapper>
+    );
+  }
+
+  return (
+    <PostInfoWrapper click={commentModalOpen}>
+      <IconWrapper>
+        {postCommentControl ? (
+          <CommentIcon
+            onClick={() => {
+              handleOpenClick();
+            }}
+          />
+        ) : (
+          <NoCommentIcon />
+        )}
+        {postCommentControl && <CountNumber>{postCommentCount}</CountNumber>}
+      </IconWrapper>
+      <IconWrapper>
+        {postLikeControl ? (
+          likeCheck ? (
+            <LikeFillIcon
               onClick={() => {
-                handleClick();
+                handleUnLike();
               }}
             />
           ) : (
-            <NoCommentIcon />
-          )}
-          {postCommentControl && (
-            <CountNumber>{postCountInfo.commentCount.length}</CountNumber>
-          )}
-        </IconWrapper>
-        <IconWrapper>
-          {postLikeControl ? (
-            likeCheck ? (
-              <LikeFillIcon
-                onClick={() => {
-                  handleUnLike();
-                }}
-              />
-            ) : (
-              <LikeIcon
-                onClick={() => {
-                  handleLike();
-                }}
-              />
-            )
-          ) : (
-            <NoLikeIcon />
-          )}
-          {postLikeControl && (
-            <CountNumber>{postCountInfo.postLikeCount.length}</CountNumber>
-          )}
-        </IconWrapper>
-      </PostInfoWrapper>
-    );
-  }
+            <LikeIcon
+              onClick={() => {
+                handleLike();
+              }}
+            />
+          )
+        ) : (
+          <NoLikeIcon />
+        )}
+        {postLikeControl && <CountNumber>{postLikeCount}</CountNumber>}
+      </IconWrapper>
+    </PostInfoWrapper>
+  );
 };
 
 export default PostInfoCp;
+
+const FakePostInfo = styled.div`
+  width: 40px;
+  height: 30px;
+  background-color: gray;
+  opacity: 0.1;
+  margin-bottom: 35px;
+  margin-top: 10px;
+`;
+
+const FakePostInfoWrapper = styled.div`
+  width: 90px;
+  margin-top: 25px;
+`;

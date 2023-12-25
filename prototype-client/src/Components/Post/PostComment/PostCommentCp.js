@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useRef } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
 import axios from "axios";
 import styled from "styled-components";
+import { useQuery } from "@tanstack/react-query";
 
 //Styled-Components
 import {
@@ -22,110 +23,43 @@ import {
 
 //Component
 import PostReplyComment from "../PostReplyComment/PostReplyComment";
+import SpinnerCp from "../../Common/Spinner/SpinnerCp";
+import PostCommentContactCp from "./PostCommentContactCp";
+import PostReplyCommentInputCp from "../PostReplyCommentInput/PostReplyCommentInputCp";
 
 //atoms
 import ModalOpenAtom from "../../../store/ModalOpenAtom";
-import stateUpdateAtom from "../../../store/stateUpdateAtom";
-import PostCommentContactCp from "./PostCommentContactCp";
-import PostReplyCommentInputCp from "../PostReplyComment/PostReplyCommentInputCp";
-import { useUserInfoValue } from "../../../contextApi/UserInfoProvider";
-import { useQuery } from "@tanstack/react-query";
-import SpinnerCp from "../../Common/Spinner/SpinnerCp";
 
 const PostCommentCp = ({ comment, myComment }) => {
-  //const userInfo = useRecoilValue(userInfoAtom);
-  const userInfo = useUserInfoValue();
-  const [reply, setReply] = useState("");
-  const [replies, setReplies] = useState([]);
+  //댓글 좋아요 상태
+  const [postCommentLikeCount, setPostCommentLikeCount] = useState(0);
+  const [commentLikeCheck, setCommentLikeCheck] = useState(false);
 
-  const [loading, setLoading] = useState(false);
-
-  const handleCheck = () => {};
-
+  //대댓글 상태
   const replyInputOpen = useRecoilValue(
     ModalOpenAtom(`replyComment${comment.id}`)
   );
-
-  const [moreReplyOpen, setMoreReplyOpen] = useState(false);
-
-  //댓글에 좋아요를 누른 사람의 명단을 담는 객체
-  const [postCommentLikeInfo, setPostCommentLikeInfo] = useState({});
-  const [postCommentLikeCount, setPostCommentLikeCount] = useState(0);
-
-  const replyUpdate = useRecoilValue(stateUpdateAtom("postReply"));
-
-  //postCommentConfigModal에서 댓글 삭제 시 댓글 업데이트
-  const postCommentUpdate = useRecoilValue(stateUpdateAtom("postComment"));
-
-  //좋아요를 누르거나 취소 했을때 댓글 좋아요 정보를 업데이트 해주는 함수
-  const [postCommentInfoUpdate, setPostCommentInfoUpdate] = useRecoilState(
-    stateUpdateAtom(`comment${comment.id}`)
-  );
-
-  const [commentLikeCheck, setCommentLikeCheck] = useState(false);
-
-  const handlePostReplyComment = async () => {
-    try {
-      await axios.post("/comment/post", {
-        content: reply,
-        PostId: comment.PostId,
-        PostCommentId: comment.id,
-      });
-    } catch (error) {
-      console.log(`PostReplyComments Error ${error}`);
-    }
-  };
+  const [ReplyCommentsOpen, setReplyCommentsOpen] = useState(false);
 
   //좋아요 버튼 함수
   const handleSubitCommentLike = async () => {
     try {
-      const response = await axios.post(`/comment/post/like/${comment.id}`);
+      await axios.post(`/comment/post/like/${comment.id}`);
     } catch (error) {
-      console.error(error);
+      console.error(error, "handleSubmitCommentLike - Error");
     }
   };
   //좋아요 버튼 취소 함수
   const handleSubmitCommentUnlike = async () => {
     try {
-      const response = await axios.post(`/comment/post/unlike/${comment.id}`);
+      await axios.post(`/comment/post/unlike/${comment.id}`);
     } catch (error) {
-      console.error(error);
+      console.error(error, "handleSubmitCommentUnlike - Error");
     }
   };
 
-  const getPostReplyComment = async () => {
-    try {
-      const response = await axios.get(
-        `/page/render-post-replycomment/${comment.id}`
-      );
-      return response;
-    } catch (error) {}
-  };
-  /*
-  useEffect(() => {
-    const fetchReplyComments = async () => {
-      try {
-        const response = await axios.get(
-          `/page/render-post-replycomment/${comment.id}`
-        );
-
-        setReplies(response.data);
-      } catch (error) {}
-    };
-
-    fetchReplyComments();
-  }, [replyUpdate, postCommentUpdate]);*/
-
-  //++!!
-
-  const { data, isLoading } = useQuery({
-    queryKey: [`postReplyComments-${comment.id}`],
-    queryFn: getPostReplyComment,
-  });
-  //++!!
-
   //댓글 좋아요 정보를 불러오는 함수 (api 폴더에서 따로 관리 할 예정)
-  const fetchPostCommentInfo = async () => {
+  const getPostCommentsInfo = async () => {
     try {
       const response = await axios.get(`
       /page/render-only-postcomment-likeinfo/${comment.id}
@@ -136,28 +70,25 @@ const PostCommentCp = ({ comment, myComment }) => {
     }
   };
 
-  //const processPostCommentInfoData = async () => {
-  // const postCommentInfoDataResponse = await fetchPostCommentInfo();
-  /*
-    postCommentInfoDataResponse.data.postCommentLikeCount.forEach((info) => {
-      if (info.id === userInfo.id) {
-        setCommentLikeCheck(true);
-      }
-    });*/
-  //setPostCommentLikeInfo({ ...postCommentInfoDataResponse.data });
-  //};
-
-  //++!!
-
+  //댓글의 좋아요 정보를 불러옴
   const commentLikeInfo = useQuery({
     queryKey: [`postCommentLikeInfo${comment.id}`],
-    queryFn: fetchPostCommentInfo,
-    /*
-    staleTime: Infinity,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
-    refetchOnWindowFocus: false,*/
+    queryFn: getPostCommentsInfo,
   });
+
+  //좋아요를 누르면 실행되는 함수
+  const handleCommentLike = () => {
+    setCommentLikeCheck(true);
+    setPostCommentLikeCount((prev) => prev + 1);
+    handleSubitCommentLike();
+  };
+
+  //좋아요 취소를 누르면 실행되는 함수
+  const handleCommentUnlike = () => {
+    setCommentLikeCheck(false);
+    setPostCommentLikeCount((prev) => prev - 1);
+    handleSubmitCommentUnlike();
+  };
 
   useEffect(() => {
     if (commentLikeInfo.data) {
@@ -167,41 +98,28 @@ const PostCommentCp = ({ comment, myComment }) => {
       setCommentLikeCheck(commentLikeInfo.data.data.likeCheck);
     }
   }, [commentLikeInfo.data]);
-  //++--
 
-  const handleCommentLike = () => {
-    setCommentLikeCheck(true);
-    setPostCommentLikeCount((prev) => prev + 1);
-    handleSubitCommentLike();
-  };
-
-  const handleCommentUnlike = () => {
-    setCommentLikeCheck(false);
-    setPostCommentLikeCount((prev) => prev - 1);
-    handleSubmitCommentUnlike();
-  };
-
-  /*
-  useEffect(() => {
-
-    if (commentLikeInfo.data) {
-      commentLikeInfo.data.data.postCommentLikeCount.forEach((info) => {
-        if (info.id === userInfo.id) {
-          setCommentLikeCheck(true);
-        }
-      });
-      setPostCommentLikeInfo({ ...commentLikeInfo.data.data });
-      setLoading(true);
+  const getPostReplyComments = async () => {
+    try {
+      const response = await axios.get(
+        `/page/render-post-replycomment/${comment.id}`
+      );
+      return response;
+    } catch (error) {
+      console.error(error, "getRostReplyComment - Error");
     }
-  }, [commentLikeInfo]);*/
+  };
 
-  //postCommentUpdate
+  //replyComments
+  const { data: replyComments, isLoading } = useQuery({
+    queryKey: [`postReplyComments-${comment.id}`],
+    queryFn: getPostReplyComments,
+  });
 
-  //++--
-  if (isLoading || commentLikeInfo.isLoading) {
+  if (isLoading) {
     return (
       <SpinnerWrapper>
-        <SpinnerCp color="black" size="30px" />
+        <SpinnerCp color="blue" size="30px" />
       </SpinnerWrapper>
     );
   }
@@ -236,18 +154,21 @@ const PostCommentCp = ({ comment, myComment }) => {
             postCommentLikeCount={postCommentLikeCount}
           />
           {replyInputOpen && <PostReplyCommentInputCp comment={comment} />}
-          {data.data.length > 0 && (
+          {replyComments?.data.length >= 1 && (
             <MoreReplyButtonWrapper
-              onClick={() => setMoreReplyOpen(!moreReplyOpen)}
+              onClick={() => setReplyCommentsOpen(!ReplyCommentsOpen)}
             >
-              <MoreReplyButtonIcon moreReplyOpen={moreReplyOpen} />
+              <MoreReplyButtonIcon moreReplyOpen={ReplyCommentsOpen} />
               <MoreReplyTitle>댓글</MoreReplyTitle>
             </MoreReplyButtonWrapper>
           )}
-          {moreReplyOpen && (
+          {ReplyCommentsOpen && (
             <>
-              {data.data.map((infoState) => (
-                <PostReplyComment comment={infoState} commentId={comment.id} />
+              {replyComments.data.map((replyComment) => (
+                <PostReplyComment
+                  replyComment={replyComment}
+                  commentId={comment.id}
+                />
               ))}
             </>
           )}

@@ -1,7 +1,7 @@
 import React from "react";
 
 import SectionContainer from "../../StyledComponents/HomeStyle/SectionContainer";
-import UserPosts from "../../UserPosts";
+import PostContentsCp from "../../PostContents";
 import styled from "styled-components";
 import PostContentsWrapper from "../../StyledComponents/HomeStyle/Section2/PostContentsWrapper";
 
@@ -13,7 +13,7 @@ const HomeContentsCp = () => {
     <SectionContainer2 flex="1">
       <PostContentsWrapper>
         <StoryContentsCp />
-        <UserPosts />
+        <PostContentsCp />
       </PostContentsWrapper>
     </SectionContainer2>
   );

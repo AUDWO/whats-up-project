@@ -21,8 +21,6 @@ const ReplyCommentCp = ({ commentId, reply, moreType }) => {
     ModalOpenAtom(`${moreType}CommentConfigModal${reply.id}`)
   );
 
-  console.log(reply, "reply - reply - reply - reply - reply");
-
   return (
     <MoreComment>
       <ProfileWrapper>

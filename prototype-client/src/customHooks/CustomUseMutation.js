@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const CustomUseMutation = (fn, queryKey, callback) => {
   const queryClient = useQueryClient();
-  const { mutate } = useMutation({
+  const { mutate, isLoading } = useMutation({
     mutationFn: fn,
     onSuccess: () => {
       if (queryKey) {
@@ -11,7 +11,7 @@ const CustomUseMutation = (fn, queryKey, callback) => {
       }
     },
   });
-  return { mutate };
+  return { mutate, isLoading };
 };
 
 export default CustomUseMutation;

@@ -114,6 +114,9 @@ const MakePostModalCp = () => {
         queryKey: ["postContentsInfo"],
       });
       queryClient.invalidateQueries({
+        queryKey: ["posts"],
+      });
+      queryClient.invalidateQueries({
         queryKey: ["userInfo"],
       });
     },

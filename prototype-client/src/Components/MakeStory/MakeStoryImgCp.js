@@ -15,6 +15,7 @@ import {
 import postImgAtom from "../../store/PostImgAtom";
 
 const MakeStoryImgCp = () => {
+  /*
   const [imgUrlData, setImgUrlData] = useRecoilState(postImgAtom("storyImg"));
 
   function handleImgSelect(e) {
@@ -24,13 +25,15 @@ const MakeStoryImgCp = () => {
       setImgUrlData(selectedImg);
     }
   }
-
+  
+  
   useEffect(() => {
     return () => {
       setImgUrlData("");
     };
   });
-
+  */
+  /*
   return (
     <MakeStoryImgWrapper>
       <MakeStoryImgSelectWrapper>
@@ -49,7 +52,8 @@ const MakeStoryImgCp = () => {
       </MakeStoryImgSelectWrapper>
       {imgUrlData && <MakeStoryImg src={URL.createObjectURL(imgUrlData)} />}
     </MakeStoryImgWrapper>
-  );
+    );
+    */
 };
 
 export default MakeStoryImgCp;

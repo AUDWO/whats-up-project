@@ -37,7 +37,8 @@ const Login = () => {
 
       if (response.data === "discord" || response.data === "not exist") {
         setPasswCheck(true);
-      } else {
+      }
+      if (response.data === "login success") {
         navigate("/home");
       }
     } catch (err) {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useRecoilState } from "recoil";
 
 //Styled-Component
@@ -24,6 +24,12 @@ const MakeStoryImgCp = () => {
       setImgUrlData(selectedImg);
     }
   }
+
+  useEffect(() => {
+    return () => {
+      setImgUrlData("");
+    };
+  });
 
   return (
     <MakeStoryImgWrapper>

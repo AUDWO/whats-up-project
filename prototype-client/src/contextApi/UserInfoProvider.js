@@ -17,7 +17,6 @@ export const UserInfoProvider = ({ children }) => {
   const userInfoResponse = useQuery({
     queryKey: ["userInfo"],
     queryFn: fetchuserInfoData,
-    staleTime: Infinity,
   });
 
   if (userInfoResponse.data) {

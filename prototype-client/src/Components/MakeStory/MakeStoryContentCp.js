@@ -110,7 +110,12 @@ const MakeStoryContentCp = () => {
         >
           게시하기
         </MakeStoryButton>
-        <MakeStoryCancelButton onClick={() => {}}>
+        <MakeStoryCancelButton
+          onClick={() => {
+            setStoryModalOpen(false);
+            setStoryImgUrl(null);
+          }}
+        >
           삭제하기
         </MakeStoryCancelButton>
       </MakeStoryFormWrapper>

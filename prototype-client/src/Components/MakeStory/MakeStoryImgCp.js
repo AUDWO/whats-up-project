@@ -25,12 +25,6 @@ const MakeStoryImgCp = () => {
     }
   }
 
-  useEffect(() => {
-    return () => {
-      setImgUrlData("");
-    };
-  });
-
   return (
     <MakeStoryImgWrapper>
       <MakeStoryImgSelectWrapper>

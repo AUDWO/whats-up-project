@@ -47,9 +47,9 @@ const MakeStoryImgCp = () => {
           />
         </MakeStoryImgFormWrapper>
       </MakeStoryImgSelectWrapper>
-      {imgUrlData && <MakeStoryImg src={URL.createObjectURL(imgUrlData)} />}
     </MakeStoryImgWrapper>
   );
 };
 
 export default MakeStoryImgCp;
+//  {imgUrlData && <MakeStoryImg src={URL.createObjectURL(imgUrlData)} />}

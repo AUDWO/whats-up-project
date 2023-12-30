@@ -41,7 +41,7 @@ router.use((req, res, next) => {
 //blurhash test
 
 //회원가입
-//router.get("/blur/:postId", renderOnlyPost);
+router.get("/blur/:postId", renderOnlyPost);
 
 router.get("/user-email-check/:email", checkUserEmail);
 router.get("/user-nickname-check/:nickname", checkUserNickname);

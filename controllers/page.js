@@ -208,7 +208,7 @@ exports.renderAllPost = async (req, res, next) => {
   }
 };
 
-exports.renderOnlyPost = async (req, res, next) => {
+exports.renderOnlyPost = async (req, res) => {
   const postId = req.params.postId;
 
   try {

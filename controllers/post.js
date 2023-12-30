@@ -3,12 +3,12 @@ const Story = require("../models/story");
 const Diary = require("../models/diary");
 const ContactStory = require("../models/contactStory");
 const ContactDiary = require("../models/contactDiary");
+const { blurhashFromURL } = require("blurhash-from-url");
 
 exports.afterUploadImage = (req, res) => {
   console.log(req.file);
-  const originalUrl = req.file.location;
-  const url = originalUrl.replace(/\/original\//, "/thumb/");
-
+  const url = req.file.location;
+  const originalUrl = url.replace(/\/original\//, "/thumb/");
   res.json({ url, originalUrl });
 };
 

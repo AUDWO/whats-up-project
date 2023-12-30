@@ -212,11 +212,11 @@ exports.renderOnlyPost = async (req, res) => {
   const postId = req.params.postId;
 
   try {
-    const post = await PostComment.findAll({
+    const post = await Post.findAll({
       where: { id: postId },
     });
 
-    res.send({ post });
+    res.send({ post, postImg: post.img });
   } catch (error) {
     console.error(error);
   }

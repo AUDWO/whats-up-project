@@ -7,7 +7,7 @@ const ContactDiary = require("../models/contactDiary");
 exports.afterUploadImage = (req, res) => {
   console.log(req.file);
   const originalUrl = req.file.location;
-  const url = url.replace(/\/original\//, "/thumb/");
+  const url = originalUrl.replace(/\/original\//, "/thumb/");
   res.json({ url, originalUrl });
 };
 

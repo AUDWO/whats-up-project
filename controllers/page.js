@@ -219,7 +219,8 @@ exports.renderOnlyPost = async (req, res) => {
       const output = await blurhashFromURL(post[0].img);
       return output;
     }
-    const aaa = getBlurhash();
+    console.log("sksksksksksksksksksksksksksksksksksksksksksksksksks");
+    const aaa = await getBlurhash();
 
     res.send({ post, postImg: post[0].img, hash: aaa });
   } catch (error) {

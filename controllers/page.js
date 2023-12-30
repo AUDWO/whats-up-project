@@ -10,8 +10,9 @@ const DiaryComment = require("../models/diaryComment");
 const db = require("../models");
 const ContactStory = require("../models/contactStory");
 const ContactDiary = require("../models/contactDiary");
+const { blurhashFromURL } = require("blurhash-from-url");
 
-exports.renderMain = async (req, res, next) => {
+exports.renderUserInfo = async (req, res, next) => {
   const otherUserId = req.params.userId;
 
   if (otherUserId) {
@@ -135,7 +136,7 @@ exports.checkUserNickname = async (req, res) => {
   }
 };
 
-exports.renderPosts = async (req, res, next) => {
+exports.renderAllPost = async (req, res, next) => {
   const { page, perPage } = req.query;
   const userId = req.params.userId;
   //const page = parseInt(sPage);
@@ -209,12 +210,13 @@ exports.renderPosts = async (req, res, next) => {
 
 exports.renderOnlyPost = async (req, res, next) => {
   const postId = req.params.postId;
+
   try {
     const post = await PostComment.findAll({
       where: { id: postId },
     });
 
-    res.send(post);
+    res.send({ post });
   } catch (error) {
     console.error(error);
   }
@@ -243,30 +245,6 @@ exports.renderOnlyPostInfo = async (req, res, next) => {
 };
 
 exports.renderPostsComments = async (req, res, next) => {
-  try {
-    const postsComments = await PostComment.findAll({
-      include: [
-        {
-          model: User,
-          attributes: ["id", "nickname", "profileImg"],
-        },
-        {
-          model: Post,
-          attributes: ["id"],
-        },
-      ],
-    });
-
-    const onlyInfoPostsComments = postsComments.map(
-      (comments) => comments.dataValues
-    );
-    res.send(onlyInfoPostsComments);
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-exports.renderPostsComments2 = async (req, res, next) => {
   const postId = req.params.postId;
   try {
     const postComments = await PostComment.findAll({
@@ -359,7 +337,7 @@ exports.renderOnlyPostCommentLikeInfo = async (req, res) => {
   }
 };
 
-exports.renderStory = async (req, res, next) => {
+exports.renderAllStory = async (req, res, next) => {
   try {
     const stories = await Story.findAll({
       include: {
@@ -375,7 +353,7 @@ exports.renderStory = async (req, res, next) => {
   }
 };
 
-exports.renderMoreStory = async (req, res, next) => {
+exports.renderOnlyStory = async (req, res, next) => {
   const storyId = req.params.storyId;
 
   try {
@@ -452,7 +430,7 @@ exports.renderStoryReact = async (req, res) => {
   }
 };
 
-exports.renderDiaries = async (req, res, next) => {
+exports.renderAllDiary = async (req, res, next) => {
   const userId = req.params.userId;
   if (userId) {
     try {
@@ -491,11 +469,11 @@ exports.renderDiaries = async (req, res, next) => {
   }
 };
 
-exports.renderMoreDiary = async (req, res, next) => {
+exports.renderOnlyDiary = async (req, res, next) => {
   const diaryId = req.params.diaryId;
 
   try {
-    const moreDiary = await Diary.findAll({
+    const diary = await Diary.findAll({
       where: {
         id: diaryId,
       },
@@ -505,7 +483,7 @@ exports.renderMoreDiary = async (req, res, next) => {
       },
     });
 
-    res.send(moreDiary);
+    res.send(diary);
   } catch (error) {
     console.error(error);
   }

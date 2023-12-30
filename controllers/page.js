@@ -216,7 +216,7 @@ exports.renderOnlyPost = async (req, res) => {
       where: { id: postId },
     });
 
-    res.send({ post, postImg: post.img });
+    res.send({ post, postImg: post[0].img });
   } catch (error) {
     console.error(error);
   }

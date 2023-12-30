@@ -1,19 +1,17 @@
 const express = require("express");
 const router = express.Router();
 const {
-  renderMain,
-  renderPosts,
+  renderAllPost,
   renderPostsComments,
-  renderPostsComments2,
-  renderStory,
+  renderAllStory,
   renderStoryComments,
   renderStoryReplyComments,
-  renderMoreStory,
+  renderOnlyStory,
   renderPostReplyComments,
   renderOnlyPost,
   renderOnlyComment,
-  renderDiaries,
-  renderMoreDiary,
+  renderAllDiary,
+  renderOnlyDiary,
   renderDiaryComments,
   renderDiaryReplyComments,
   renderOnlyPostInfo,
@@ -23,6 +21,7 @@ const {
   renderDiaryReact,
   checkUserEmail,
   checkUserNickname,
+  renderUserInfo,
 } = require("../controllers/page");
 const { isLoggedIn, isNotLoggedIn } = require("../middlewares");
 
@@ -39,23 +38,25 @@ router.use((req, res, next) => {
   next();
 });
 
+//blurhash test
+
 //회원가입
+//router.get("/blur/:postId", renderOnlyPost);
 
 router.get("/user-email-check/:email", checkUserEmail);
 router.get("/user-nickname-check/:nickname", checkUserNickname);
 //
 
-router.get("/user-info", renderMain);
-router.get("/render-posts", renderPosts);
+router.get("/user-info", renderUserInfo);
+router.get("/render-posts", renderAllPost);
 
 //상대 프로필 조회
-router.get("/user-info/:userId", renderMain);
+router.get("/user-info/:userId", renderUserInfo);
 //상대 프로필 게시물 조회
-router.get("/render-posts/:userId", renderPosts);
+router.get("/render-posts/:userId", renderAllPost);
 router.get("/render-only-post-info/:postId", renderOnlyPostInfo);
 
-router.get("/render-post-comment", renderPostsComments);
-router.get("/render-post-comment/:postId", renderPostsComments2);
+router.get("/render-post-comment/:postId", renderPostsComments);
 
 router.get("/render-post-replycomment/:commentId", renderPostReplyComments);
 //router.get("/render-only-comment-info/:commentId", renderOnlyComment);
@@ -66,20 +67,22 @@ router.get(
   renderOnlyPostCommentLikeInfo
 );
 
-router.get("/render-story", renderStory);
-router.get("/render-more-story/:storyId", renderMoreStory);
+router.get("/render-story", renderAllStory);
+router.get("/render-more-story/:storyId", renderOnlyStory);
 router.get("/render-story-comments/:storyId", renderStoryComments);
 router.get("/render-story-replycomments/:commentId", renderStoryReplyComments);
 router.get("/render-story-react/:storyId", renderStoryReact);
 
-router.get("/render-diaries", renderDiaries);
+router.get("/render-diaries", renderAllDiary);
 
 //상대 프로필 일기 조회
-router.get("/render-diaries/:userId", renderDiaries);
+router.get("/render-diaries/:userId", renderAllDiary);
+router.get("/render-only-diaryinfo/:diaryId", renderOnlyDiary);
 
 router.get("/render-diary-comments/:diaryId", renderDiaryComments);
-router.get("/render-only-diaryinfo/:diaryId", renderMoreDiary);
 router.get("/render-diary-replycomments/:commentId", renderDiaryReplyComments);
 router.get("/render-diary-react/:diaryId", renderDiaryReact);
+
+//New
 
 module.exports = router;

@@ -182,11 +182,6 @@ exports.renderAllPost = async (req, res, next) => {
         return output;
       };
 
-      const blurhasedImages = posts.map(async (post) => {
-        const blurhashedImg = await getBlurhash(post.img);
-        return { ...post, hash: blurhashedImg };
-      });
-
       const currentCount = posts.length;
 
       // 마지막으로 데이
@@ -209,6 +204,11 @@ exports.renderAllPost = async (req, res, next) => {
         }
         posts.push(...additionalPosts);
       }
+
+      const blurhasedImages = posts.map(async (post) => {
+        const blurhashedImg = await getBlurhash(post.img);
+        return { ...post, hash: blurhashedImg };
+      });
 
       res.send({ posts, page, lastPageCheck, blurhasedImages });
     } catch (err) {

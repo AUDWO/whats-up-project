@@ -182,13 +182,9 @@ exports.renderAllPost = async (req, res, next) => {
         return output;
       };
 
-      posts = posts.map((post) => {
-        const fetch = async () => {
-          const blurhashedImg = await getBlurhash(post.img);
-
-          return { ...post, hash: blurhashedImg };
-        };
-        fetch();
+      const blurhasedImages = posts.map(async (post) => {
+        const blurhashedImg = await getBlurhash(post.img);
+        return { ...post, hash: blurhashedImg };
       });
 
       const currentCount = posts.length;
@@ -214,7 +210,7 @@ exports.renderAllPost = async (req, res, next) => {
         posts.push(...additionalPosts);
       }
 
-      res.send({ posts, page, lastPageCheck });
+      res.send({ posts, page, lastPageCheck, blurhasedImages });
     } catch (err) {
       console.error(err, "getAllPosts - Error");
       next(err);

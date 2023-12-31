@@ -177,6 +177,12 @@ exports.renderAllPost = async (req, res, next) => {
         limit: parseInt(perPage),
       });
 
+      const getBlurhash = async (postImgUrl) => {
+        const output = await blurhashFromURL(postImgUrl);
+        return output;
+      };
+      posts = posts.map((post) => ({ ...post, hash: getBlurhash(post.img) }));
+
       const currentCount = posts.length;
 
       // 마지막으로 데이
@@ -202,7 +208,7 @@ exports.renderAllPost = async (req, res, next) => {
 
       res.send({ posts, page, lastPageCheck });
     } catch (err) {
-      console.error(err);
+      console.error(err, "getAllPosts - Error");
       next(err);
     }
   }
@@ -219,7 +225,6 @@ exports.renderOnlyPost = async (req, res) => {
       const output = await blurhashFromURL(post[0].img);
       return output;
     }
-    console.log("sksksksksksksksksksksksksksksksksksksksksksksksksks");
     const aaa = await getBlurhash();
 
     res.send({ post, postImg: post[0].img, hash: aaa });

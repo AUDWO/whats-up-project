@@ -205,13 +205,13 @@ exports.renderAllPost = async (req, res, next) => {
         posts.push(...additionalPosts);
       }
 
-      const blurhasedImages = await Promise.all(
+      posts = await Promise.all(
         posts.map(async (post) => {
           const blurhashedImg = await getBlurhash(post.img);
-          return blurhashedImg;
+          return { ...post, blurhashdImg: blurhashedImg.encoded };
         })
       );
-      res.send({ posts, page, lastPageCheck, blurhasedImages });
+      res.send({ posts, page, lastPageCheck });
     } catch (err) {
       console.error(err, "getAllPosts - Error");
       next(err);

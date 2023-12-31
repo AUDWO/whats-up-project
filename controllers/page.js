@@ -188,6 +188,7 @@ exports.renderAllPost = async (req, res, next) => {
 
           return { ...post, hash: blurhashedImg };
         };
+        fetch();
       });
 
       const currentCount = posts.length;

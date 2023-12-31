@@ -205,7 +205,7 @@ exports.renderAllPost = async (req, res, next) => {
         posts.push(...additionalPosts);
       }
 
-      const blurhasedImages = posts.map((post) => {
+      const blurhasedImages = posts.map(async (post) => {
         //const blurhashedImg = await getBlurhash(post.img);
         return { post };
       });

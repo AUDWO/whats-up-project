@@ -207,7 +207,7 @@ exports.renderAllPost = async (req, res, next) => {
 
       const blurhasedImages = posts.map(async (post) => {
         //const blurhashedImg = await getBlurhash(post.img);
-        return { ...post, a: 1 };
+        return { a: "a" };
       });
 
       res.send({ posts, page, lastPageCheck, blurhasedImages });

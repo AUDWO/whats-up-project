@@ -181,7 +181,10 @@ exports.renderAllPost = async (req, res, next) => {
         const output = await blurhashFromURL(postImgUrl);
         return output;
       };
-      posts = posts.map((post) => ({ ...post, hash: getBlurhash(post.img) }));
+      posts = posts.map(async (post) => {
+        const blurhashedImg = await getBlurhash(post.img);
+        return { ...post, hash: blurhashedImg };
+      });
 
       const currentCount = posts.length;
 

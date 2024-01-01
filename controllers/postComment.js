@@ -4,7 +4,7 @@ const StoryComment = require("../models/storyComment");
 const Story = require("../models/story");
 const Post = require("../models/post");
 
-exports.postPostsComment = async (req, res) => {
+exports.postPostComment = async (req, res) => {
   if (req.body.PostCommentId === undefined) {
     req.body.PostCommentId = null;
   }

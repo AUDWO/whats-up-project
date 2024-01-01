@@ -53,10 +53,11 @@ exports.findUserById = async (req, res, next) => {
   }
 };
 
-exports.checkFollower = async (req, res, next) => {
+exports.renderFollowInfo = async (req, res) => {
+  const userId = req.params.userId;
   try {
     const user = await User.findOne({
-      where: { id: req.params.userId },
+      where: { id: userId },
       include: [
         {
           model: User,
@@ -83,7 +84,7 @@ exports.checkFollower = async (req, res, next) => {
   }
 };
 
-exports.checkFollowerr = async (req, res, next) => {
+exports.checkFollower = async (req, res, next) => {
   try {
     const user = await User.findOne({
       where: { id: req.params.userId },

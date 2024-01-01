@@ -3,7 +3,7 @@ const router = express.Router();
 const { join, login, logout } = require("../controllers/auth");
 const { isLoggedIn, isNotLoggedIn } = require("../middlewares");
 
-router.post("/join", isNotLoggedIn, join);
+router.post("/sign-up", isNotLoggedIn, join);
 
 router.post("/login", isNotLoggedIn, login);
 

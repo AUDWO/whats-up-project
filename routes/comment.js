@@ -1,14 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const {
-  postPostsComment,
+  postPostComment,
   postStoryComment,
   postDiaryComment,
   postCommentLike,
   postCommenUntLike,
 } = require("../controllers/postComment");
 
-router.post("/post", postPostsComment);
+router.post("/post", postPostComment);
 router.post("/post/like/:commentId", postCommentLike);
 router.post("/post/unlike/:commentId", postCommenUntLike);
 

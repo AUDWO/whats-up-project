@@ -1,4 +1,5 @@
 const express = require("express");
+const router = express.Router();
 const {
   deletePost,
   deleteDiary,
@@ -9,8 +10,6 @@ const {
   unReactDiary,
 } = require("../controllers/delete");
 
-const DiaryComment = require("../models/diaryComment");
-const router = express.Router();
 //post
 router.delete("/post/:postId", deletePost);
 router.delete("/post-comment/:commentId", deletePostComment);

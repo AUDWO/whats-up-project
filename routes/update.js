@@ -11,7 +11,7 @@ const {
 } = require("../controllers/update");
 
 router.patch("/postLikeCount", updatePostLikeCount);
-router.patch("/commentLikeCount", updateCommentLikeCount);
+//router.patch("/commentLikeCount", updateCommentLikeCount);
 
 //user
 router.patch("/user/profile-info", updateUserInfo);

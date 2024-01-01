@@ -47,3 +47,50 @@ const MakeStoryImgCp = () => {
 };
 
 export default MakeStoryImgCp;
+
+/*
+ return (
+    <MakeStoryImgWrapper>
+      <MakeStoryImgSelectWrapper>
+        <MakeStoryImgFormWrapper>
+          <MakeStoryImgSelectButton htmlFor="storyImg">
+            사진 선택하기
+          </MakeStoryImgSelectButton>
+          <MakeStoryImgInput
+            id="storyImg"
+            type="file"
+            accept="image/*"
+            hidden
+            onChange={handleImgSelect}
+          />
+        </MakeStoryImgFormWrapper>
+      </MakeStoryImgSelectWrapper>
+      {imgUrlData && <MakeStoryImg src={URL.createObjectURL(imgUrlData)} />}
+    </MakeStoryImgWrapper>
+  );
+  */
+
+/*
+return (
+    <MakeStoryImgWrapper>
+      <MakeStoryImgSelectWrapper>
+        <MakeStoryImgFormWrapper>
+          <MakeStoryImgSelectButton htmlFor="storyImg">
+            사진 선택하기
+          </MakeStoryImgSelectButton>
+          <MakeStoryImgInput
+            id="storyImg"
+            type="file"
+            accept="image/*"
+            hidden
+            onChange={handleImgSelect}
+          />
+        </MakeStoryImgFormWrapper>
+      </MakeStoryImgSelectWrapper>
+    </MakeStoryImgWrapper>
+  );
+
+
+
+
+  */

@@ -30,7 +30,6 @@ const StoryContentsCp = () => {
 
   const fetchStories = async () => {
     try {
-      console.log("aoaoaoaoaoaoalplplplplplplp");
       return await axios.get("/page/render-story");
     } catch (error) {
       console.error(error);
@@ -40,7 +39,8 @@ const StoryContentsCp = () => {
   const storyContentsInfo = useQuery({
     queryKey: ["storyContents"],
     queryFn: fetchStories,
-    staleTime: Infinity,
+    staleTime: 0,
+    gcTime: 0,
   });
 
   useEffect(() => {

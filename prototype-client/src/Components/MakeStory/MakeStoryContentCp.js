@@ -19,6 +19,7 @@ import { useUserInfoValue } from "../../contextApi/UserInfoProvider";
 
 //Component
 import ProfileCp from "../Common/Profile/ProfileCp";
+import DeleteStoryScheduled from "./DeleteStorySchedule";
 
 const MakeStoryContentCp = () => {
   const [StoryModalOpen, setStoryModalOpen] = useRecoilState(
@@ -100,6 +101,7 @@ const MakeStoryContentCp = () => {
           setContent(e.target.value);
         }}
       />
+      <DeleteStoryScheduled />
       <MakeStoryFormWrapper>
         <MakeStoryButton
           onClick={() => {

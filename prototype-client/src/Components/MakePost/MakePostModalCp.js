@@ -34,7 +34,8 @@ const MakePostModalCp = () => {
     ModalOpenAtom("makePostModal")
   );
 
-  const [postimgUrl, setPostImgUrl] = useRecoilState(imgUrlAtom("postImg"));
+  const [postimgUrl, setPostImgUrl] = useRecoilState(imgUrlAtom("postImgUrl"));
+  console.log(postimgUrl, "?>?>?>?>?><><><>?<?<?<?<");
   const postModalBackground = useRef();
   const [content, setContent] = useState(null);
   const [title, setTitle] = useState(null);
@@ -51,8 +52,9 @@ const MakePostModalCp = () => {
 
   const userInfo = useUserInfoValue();
 
+  /*
   const formData = new FormData();
-  formData.append("img", postimgUrl);
+  formData.append("img", postimgUrl);*/
 
   const handleReset = () => {
     setCommentControl(false);
@@ -61,6 +63,7 @@ const MakePostModalCp = () => {
     setPostImgUrl(false);
   };
 
+  /*
   const handleSubmitPostImg = async () => {
     try {
       const imgDataResponse = await axios.post("/post/img", formData);
@@ -70,11 +73,11 @@ const MakePostModalCp = () => {
     } catch (error) {
       console.error(error);
     }
-  };
-  const handleSubmitPost = async (imgDataResponse) => {
+  };*/
+  const handleSubmitPost = async () => {
     try {
       const postResponse = await axios.post("/post", {
-        url: imgDataResponse.data.url,
+        url: postimgUrl,
         content: content,
         title: title,
         likeControl: !likeControl,
@@ -95,8 +98,13 @@ const MakePostModalCp = () => {
       return;
     }
     try {
+      /*
       const imgDataResponse = await handleSubmitPostImg();
-      const response = await handleSubmitPost(imgDataResponse);
+      console.log(
+        imgDataResponse.data,
+        "진짜 제발 진짜 제발 진짜 제발 진짜 제발"
+      );*/
+      const response = await handleSubmitPost();
       setMakePostModalOpen(false);
       handleReset();
       return response;

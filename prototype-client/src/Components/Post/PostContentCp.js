@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { Link } from "react-router-dom";
+import { Blurhash } from "react-blurhash";
 
 //Styled-Components
 import {
@@ -43,6 +44,7 @@ const PostContentCp = ({ postContentInfo, userId }) => {
 
   const postImgRef = useRef(null);
   const postRef = useRef(null);
+  const [ma, setMa] = useState(true);
 
   useEffect(() => {
     return () => {
@@ -60,13 +62,46 @@ const PostContentCp = ({ postContentInfo, userId }) => {
     else return false;
   })();
 
+  useEffect(() => {
+    const intersectionCallback = (entries) => {
+      if (entries[0].isIntersecting) {
+        setMa(false);
+      }
+    };
+
+    let options = {
+      root: null,
+      rootMargin: "0px",
+      threshold: 1,
+    };
+
+    const observer = new IntersectionObserver(intersectionCallback, options);
+    if (postRef.current) {
+      observer.observe(postRef.current);
+    }
+
+    return () => {
+      if (postRef.current) {
+        observer.unobserve(postRef.current);
+      }
+    };
+  }, []);
+
   return (
     <PostImgWrapper click={modalOpen} ref={postRef}>
-      <PostImg
-        src={postContentInfo.url}
-        onLoad={() => updateImgLoadingStatus()}
-        ref={postImgRef}
-      />
+      {ma ? (
+        <Blurhash
+          hash={postContentInfo.hash}
+          width={"410px"}
+          height={"585px"}
+        />
+      ) : (
+        <PostImg
+          src={postContentInfo.url}
+          onLoad={() => updateImgLoadingStatus()}
+          ref={postImgRef}
+        />
+      )}
       {isMyPost ? (
         <Link to={`/dashboard/profile/`}>
           <ProfileCp

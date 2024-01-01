@@ -20,6 +20,7 @@ export const SidebarMenu = styled.div`
   }
   cursor: pointer;
   font-size: 15px;
+  position: relative;
 `;
 
 export const MoreTitleWrapper = styled.div``;

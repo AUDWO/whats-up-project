@@ -64,7 +64,7 @@ const ProfileInfoCp = ({ otherUserInfo, userInfo }) => {
     const fetchFollowData = async () => {
       try {
         const response2 = await axios.get(
-          `/user/find-followerr/${otherUserInfo.id}`
+          `/user/check-follower/${otherUserInfo.id}`
         );
         setCheckFollower(response2.data);
       } catch (error) {

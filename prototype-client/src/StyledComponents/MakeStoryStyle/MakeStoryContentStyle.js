@@ -8,7 +8,7 @@ export const MakeStoryContentWrapper = styled.div`
 
 export const MakeStoryContent = styled.textarea`
   width: 100%;
-  height: 200px;
+  height: 140px;
   border: none;
   line-height: 1.3;
   padding: 10px 20px 10px 20px;
@@ -18,7 +18,7 @@ export const MakeStoryContent = styled.textarea`
 `;
 
 export const MakeStoryFormWrapper = styled.div`
-  margin-top: 90px;
+  margin-top: 20px;
   display: flex;
   justify-content: space-around;
 `;

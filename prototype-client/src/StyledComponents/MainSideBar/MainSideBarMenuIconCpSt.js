@@ -49,6 +49,7 @@ export const SearchIcon = styled(BsSearch)`
   ${cursorPointer};
   ${size};
   ${(props) => marginDynamic(props)};
+  position: relative;
 `;
 
 export const DiaryIcon = styled(BsJournalBookmark)`

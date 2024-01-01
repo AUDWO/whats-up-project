@@ -10,12 +10,16 @@ import {
 //Components
 import PostInfoCp from "./PostInfoCp";
 import PostContentCp from "./PostContentCp";
-import CommentModalCp from "./PostComment/PostCommentsCp";
+//import CommentModalCp from "./PostComment/PostCommentsCp";
 
 //Atom
 import toggleValueAtom from "../../store/ToggleValueAtom";
+import { Suspense, lazy, useEffect } from "react";
+import axios from "axios";
 
-const PostCp = ({ post }) => {
+const CommentModalCp = lazy(() => import("./PostComment/PostCommentsCp"));
+
+const PostCp = ({ post, blurhashedImg }) => {
   const postContentInfo = {
     url: post.img,
     title: post.title,
@@ -23,6 +27,7 @@ const PostCp = ({ post }) => {
     contentControl: post.contentControl,
     id: post.id,
     userInfo: post.User,
+    hash: blurhashedImg,
   };
 
   const postInfo = {
@@ -31,7 +36,21 @@ const PostCp = ({ post }) => {
     commentControl: post.commentControl,
   };
 
+  console.log(blurhashedImg, "blur blur lbur");
+
   const isImgLoaded = useRecoilValue(toggleValueAtom(`isImgLoaded${post.id}`));
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const response = await axios.get(`/page/blur/${post.id}`);
+        console.log(response);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetch();
+  }, []);
 
   return (
     <PostDivWrapper>
@@ -41,7 +60,9 @@ const PostCp = ({ post }) => {
             postContentInfo={postContentInfo}
             userId={post.UserId}
           />
-          {isImgLoaded && <CommentModalCp postId={post.id} />}
+          <Suspense fallback={<div>Loading...</div>}>
+            <CommentModalCp postId={post.id} />
+          </Suspense>
           {isImgLoaded && <PostInfoCp postInfo={postInfo} />}
         </UserInfoProvider>
       </PostWrapper>
@@ -50,3 +71,11 @@ const PostCp = ({ post }) => {
 };
 
 export default PostCp;
+
+//
+
+/*
+<Suspense fallback={<div>Loading...</div>}>
+<CommentModalCp postId={post.id} />
+</Suspense>
+*/

@@ -16,8 +16,6 @@ const ToggleAbleSwitchComponent = ({ inputId, atomName }) => {
     toggleValueAtom(`${atomName}`)
   );
 
-  console.log(toggleValue);
-
   return (
     <>
       <AbleCheckbox

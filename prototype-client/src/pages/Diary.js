@@ -21,6 +21,8 @@ const Diary = () => {
     setFilterType("latest");
   }, []);
 
+  console.log("useEffect");
+
   if (filterType === "latest" || filterType === "trend") {
     return (
       <HomeWraper>

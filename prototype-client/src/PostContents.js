@@ -9,7 +9,8 @@ import PostCp from "./Components/Post/PostCp";
 import SpinnerCp from "./Components/Common/Spinner/SpinnerCp";
 
 const PostContentsCp = () => {
-  const targetRef = useRef(null);
+  const morePostsRef = useRef(null);
+  //timeout을 사용하여 일정 시간동안은 intersection이 작용하지 않도록
   let timeoutId = null;
 
   const [lastPageCheckState] = useState(false);
@@ -35,14 +36,14 @@ const PostContentsCp = () => {
 
     const observer = new IntersectionObserver(intersectionCallback, options);
 
-    if (targetRef.current) {
+    if (morePostsRef.current) {
       console.log("target-current");
-      observer.observe(targetRef.current);
+      observer.observe(morePostsRef.current);
     }
 
     return () => {
-      if (targetRef.current) {
-        observer.unobserve(targetRef.current);
+      if (morePostsRef.current) {
+        observer.unobserve(morePostsRef.current);
       }
     };
   }, []);
@@ -58,20 +59,25 @@ const PostContentsCp = () => {
       }
       return;
     },
+    gcTime: 0,
   });
 
   return (
     <>
       {data ? (
         data.pages.map((postData) => {
-          return postData.data.posts.map((post) => (
-            <PostCp post={post} key={post.id} />
+          return postData.data.posts.map((post, idx) => (
+            <PostCp
+              post={post}
+              key={post.id}
+              blurhashedImg={postData.data.blurhashedImgs[idx]}
+            />
           ));
         })
       ) : (
         <Rendering />
       )}
-      <PostDivWrapper ref={targetRef}>
+      <PostDivWrapper ref={morePostsRef}>
         <PostWrapper>
           {hasNextPage ? (
             <SpinnerWrapper>

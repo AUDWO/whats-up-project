@@ -22,6 +22,7 @@ const {
   checkUserEmail,
   checkUserNickname,
   renderUserInfo,
+  renderAllUserInfo,
 } = require("../controllers/page");
 const { isLoggedIn, isNotLoggedIn } = require("../middlewares");
 
@@ -47,6 +48,7 @@ router.get("/user-email-check/:email", checkUserEmail);
 router.get("/user-nickname-check/:nickname", checkUserNickname);
 //
 
+router.get("/all-user-info", renderAllUserInfo);
 router.get("/user-info", renderUserInfo);
 router.get("/render-posts", renderAllPost);
 

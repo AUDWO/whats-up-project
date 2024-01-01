@@ -12,6 +12,15 @@ const ContactStory = require("../models/contactStory");
 const ContactDiary = require("../models/contactDiary");
 const { blurhashFromURL } = require("blurhash-from-url");
 
+exports.renderAllUserInfo = async (req, res) => {
+  try {
+    const allUser = await User.findAll();
+    res.send(allUser);
+  } catch (error) {
+    console.error(error, "getAllUser - Error");
+  }
+};
+
 exports.renderUserInfo = async (req, res, next) => {
   const otherUserId = req.params.userId;
 

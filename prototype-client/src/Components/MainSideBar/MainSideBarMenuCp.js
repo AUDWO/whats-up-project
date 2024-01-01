@@ -29,6 +29,7 @@ import ModalOpenAtom from "../../store/ModalOpenAtom";
 
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import SearchModalCp from "./SearchModalCp";
 
 const MainSideBarMenuCp = () => {
   const navigate = useNavigate();
@@ -79,6 +80,7 @@ const MainSideBarMenuCp = () => {
       <SidebarMenu>
         <SearchIcon marginR={"10"} />
         <div>검색</div>
+        <SearchModalCp />
       </SidebarMenu>
       <SidebarMenu
         onClick={() => {

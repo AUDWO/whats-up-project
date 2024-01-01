@@ -3,6 +3,7 @@ import styled from "styled-components";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import Mm from "./Mm";
+import searchFilter from "../../utils/SearchFilter";
 
 const SearchModalCp = () => {
   const getAllUser = async () => {
@@ -19,44 +20,47 @@ const SearchModalCp = () => {
   });
 
   const [searchInput, setSearchInput] = useState("");
+  const [searchedUsers, setSearchedUsers] = useState([]);
   const [noSearch, setNoSearch] = useState(true);
-  /*
-  const filterdUsers = allUser?.data
-    .filter((user) => ({
-      ...user,
-      nickname: user.nickname.replace(/[^a-zA-Z]/g, "").toLowerCase(),
-    }))
-    .sort((fst, snd) => {
-      let filterdSearchInout = searchInput
-        .replace(/[^a-zA-Z]/g, "")
-        .toLowerCase();
-      const fstIndex = fst.nickname.indexOf(filterdSearchInout);
-      const sndIndex = snd.nickname.indexOf(filterdSearchInout);
-
-      return fstIndex - sndIndex || fst.nickname.localeCompare(snd.nickname);
-    });
 
   useEffect(() => {
-    if (filterdUsers.length > 1) setNoSearch(false);
-  }, [filterdUsers]);
+    const users = searchFilter(allUser.data, searchInput);
+    setSearchedUsers([...users]);
+    /*
+    const filterdUsers = allUser?.data
+      .filter((user) => ({
+        ...user,
+        nickname: user.nickname.replace(/[^a-zA-Z]/g, "").toLowerCase(),
+      }))
+      .sort((fst, snd) => {
+        let filterdSearchInout = searchInput
+          .replace(/[^a-zA-Z]/g, "")
+          .toLowerCase();
+        const fstIndex = fst.nickname.indexOf(filterdSearchInout);
+        const sndIndex = snd.nickname.indexOf(filterdSearchInout);
 
-  console.log("n");
-  console.log("n");
-  console.log("n");
-  console.log("n");
-  console.log("n");
-  console.log("n");
+        return fstIndex - sndIndex || fst.nickname.localeCompare(snd.nickname);
+      });*/
+    // if (filterdUsers) console.log(filterdUsers, "filteredUsers filteredUsers");
+  }, [searchInput, allUser?.data]);
 
-  if (filterdUsers?.data)
-    console.log(filterdUsers?.data, "filteredUsers filteredUsers");
-
-  if (allUser?.data) console.log(allUser?.data, "allUser allUser allUser ");*/
+  useEffect(() => {
+    if (searchedUsers.lengt > 0) setNoSearch(false);
+  }, [searchedUsers]);
 
   return (
     <SearchDiv>
-      <SearchInput value={searchInput} onChange={(e) => e.target.value} />
+      <SearchInput
+        value={searchInput}
+        onChange={(e) => setSearchInput(e.target.value)}
+      />
       <UserList>
-        <Mm />
+        {(noSearch ? [] : searchedUsers)?.data.map((user) => (
+          <User>
+            <UserProfileImg src={user?.profileImg} />
+            <UserNickname>{user?.nickname}</UserNickname>
+          </User>
+        ))}
       </UserList>
     </SearchDiv>
   );

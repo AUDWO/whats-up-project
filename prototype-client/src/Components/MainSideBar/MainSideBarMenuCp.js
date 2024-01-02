@@ -1,6 +1,5 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
 
 //Styled-Components
 import {
@@ -9,6 +8,7 @@ import {
   MoreTitleWrapper,
   MoreTitle,
 } from "../../StyledComponents/MainSideBar/MainSideBarMenuCpSt";
+import { useRecoilState } from "recoil";
 
 //Icons
 import {
@@ -23,19 +23,17 @@ import {
 
 //Component
 import MoreModalCp from "./MoreModalCp";
-import { useRecoilState } from "recoil";
+import SearchModalCp from "./SearchModalCp";
+
+//Atoms
 import toggleValueAtom from "../../store/ToggleValueAtom";
 import ModalOpenAtom from "../../store/ModalOpenAtom";
 
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import SearchModalCp from "./SearchModalCp";
+//Custom hook
+import useModalOutClickEffect from "../../customHooks/useModalEffect";
 
 const MainSideBarMenuCp = () => {
   const navigate = useNavigate();
-
-  const moreModalRef = useRef(null);
-  const moreModalIconRef = useRef(null);
 
   const [contentsChange, setContentsChange] = useRecoilState(
     toggleValueAtom("contentsChange")
@@ -45,27 +43,26 @@ const MainSideBarMenuCp = () => {
     ModalOpenAtom("moreModal")
   );
 
+  const [searchModalOpen, setSearchModalOpen] = useRecoilState(
+    ModalOpenAtom("searchModal")
+  );
+
   const [postModalOpen, setPostModalOpen] = useRecoilState(
     ModalOpenAtom("makePostModal")
   );
 
-  useEffect(() => {
-    if (moreModalOpen) {
-      const handleClick = (e) => {
-        if (
-          !moreModalRef.current.contains(e.target) &&
-          !moreModalIconRef.current.contains(e.target)
-        ) {
-          setMoreModalOpen(!moreModalOpen);
-        }
-        e.stopPropagation();
-      };
-      document.addEventListener("click", handleClick);
-      return () => {
-        document.removeEventListener("click", handleClick);
-      };
-    }
-  }, [moreModalOpen]);
+  const moreModalRef = useRef(null);
+  const moreModalIconRef = useRef(null);
+
+  const searchModalRef = useRef(null);
+  const searchModalIconRef = useRef(null);
+
+  useModalOutClickEffect([moreModalRef, moreModalIconRef], () => {
+    setMoreModalOpen(!moreModalOpen);
+  });
+  useModalOutClickEffect([searchModalRef, searchModalIconRef], () => {
+    setSearchModalOpen(!searchModalOpen);
+  });
 
   return (
     <SidebarMenuWrapper>
@@ -77,10 +74,20 @@ const MainSideBarMenuCp = () => {
         <HomeIcon marginR={"10"} />
         <div>홈</div>
       </SidebarMenu>
-      <SidebarMenu>
+      {searchModalOpen && <SearchModalCp ref={searchModalRef} />}
+      <SidebarMenu
+        ref={searchModalIconRef}
+        onClick={() => {
+          if (searchModalOpen) {
+            setSearchModalOpen(false);
+          }
+          if (!searchModalOpen) {
+            setSearchModalOpen(true);
+          }
+        }}
+      >
         <SearchIcon marginR={"10"} />
         <div>검색</div>
-        <SearchModalCp />
       </SidebarMenu>
       <SidebarMenu
         onClick={() => {

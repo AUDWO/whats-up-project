@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, forwardRef } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import Mm from "./Mm";
 import searchFilter from "../../utils/SearchFilter";
+import { Link } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
+import ModalOpenAtom from "../../store/ModalOpenAtom";
 
-const SearchModalCp = () => {
+const SearchModalCp = forwardRef((props, ref) => {
+  const setSearchModalOpen = useSetRecoilState(ModalOpenAtom("searchModal"));
   const getAllUser = async () => {
     try {
       return await axios.get(`/page/all-user-info`);
@@ -24,57 +27,47 @@ const SearchModalCp = () => {
   const [noSearch, setNoSearch] = useState(true);
 
   useEffect(() => {
-    const users = searchFilter(allUser.data, searchInput);
-    setSearchedUsers([...users]);
-    /*
-    const filterdUsers = allUser?.data
-      .filter((user) => ({
-        ...user,
-        nickname: user.nickname.replace(/[^a-zA-Z]/g, "").toLowerCase(),
-      }))
-      .sort((fst, snd) => {
-        let filterdSearchInout = searchInput
-          .replace(/[^a-zA-Z]/g, "")
-          .toLowerCase();
-        const fstIndex = fst.nickname.indexOf(filterdSearchInout);
-        const sndIndex = snd.nickname.indexOf(filterdSearchInout);
-
-        return fstIndex - sndIndex || fst.nickname.localeCompare(snd.nickname);
-      });*/
-    // if (filterdUsers) console.log(filterdUsers, "filteredUsers filteredUsers");
+    if (allUser?.data && searchInput) {
+      const users = searchFilter(allUser?.data, searchInput);
+      setSearchedUsers([...users]);
+      console.log(allUser.data, "allUser allUser");
+    }
+    if (!searchInput) {
+      setNoSearch(true);
+    }
   }, [searchInput, allUser?.data]);
 
   useEffect(() => {
-    if (searchedUsers.lengt > 0) setNoSearch(false);
+    if (searchedUsers.length > 0) setNoSearch(false);
   }, [searchedUsers]);
 
   return (
-    <SearchDiv>
+    <SearchDiv ref={ref}>
       <SearchInput
         value={searchInput}
         onChange={(e) => setSearchInput(e.target.value)}
       />
       <UserList>
-        {(noSearch ? [] : searchedUsers)?.data.map((user) => (
-          <User>
-            <UserProfileImg src={user?.profileImg} />
-            <UserNickname>{user?.nickname}</UserNickname>
-          </User>
+        {(noSearch ? [] : searchedUsers)?.map((user) => (
+          <UserProfileLink
+            to={`/dashboard/profile/${user.nickname}/${user.id}`}
+            key={user.id}
+          >
+            <User onClick={() => setSearchModalOpen(false)}>
+              <UserProfileImg src={user?.profileImg} />
+              <UserNickname>{user?.nickname}</UserNickname>
+            </User>
+          </UserProfileLink>
         ))}
       </UserList>
     </SearchDiv>
   );
-};
-
-/*
- {(noSearch ? [] : filterdUsers)?.data.map((user) => (
-          <User>
-            <UserProfileImg src={user?.profileImg} />
-            <UserNickname>{user?.nickname}</UserNickname>
-          </User>
-        ))}*/
+});
 
 export default SearchModalCp;
+const UserProfileLink = styled(Link)`
+  text-decoration: none;
+`;
 
 const SearchDiv = styled.div`
   position: absolute;
@@ -120,6 +113,7 @@ const User = styled.div`
     border-radius: 5px;
   }
   margin-bottom: 5px;
+  cursor: pointer;
 `;
 
 const UserProfileImg = styled.img`
@@ -132,7 +126,10 @@ const UserProfileImg = styled.img`
   object-fit: cover;
 `;
 
-const UserNickname = styled.div``;
+const UserNickname = styled.div`
+  text-decoration: none;
+  color: black;
+`;
 
 const UserProfileIdddmg = styled.img`
   width: 40px;

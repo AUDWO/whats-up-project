@@ -4,12 +4,12 @@ const searchFilter = (arr, input) => {
       ...user,
       nickname: user.nickname.replace(/[^a-zA-Z]/g, "").toLowerCase(),
     }))
-    .filter((item) => item.includes(input));
+    .filter((user) => user.nickname.includes(input));
 
   // "h"의 인덱스가 가장 낮은 순으로 정렬
-  const sortedArray = filteredArray.sort((a, b) => {
-    const indexOfA = a.indexOf(input);
-    const indexOfB = b.indexOf(input);
+  const sortedArray = filteredArray.sort((fst, snd) => {
+    const indexOfA = fst.nickname.indexOf(input);
+    const indexOfB = snd.nickname.indexOf(input);
     return indexOfA - indexOfB;
   });
 

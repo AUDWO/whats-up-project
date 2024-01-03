@@ -22,30 +22,19 @@ import ProfileCp from "../Common/Profile/ProfileCp";
 import DeleteStoryScheduled from "./DeleteStorySchedule";
 
 const MakeStoryContentCp = () => {
+  const [content, setContent] = useState(null);
   const [StoryModalOpen, setStoryModalOpen] = useRecoilState(
     ModalOpenAtom("makeStoryModal")
   );
-  const [storyImgUrl, setStoryImgUrl] = useRecoilState(postImgAtom("storyImg"));
-
-  const [content, setContent] = useState(null);
-
-  const formData = new FormData();
-  formData.append("img", storyImgUrl);
-
-  const handleSubmitStoryImg = async (formData) => {
-    try {
-      const imgData = await axios.post("/post/storyimg", formData);
-      return imgData;
-    } catch (error) {
-      console.error("handleSubmit Error", error);
-    }
-  };
+  const [storyImgUrl, setStoryImgUrl] = useRecoilState(
+    postImgAtom("storyImgUrl")
+  );
 
   const handleSubmitStory = async (content, imgData) => {
     try {
       const postStoryResponse = await axios.post("/post/story", {
         content: content,
-        url: imgData.data.url,
+        url: imgData,
       });
       return postStoryResponse;
     } catch (error) {
@@ -56,8 +45,8 @@ const MakeStoryContentCp = () => {
   const handlePostStory = async () => {
     if (storyImgUrl) {
       try {
-        const imgData = await handleSubmitStoryImg(formData);
-        const response = await handleSubmitStory(content, imgData);
+        //const imgData = await handleSubmitStoryImg(formData);
+        const response = await handleSubmitStory(content, storyImgUrl);
         return response;
       } catch (error) {
         console.error("게시 중 오류 발생:", error);

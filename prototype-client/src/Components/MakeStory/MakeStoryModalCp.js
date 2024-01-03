@@ -20,7 +20,7 @@ const MakeStoryModalCp = () => {
     ModalOpenAtom("makeStoryModal")
   );
 
-  const storyModalBackground = useRef();
+  const storyModalBackground = useRef(null);
   return (
     <MakeStoryModal
       ref={storyModalBackground}

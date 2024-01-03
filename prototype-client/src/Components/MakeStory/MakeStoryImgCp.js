@@ -14,16 +14,37 @@ import {
 //Atom
 import postImgAtom from "../../store/PostImgAtom";
 
-const MakeStoryImgCp = () => {
-  const [imgUrlData, setImgUrlData] = useRecoilState(postImgAtom("storyImg"));
+import axios from "axios";
 
-  function handleImgSelect(e) {
-    e.preventDefault();
-    const selectedImg = e.target.files[0];
-    if (selectedImg && selectedImg.type.startsWith("image/")) {
-      setImgUrlData(selectedImg);
+const MakeStoryImgCp = () => {
+  const [imgUrlData, setImgUrlData] = useRecoilState(
+    postImgAtom("storyImgUrl")
+  );
+  const [imgOriginalUrlData, setImgOriginalUrlData] = useRecoilState(
+    postImgAtom("storyImgOriginalUrl")
+  );
+
+  const formData = new FormData();
+
+  const handleSubmitPostImg = async (formData) => {
+    try {
+      const imgDataResponse = await axios.post("/post/storyimg", formData);
+      return imgDataResponse;
+    } catch (error) {
+      console.error(error);
     }
-  }
+  };
+
+  const handleFileSelect = async (e) => {
+    e.preventDefault();
+    const selectedImgUrl = e.target.files[0];
+    if (selectedImgUrl && selectedImgUrl.type.startsWith("image/")) {
+      formData.append("img", selectedImgUrl);
+      const response = await handleSubmitPostImg(formData);
+      setImgOriginalUrlData(response.data.originalUrl);
+      setImgUrlData(response.data.url);
+    }
+  };
 
   return (
     <MakeStoryImgWrapper>
@@ -37,60 +58,13 @@ const MakeStoryImgCp = () => {
             type="file"
             accept="image/*"
             hidden
-            onChange={handleImgSelect}
+            onChange={handleFileSelect}
           />
         </MakeStoryImgFormWrapper>
       </MakeStoryImgSelectWrapper>
-      {imgUrlData && <MakeStoryImg src={URL.createObjectURL(imgUrlData)} />}
+      {imgUrlData && <MakeStoryImg src={imgOriginalUrlData} />}
     </MakeStoryImgWrapper>
   );
 };
 
 export default MakeStoryImgCp;
-
-/*
- return (
-    <MakeStoryImgWrapper>
-      <MakeStoryImgSelectWrapper>
-        <MakeStoryImgFormWrapper>
-          <MakeStoryImgSelectButton htmlFor="storyImg">
-            사진 선택하기
-          </MakeStoryImgSelectButton>
-          <MakeStoryImgInput
-            id="storyImg"
-            type="file"
-            accept="image/*"
-            hidden
-            onChange={handleImgSelect}
-          />
-        </MakeStoryImgFormWrapper>
-      </MakeStoryImgSelectWrapper>
-      {imgUrlData && <MakeStoryImg src={URL.createObjectURL(imgUrlData)} />}
-    </MakeStoryImgWrapper>
-  );
-  */
-
-/*
-return (
-    <MakeStoryImgWrapper>
-      <MakeStoryImgSelectWrapper>
-        <MakeStoryImgFormWrapper>
-          <MakeStoryImgSelectButton htmlFor="storyImg">
-            사진 선택하기
-          </MakeStoryImgSelectButton>
-          <MakeStoryImgInput
-            id="storyImg"
-            type="file"
-            accept="image/*"
-            hidden
-            onChange={handleImgSelect}
-          />
-        </MakeStoryImgFormWrapper>
-      </MakeStoryImgSelectWrapper>
-    </MakeStoryImgWrapper>
-  );
-
-
-
-
-  */

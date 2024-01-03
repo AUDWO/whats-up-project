@@ -38,13 +38,13 @@ const PostContentCp = ({ postContentInfo, userId }) => {
   };
 
   //댓글창이 먼저 나오지 않도록
-  const setIsImgLoaded = useSetRecoilState(
+  const [isImgLoaded, setIsImgLoaded] = useRecoilState(
     toggleValueAtom(`isImgLoaded${postContentInfo.id}`)
   );
+  const [postObservingCheck, setPostObservingCheck] = useState(false);
 
   const postImgRef = useRef(null);
   const postRef = useRef(null);
-  const [ma, setMa] = useState(true);
 
   useEffect(() => {
     return () => {
@@ -64,9 +64,7 @@ const PostContentCp = ({ postContentInfo, userId }) => {
 
   useEffect(() => {
     const intersectionCallback = (entries) => {
-      if (entries[0].isIntersecting) {
-        setMa(false);
-      }
+      if (entries[0].isIntersecting) setPostObservingCheck(true);
     };
 
     let options = {
@@ -89,7 +87,7 @@ const PostContentCp = ({ postContentInfo, userId }) => {
 
   return (
     <PostImgWrapper click={modalOpen} ref={postRef}>
-      {ma ? (
+      {isImgLoaded && !postObservingCheck ? (
         <Blurhash
           hash={postContentInfo.hash}
           width={"410px"}

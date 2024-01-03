@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 //Styled-Components
@@ -29,40 +29,21 @@ import SearchModalCp from "./SearchModalCp";
 import toggleValueAtom from "../../store/ToggleValueAtom";
 import ModalOpenAtom from "../../store/ModalOpenAtom";
 
-//Custom hook
-import useModalOutClickEffect from "../../customHooks/useModalEffect";
-
 const MainSideBarMenuCp = () => {
   const navigate = useNavigate();
 
   const [contentsChange, setContentsChange] = useRecoilState(
     toggleValueAtom("contentsChange")
   );
-
   const [moreModalOpen, setMoreModalOpen] = useRecoilState(
     ModalOpenAtom("moreModal")
   );
-
   const [searchModalOpen, setSearchModalOpen] = useRecoilState(
     ModalOpenAtom("searchModal")
   );
-
   const [postModalOpen, setPostModalOpen] = useRecoilState(
     ModalOpenAtom("makePostModal")
   );
-
-  const moreModalRef = useRef(null);
-  const moreModalIconRef = useRef(null);
-
-  const searchModalRef = useRef(null);
-  const searchModalIconRef = useRef(null);
-
-  useModalOutClickEffect([moreModalRef, moreModalIconRef], () => {
-    setMoreModalOpen(!moreModalOpen);
-  });
-  useModalOutClickEffect([searchModalRef, searchModalIconRef], () => {
-    setSearchModalOpen(!searchModalOpen);
-  });
 
   return (
     <SidebarMenuWrapper>
@@ -74,13 +55,10 @@ const MainSideBarMenuCp = () => {
         <HomeIcon marginR={"10"} />
         <div>홈</div>
       </SidebarMenu>
-      {searchModalOpen && <SearchModalCp ref={searchModalRef} />}
+      {searchModalOpen && <SearchModalCp />}
       <SidebarMenu
-        ref={searchModalIconRef}
-        onClick={() => {
-          if (searchModalOpen) {
-            setSearchModalOpen(false);
-          }
+        onClick={(e) => {
+          e.stopPropagation();
           if (!searchModalOpen) {
             setSearchModalOpen(true);
           }
@@ -122,13 +100,11 @@ const MainSideBarMenuCp = () => {
         <UserIcon marginR={"10"} />
         <div>프로필</div>
       </SidebarMenu>
-      {moreModalOpen && <MoreModalCp ref={moreModalRef} />}
+      {moreModalOpen && <MoreModalCp />}
       <SidebarMenu
-        ref={moreModalIconRef}
-        onClick={() => {
-          if (moreModalOpen) {
-            setMoreModalOpen(false);
-          }
+        onClick={(e) => {
+          e.stopPropagation();
+
           if (!moreModalOpen) {
             setMoreModalOpen(true);
           }

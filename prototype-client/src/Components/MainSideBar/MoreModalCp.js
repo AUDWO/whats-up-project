@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
@@ -12,23 +12,25 @@ import {
 
 //Atom
 import ModalOpenAtom from "../../store/ModalOpenAtom";
-//import { ActionUserInfo } from "../../contextApi/UserInfoProvider";
+import useModalOutClickEffect from "../../customHooks/useModalEffect";
 
 const MoreModalCp = forwardRef((props, ref) => {
   const navigate = useNavigate();
-
-  //const setUserInfo = ActionUserInfo();
+  const moreModalRef = useRef(null);
 
   const handleLogOut = async () => {
     const response = await axios.get("/auth/logout");
-    //setUserInfo((prev) => {});
     setMoreModalOpen(false);
     navigate("/");
   };
 
+  useModalOutClickEffect(moreModalRef, () => {
+    setMoreModalOpen(false);
+  });
+
   const setMoreModalOpen = useSetRecoilState(ModalOpenAtom("moreModal"));
   return (
-    <MoreModalWrapper ref={ref}>
+    <MoreModalWrapper ref={moreModalRef}>
       <MoreOptionWrapper>
         <MoreOption>문제신고</MoreOption>
       </MoreOptionWrapper>

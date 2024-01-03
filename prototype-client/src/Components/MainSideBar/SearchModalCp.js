@@ -1,4 +1,4 @@
-import React, { useEffect, useState, forwardRef } from "react";
+import React, { useEffect, useState, forwardRef, useRef } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
@@ -6,9 +6,12 @@ import searchFilter from "../../utils/SearchFilter";
 import { Link } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import ModalOpenAtom from "../../store/ModalOpenAtom";
+import useModalOutClickEffect from "../../customHooks/useModalEffect";
 
 const SearchModalCp = forwardRef((props, ref) => {
   const setSearchModalOpen = useSetRecoilState(ModalOpenAtom("searchModal"));
+
+  //API 파일로 이동 예정
   const getAllUser = async () => {
     try {
       return await axios.get(`/page/all-user-info`);
@@ -17,15 +20,17 @@ const SearchModalCp = forwardRef((props, ref) => {
     }
   };
 
+  const [searchInput, setSearchInput] = useState("");
+  const [searchedUsers, setSearchedUsers] = useState([]);
+  const [noSearch, setNoSearch] = useState(true);
+  const setModalOpen = useSetRecoilState(ModalOpenAtom("searchModal"));
+
+  const searchModalRef = useRef(null);
+
   const { data: allUser } = useQuery({
     queryKey: ["allUser"],
     queryFn: getAllUser,
   });
-
-  const [searchInput, setSearchInput] = useState("");
-  const [searchedUsers, setSearchedUsers] = useState([]);
-  const [noSearch, setNoSearch] = useState(true);
-
   useEffect(() => {
     if (allUser?.data && searchInput) {
       const users = searchFilter(allUser?.data, searchInput);
@@ -41,8 +46,12 @@ const SearchModalCp = forwardRef((props, ref) => {
     if (searchedUsers.length > 0) setNoSearch(false);
   }, [searchedUsers]);
 
+  useModalOutClickEffect(searchModalRef, () => {
+    setModalOpen(false);
+  });
+
   return (
-    <SearchDiv ref={ref}>
+    <SearchDiv ref={searchModalRef}>
       <SearchInput
         value={searchInput}
         onChange={(e) => setSearchInput(e.target.value)}

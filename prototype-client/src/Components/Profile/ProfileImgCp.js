@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 
@@ -7,8 +7,9 @@ import ProfileInfoCp from "./ProfileInfoCp";
 
 //Styled-Component
 import { BasicProfileImg } from "../../StyledComponents/CommonCpStyle/Icon/BasicProfileIcom";
-import { useQuery } from "@tanstack/react-query";
-import { useUserInfoValue } from "../../contextApi/UserInfoProvider";
+
+//Custom hook
+import UserInfoQuery from "../../customHooks/userInfoQuery";
 
 const ProfileImgCp = ({ otherUserId }) => {
   const [otherUserInfo, setOtherUserInfo] = useState({});
@@ -35,20 +36,7 @@ const ProfileImgCp = ({ otherUserId }) => {
     }
   }, [otherUserId]);
 
-  /*
-  const otherUserInfo = useQuery({
-    queryKey: [otherUserId ? `otherUserInfo${otherUserId}` : "otherUserInfo"],
-    queryFn: fetchOtherUserInfoData,
-    enabled: !!otherUserId,
-  });*/
-
-  //console.log(otherUserInfo, "otherUserInfo - useQuery USEQUERYUSEQUERY");
-
-  const userInfo = useUserInfoValue();
-
-  //console.log(userInfo, "userInfo in ProfileImgCp");
-  //const userData = Array.isArray(userInfo) ? userInfo[0] : userInfo;
-  //console.log(userData, "userData");
+  const userInfo = UserInfoQuery();
 
   if (!otherUserId && userInfo) {
     return (

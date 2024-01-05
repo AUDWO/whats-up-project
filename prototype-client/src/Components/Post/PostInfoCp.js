@@ -19,21 +19,18 @@ import {
   NoLikeIcon,
 } from "../../StyledComponents/HomeStyle/Section2/Icon";
 
-//import postUnLike from "../../apis/post/postUnLike";
-//import postLike from "../../apis/post/postLike";
-
 //Atoms
 import ModalOpenAtom from "../../store/ModalOpenAtom";
-
-//Context
-import { useUserInfoValue } from "../../contextApi/UserInfoProvider";
 
 //useMutation hook
 import CustomUseMutation from "../../customHooks/CustomUseMutation";
 
+//Custom hook
+import UserInfoQuery from "../../customHooks/userInfoQuery";
+
 const PostInfoCp = ({ postInfo }) => {
   const postInfoId = postInfo.id;
-  const userInfo = useUserInfoValue();
+  const userInfo = UserInfoQuery();
 
   const [postLikeCount, setPostLikeCount] = useState(0);
   const [postCommentCount, setPostCommentCount] = useState(0);

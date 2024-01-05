@@ -15,11 +15,13 @@ import {
 import postImgAtom from "../../store/PostImgAtom";
 import ModalOpenAtom from "../../store/ModalOpenAtom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useUserInfoValue } from "../../contextApi/UserInfoProvider";
 
 //Component
 import ProfileCp from "../Common/Profile/ProfileCp";
 import DeleteStoryScheduled from "./DeleteStorySchedule";
+
+//Custom hook
+import UserInfoQuery from "../../customHooks/userInfoQuery";
 
 const MakeStoryContentCp = () => {
   const [content, setContent] = useState(null);
@@ -65,7 +67,7 @@ const MakeStoryContentCp = () => {
     },
   });
 
-  const userInfo = useUserInfoValue();
+  const userInfo = UserInfoQuery();
 
   return (
     <MakeStoryContentWrapper>

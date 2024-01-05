@@ -26,8 +26,10 @@ import toggleValueAtom from "../../store/ToggleValueAtom";
 import imgUrlAtom from "../../store/imgUrlAtom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { useUserInfoValue } from "../../contextApi/UserInfoProvider";
 import ProfileCp from "../Common/Profile/ProfileCp";
+
+//Custom hook
+import UserInfoQuery from "../../customHooks/userInfoQuery";
 
 const MakePostModalCp = () => {
   const setMakePostModalOpen = useSetRecoilState(
@@ -50,11 +52,7 @@ const MakePostModalCp = () => {
     toggleValueAtom("postContent")
   );
 
-  const userInfo = useUserInfoValue();
-
-  /*
-  const formData = new FormData();
-  formData.append("img", postimgUrl);*/
+  const userInfo = UserInfoQuery();
 
   const handleReset = () => {
     setCommentControl(false);
@@ -63,17 +61,6 @@ const MakePostModalCp = () => {
     setPostImgUrl(false);
   };
 
-  /*
-  const handleSubmitPostImg = async () => {
-    try {
-      const imgDataResponse = await axios.post("/post/img", formData);
-      console.log(imgDataResponse, "imgDataResponse");
-
-      return imgDataResponse;
-    } catch (error) {
-      console.error(error);
-    }
-  };*/
   const handleSubmitPost = async () => {
     try {
       const postResponse = await axios.post("/post", {
@@ -98,12 +85,6 @@ const MakePostModalCp = () => {
       return;
     }
     try {
-      /*
-      const imgDataResponse = await handleSubmitPostImg();
-      console.log(
-        imgDataResponse.data,
-        "진짜 제발 진짜 제발 진짜 제발 진짜 제발"
-      );*/
       const response = await handleSubmitPost();
       setMakePostModalOpen(false);
       handleReset();
@@ -125,7 +106,7 @@ const MakePostModalCp = () => {
         queryKey: ["posts"],
       });
       queryClient.invalidateQueries({
-        queryKey: ["userInfo"],
+        queryKey: ["myUserInfo"],
       });
     },
   });

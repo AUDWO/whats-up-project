@@ -23,7 +23,6 @@ import DiaryOptionCp from "../Components/WriteDiary/DiaryOptionCp";
 //Atoms
 import toggleValueAtom from "../store/ToggleValueAtom";
 import imgUrlAtom from "../store/imgUrlAtom";
-import stateUpdateAtom from "../store/stateUpdateAtom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const MakeDiary = () => {
@@ -35,7 +34,7 @@ const MakeDiary = () => {
   const likeControl = useRecoilValue(toggleValueAtom("diaryReact"));
   const commentControl = useRecoilValue(toggleValueAtom("diaryComment"));
   const publicControl = useRecoilValue(toggleValueAtom("public"));
-  const [imgUrlData, setImgUrlData] = useRecoilState(imgUrlAtom("diaryImg"));
+  const [imgUrlData, setImgUrlData] = useRecoilState(imgUrlAtom("diaryImgUrl"));
 
   //다른 페이지에 나갔다가 다시 들어오면 설정값을 초기화시키기 위해 필요한 토글 값들
   const [toggleImgValue, setToggleImgValue] = useRecoilState(
@@ -49,13 +48,6 @@ const MakeDiary = () => {
     toggleValueAtom("diaryComment")
   );
   //-------------------
-
-  const [userInfoUpdate, setUserInfoUpdate] = useRecoilState(
-    stateUpdateAtom("userInfo")
-  );
-  const [contentUpdate, setContentUpdate] = useRecoilState(
-    stateUpdateAtom("diary")
-  );
 
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
@@ -98,20 +90,13 @@ const MakeDiary = () => {
     mutate();
   };
 
-  /*
-  const handleImageError = (event) => {
-    event.target.src = event.target.src.replace(/\/thumb\//, '/original/');
-  };*/
-
   const createDiary = async () => {
     try {
       //사진을 선택한 경우
       if (imgUrlData) {
-        const imgDataResponse = await axios.post("/post/diaryimg", formData);
-
         if (publicControl) {
           const postResponse = await axios.post("/post/diary", {
-            url: imgDataResponse.data.url,
+            url: imgUrlData,
             likeControl: !likeControl,
             commentControl: !commentControl,
             publicControl: publicControl,
@@ -123,7 +108,7 @@ const MakeDiary = () => {
 
         if (!publicControl) {
           const postResponse = await axios.post("/post/diary", {
-            url: imgDataResponse.data.url,
+            url: imgUrlData,
             likeControl: likeControl,
             commentControl: commentControl,
             publicControl: publicControl,
@@ -170,7 +155,7 @@ const MakeDiary = () => {
         queryKey: ["diaryContentsInfo"],
       });
       queryClient.invalidateQueries({
-        queryKey: ["userInfo"],
+        queryKey: ["myUserInfo"],
       });
       if (publicControl) {
         navigate("/dashboard/diary");

@@ -1,9 +1,10 @@
 import React, { Suspense } from "react";
 import { Outlet } from "react-router-dom";
+import LoadingPage from "./LoadingPage";
 
 const PageWrapper = () => {
   return (
-    <Suspense fallback={<h1>Loading...</h1>}>
+    <Suspense fallback={<LoadingPage />}>
       <Outlet />
     </Suspense>
   );

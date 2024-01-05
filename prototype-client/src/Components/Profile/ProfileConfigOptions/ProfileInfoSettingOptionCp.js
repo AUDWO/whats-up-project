@@ -76,7 +76,7 @@ const ProfileInfoSettingOptionCp = ({ userInfo }) => {
   const { mutate } = useMutation({
     mutationFn: updateProfileInfo,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["userInfo"] });
+      queryClient.invalidateQueries({ queryKey: ["myUserInfo"] });
       setProfileConfigModalOpen(false);
     },
   });

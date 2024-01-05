@@ -31,7 +31,7 @@ const PostContentsCp = () => {
     let options = {
       root: null,
       rootMargin: "0px",
-      threshold: 1.0,
+      threshold: 0.4,
     };
 
     const observer = new IntersectionObserver(intersectionCallback, options);
@@ -59,7 +59,6 @@ const PostContentsCp = () => {
       }
       return;
     },
-    gcTime: 0,
   });
 
   return (

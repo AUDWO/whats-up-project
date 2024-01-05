@@ -19,11 +19,11 @@ import PostCommentInput from "../PostCommentInput/PostCommentInput";
 //Atoms
 import ModalOpenAtom from "../../../store/ModalOpenAtom";
 
-//Context
-import { useUserInfoValue } from "../../../contextApi/UserInfoProvider";
+//Cutom hook
+import UserInfoQuery from "../../../customHooks/userInfoQuery";
 
 const CommentModalCp = ({ postId }) => {
-  const userInfo = useUserInfoValue();
+  const userInfo = UserInfoQuery();
 
   const [modalOpen, setModalOpen] = useRecoilState(
     ModalOpenAtom(`commentModalOpen${postId}`)

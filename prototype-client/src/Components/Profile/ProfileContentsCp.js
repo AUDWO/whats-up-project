@@ -3,9 +3,6 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { useRecoilValue } from "recoil";
 
-//Context
-import { useUserInfoValue } from "../../contextApi/UserInfoProvider";
-
 //Styled-Components
 import {
   ContentsWrapper,
@@ -25,13 +22,15 @@ import ProfilePostCardCp from "./ProfileContentCard/ProfilePostCardCp";
 
 //Atoms
 import toggleValueAtom from "../../store/ToggleValueAtom";
-import stateUpdateAtom from "../../store/stateUpdateAtom";
 import defaultTrueToggleValueAtom from "../../store/defaultTrueToggleValueAtom";
+
+//Custom hook
+import UserInfoQuery from "../../customHooks/userInfoQuery";
 
 const ProfileContentsCp = ({ otherUserId }) => {
   //otherUserProfileContents
 
-  const userInfo = useUserInfoValue();
+  const userInfo = UserInfoQuery();
 
   //OtherUserProfile-Info--------------------------------------------------------
   const [otherUserDiaryContents, setOhterUserDiaryContents] = useState([]);
@@ -189,6 +188,7 @@ const ProfileContentsCp = ({ otherUserId }) => {
     );
   }
 
+  //내 프로필
   if (
     !otherUserId &&
     userInfo &&

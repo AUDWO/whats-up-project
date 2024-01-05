@@ -1,12 +1,17 @@
 import React, { useEffect, useState, forwardRef, useRef } from "react";
-import styled from "styled-components";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import searchFilter from "../../utils/SearchFilter";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
 import { useSetRecoilState } from "recoil";
 import ModalOpenAtom from "../../store/ModalOpenAtom";
+
+//util
+import searchFilter from "../../utils/searchFilter";
+
+//Custom hooks
 import useModalOutClickEffect from "../../customHooks/useModalEffect";
+import UserInfoQuery from "../../customHooks/userInfoQuery";
 
 const SearchModalCp = forwardRef((props, ref) => {
   const setSearchModalOpen = useSetRecoilState(ModalOpenAtom("searchModal"));
@@ -27,20 +32,26 @@ const SearchModalCp = forwardRef((props, ref) => {
 
   const searchModalRef = useRef(null);
 
+  const userInfo = UserInfoQuery();
+
   const { data: allUser } = useQuery({
     queryKey: ["allUser"],
     queryFn: getAllUser,
   });
   useEffect(() => {
     if (allUser?.data && searchInput) {
-      const users = searchFilter(allUser?.data, searchInput);
+      const users = searchFilter(
+        allUser?.data,
+        searchInput,
+        userInfo?.data.nickname
+      );
       setSearchedUsers([...users]);
       console.log(allUser.data, "allUser allUser");
     }
     if (!searchInput) {
       setNoSearch(true);
     }
-  }, [searchInput, allUser?.data]);
+  }, [searchInput, allUser?.data, userInfo?.data]);
 
   useEffect(() => {
     if (searchedUsers.length > 0) setNoSearch(false);

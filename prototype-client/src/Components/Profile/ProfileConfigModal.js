@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react";
 import { useSetRecoilState } from "recoil";
-import { useRecoilValue } from "recoil";
 
 //Styled-Components
 import {
@@ -20,12 +19,14 @@ import ProfilePasswordOptionCp from "./ProfileConfigOptions/ProfilePasswordOptio
 
 //Atoms
 import ModalOpenAtom from "../../store/ModalOpenAtom";
-import { useUserInfoValue } from "../../contextApi/UserInfoProvider";
+
+//Custom hook
+import UserInfoQuery from "../../customHooks/userInfoQuery";
 
 const ProfileConfigModal = () => {
   const profileConfigModalBackground = useRef();
 
-  const userInfo = useUserInfoValue();
+  const userInfo = UserInfoQuery();
   const setConfigModalOpen = useSetRecoilState(
     ModalOpenAtom("profileConfigModal")
   );

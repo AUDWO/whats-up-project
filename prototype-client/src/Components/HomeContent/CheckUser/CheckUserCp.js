@@ -2,15 +2,12 @@ import React from "react";
 import SectionContainer from "../../../StyledComponents/HomeStyle/SectionContainer";
 import User from "./User";
 import styled from "styled-components";
-import { UserInfoProvider } from "../../../contextApi/UserInfoProvider";
 
 const CheckUserCp = () => {
   return (
     <SectionContainer3 width={"320px"}>
       <section>
-        <UserInfoProvider>
-          <User />
-        </UserInfoProvider>
+        <User />
       </section>
     </SectionContainer3>
   );

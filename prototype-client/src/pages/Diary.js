@@ -11,7 +11,6 @@ import { DiaryPageWrapper } from "../StyledComponents/DiaryStyle/Diary";
 
 //Atom
 import toggleValueAtom from "../store/ToggleValueAtom";
-//import { UserInfoProvider } from "../contextApi/UserInfoProvider";
 
 const Diary = () => {
   const [filterType, setFilterType] = useRecoilState(

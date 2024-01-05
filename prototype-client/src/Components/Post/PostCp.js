@@ -1,5 +1,4 @@
 import { useRecoilValue } from "recoil";
-import { UserInfoProvider } from "../../contextApi/UserInfoProvider";
 
 //Styled-Components
 import {
@@ -55,16 +54,11 @@ const PostCp = ({ post, blurhashedImg }) => {
   return (
     <PostDivWrapper>
       <PostWrapper>
-        <UserInfoProvider>
-          <PostContentCp
-            postContentInfo={postContentInfo}
-            userId={post.UserId}
-          />
-          <Suspense fallback={<div>Loading...</div>}>
-            <CommentModalCp postId={post.id} />
-          </Suspense>
-          {isImgLoaded && <PostInfoCp postInfo={postInfo} />}
-        </UserInfoProvider>
+        <PostContentCp postContentInfo={postContentInfo} userId={post.UserId} />
+        <Suspense fallback={<div>Loading...</div>}>
+          <CommentModalCp postId={post.id} />
+        </Suspense>
+        {isImgLoaded && <PostInfoCp postInfo={postInfo} />}
       </PostWrapper>
     </PostDivWrapper>
   );

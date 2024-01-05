@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { Link } from "react-router-dom";
 import { Blurhash } from "react-blurhash";
 
@@ -20,12 +20,15 @@ import {
 //Atom
 import ModalOpenAtom from "../../store/ModalOpenAtom";
 import toggleValueAtom from "../../store/ToggleValueAtom";
-import { useUserInfoValue } from "../../contextApi/UserInfoProvider";
+
+//Component
 import ProfileCp from "../Common/Profile/ProfileCp";
-//import CustomUseQuery from "../../customHooks/customUseQuery";
+
+//Custom hook
+import UserInfoQuery from "../../customHooks/userInfoQuery";
 
 const PostContentCp = ({ postContentInfo, userId }) => {
-  const userInfo = useUserInfoValue();
+  const userInfo = UserInfoQuery();
 
   const [modalOpen, setModalOpen] = useRecoilState(
     ModalOpenAtom(`commentModalOpen${postContentInfo.id}`)
@@ -70,7 +73,7 @@ const PostContentCp = ({ postContentInfo, userId }) => {
     let options = {
       root: null,
       rootMargin: "0px",
-      threshold: 1,
+      threshold: 0.4,
     };
 
     const observer = new IntersectionObserver(intersectionCallback, options);

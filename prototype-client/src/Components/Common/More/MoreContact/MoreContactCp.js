@@ -12,9 +12,9 @@ import {
   SadIcon,
 } from "../../../../StyledComponents/CommonCpStyle/More/MoreContactCpSt";
 
-import { useUserInfoValue } from "../../../../contextApi/UserInfoProvider";
 import { useQuery } from "@tanstack/react-query";
 import CustomUseMutation from "../../../../customHooks/CustomUseMutation";
+import UserInfoQuery from "../../../../customHooks/userInfoQuery";
 
 const MoreContactCp = ({ contentInfo, moreType }) => {
   const [likeReactionCount, setLikeReactionCount] = useState(0);
@@ -36,7 +36,7 @@ const MoreContactCp = ({ contentInfo, moreType }) => {
   //reactInfo를 통해 content에 자신이 반응을 했는지 알 수 있다.
   const [myReactInfo, setMyReactInfo] = useState({});
 
-  const userInfo = useUserInfoValue();
+  const userInfo = UserInfoQuery();
 
   //react의 업데이트 된 정보를 참조하기 때문에
 

@@ -5,6 +5,7 @@ export const StoryImg = styled.img`
   height: 100%;
   object-fit: cover;
   border-radius: 17px;
+  background-color: ${(props) => props.backC};
 `;
 
 export const StoryContent = styled.div`

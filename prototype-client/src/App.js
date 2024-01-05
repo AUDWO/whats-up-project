@@ -8,13 +8,7 @@ import GlobalStyles from "./StyledComponents/GlobalStyles";
 
 //Components
 import Login from "./pages/Login";
-//import Home from "./pages/Home";
-//import SignUp from "./pages/SignUp";
-//import Diary from "./pages/Diary";
-//import MoreDiary from "./pages/MoreDiary";
-//import MoreStory from "./pages/MoreStory";
-//import MakeDiary from "./pages/MakeDiary";
-//import Profile from "./pages/Profile";
+import SignUp from "./pages/SignUp";
 
 import Error from "./pages/Error";
 
@@ -23,13 +17,6 @@ import ModalOpenAtom from "./store/ModalOpenAtom";
 
 import PageWrapper from "./PageWrapper";
 import DashboardWrapper from "./DashboardWrapper";
-import { UserInfoProvider } from "./contextApi/UserInfoProvider";
-
-//Modal Components
-//import MakeStoryModalCp from "./Components/MakeStory/MakeStoryModalCp";
-//import MakePostModalCp from "./Components/MakePost/MakePostModalCp";
-//import ProfileContentConfigModalCp from "./Components/Profile/ProfileContentConfigModalCp";
-//import ProfileConfigModal from "./Components/Profile/ProfileConfigModal";
 
 const ProfileConfigModal = lazy(() =>
   import("./Components/Profile/ProfileConfigModal")
@@ -43,10 +30,8 @@ const MakePostModalCp = lazy(() =>
 const MakeStoryModalCp = lazy(() =>
   import("./Components/MakeStory/MakeStoryModalCp")
 );
-
 const Home = lazy(() => import("./pages/Home"));
 const Diary = lazy(() => import("./pages/Diary"));
-const SignUp = lazy(() => import("./pages/SignUp"));
 const MoreDiary = lazy(() => import("./pages/MoreDiary"));
 const MoreStory = lazy(() => import("./pages/MoreStory"));
 const MakeDiary = lazy(() => import("./pages/MakeDiary"));
@@ -65,14 +50,12 @@ function App() {
   return (
     <BrowserRouter>
       <GlobalStyles />
-      <UserInfoProvider>
-        <Suspense fallback={<div>Loading...</div>}>
-          {PostModalOpen && <MakePostModalCp />}
-          {StoryModalOpen && <MakeStoryModalCp />}
-          {ProfileConfigModalOpen && <ProfileConfigModal />}
-          {ContentConfigModalOpen && <ProfileContentConfigModalCp />}
-        </Suspense>
-      </UserInfoProvider>
+      <Suspense fallback={<div>Loading...</div>}>
+        {PostModalOpen && <MakePostModalCp />}
+        {StoryModalOpen && <MakeStoryModalCp />}
+        {ProfileConfigModalOpen && <ProfileConfigModal />}
+        {ContentConfigModalOpen && <ProfileContentConfigModalCp />}
+      </Suspense>
       <Routes>
         <Route path="/" element={<PageWrapper />}>
           <Route index element={<Login />} />

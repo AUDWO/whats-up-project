@@ -17,6 +17,7 @@ const ProfilePostsInfoCp = ({ contentsInfo: userInfo }) => {
   const [diaryContentsOpen, setDiaryContentsOpen] = useRecoilState(
     toggleValueAtom(`diaryContentsOpen${userInfo.id}`)
   );
+
   const [postContentsOpen, setPostContentsOpen] = useRecoilState(
     defaultTrueToggleValueAtom(`postContentsOpen${userInfo.id}`)
   );

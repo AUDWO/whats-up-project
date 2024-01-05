@@ -45,15 +45,9 @@ const CommentConfigModalCp = ({
   const CommentConfigModalRef = useRef(null);
 
   useEffect(() => {
-    console.log("CommentConfigModalCp - useEffect");
-    if (commentConfigModalOpen) {
-    }
     const handleClick = (e) => {
-      console.log("CommentConfigModalCp-handleClick");
       if (!CommentConfigModalRef.current.contains(e.target)) {
         setCommentConfigModalOpen(false);
-      } else {
-        e.stopPropagation();
       }
     };
     document.addEventListener("click", handleClick);

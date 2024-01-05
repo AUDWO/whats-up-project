@@ -8,8 +8,6 @@ import MainSideBarCp from "../Components/MainSideBar/MainSideBarCp";
 //import MoreStoryContentCp from "../Components/More/MoreStory/MoreStoryContentCp";
 import MoreStoryContentCp from "../Components/MoreStory/MoreStoryContentCp";
 import MoreCommentsCp from "../Components/Common/More/MoreComment/MoreCommentsCp";
-import { UserInfoProvider } from "../contextApi/UserInfoProvider";
-//import { UserInfoProvider } from "../contextApi/UserInfoProvider";
 
 const MoreStory = () => {
   const { storyId } = useParams();
@@ -17,9 +15,7 @@ const MoreStory = () => {
     <Wrapper>
       <HomeWrapper2>
         <MainSideBarCp />
-        <UserInfoProvider>
-          <MoreStoryContentCp storyId={storyId}></MoreStoryContentCp>
-        </UserInfoProvider>
+        <MoreStoryContentCp storyId={storyId}></MoreStoryContentCp>
         <Section3 />
       </HomeWrapper2>
       <MoreCommentsCp storyId={storyId} moreType={"story"} />

@@ -6,12 +6,8 @@ import { ProfilePageWrapper } from "../../StyledComponents/ProfileStyle/ProfileC
 import ProfileImgCp from "./ProfileImgCp";
 import ProfileContentsCp from "./ProfileContentsCp";
 
-import { useUserInfoValue } from "../../contextApi/UserInfoProvider";
-
 const ProfileCp = ({ otherUserId }) => {
   //프로필 설정 모달에서 프로필 정보 변경 후 프로필 업데이트
-
-  const userInfo = useUserInfoValue();
 
   return (
     <>

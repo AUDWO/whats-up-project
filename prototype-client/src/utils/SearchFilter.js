@@ -1,10 +1,12 @@
-const searchFilter = (arr, input) => {
+const searchFilter = (arr, input, myNickname) => {
   const filteredArray = arr
     .map((user) => ({
       ...user,
       nickname: user.nickname.replace(/[^a-zA-Z]/g, "").toLowerCase(),
     }))
-    .filter((user) => user.nickname.includes(input));
+    .filter(
+      (user) => user.nickname.includes(input) && user.nickname !== myNickname
+    );
 
   // "h"의 인덱스가 가장 낮은 순으로 정렬
   const sortedArray = filteredArray.sort((fst, snd) => {

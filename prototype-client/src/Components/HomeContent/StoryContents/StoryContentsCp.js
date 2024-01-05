@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -20,15 +19,13 @@ import StoryContentCp from "./StoryContentCp";
 
 //Atom
 import ModalOpenAtom from "../../../store/ModalOpenAtom";
-import stateUpdateAtom from "../../../store/stateUpdateAtom";
 
 const StoryContentsCp = () => {
-  const storyUpdate = useRecoilValue(stateUpdateAtom("story"));
   const [storyModalOpen, setStoryModalOpen] = useRecoilState(
     ModalOpenAtom("makeStoryModal")
   );
 
-  const fetchStories = async () => {
+  const getAllStory = async () => {
     try {
       return await axios.get("/page/render-story");
     } catch (error) {
@@ -36,44 +33,50 @@ const StoryContentsCp = () => {
     }
   };
 
-  const storyContentsInfo = useQuery({
+  const { data: storyContentsInfo, isLoading } = useQuery({
     queryKey: ["storyContents"],
-    queryFn: fetchStories,
-    staleTime: 0,
-    gcTime: 0,
+    queryFn: getAllStory,
   });
 
-  useEffect(() => {
-    //setStoryModalOpen(false);
-  }, [storyUpdate]);
-
-  if (storyContentsInfo.data) {
+  if (isLoading) {
     return (
       <StoryWrapper>
         <StoryContents>
-          <MakeStoryContent
-            onClick={() => {
-              setStoryModalOpen(!storyModalOpen);
-            }}
-          >
-            <StoryProfile>
-              <MakeStoryProfileImg>
-                <PlusIcon />
-              </MakeStoryProfileImg>
-              <StoryProfileName>Make story</StoryProfileName>
-            </StoryProfile>
-          </MakeStoryContent>
-          {storyContentsInfo.data.data.map((story) => {
-            return (
-              <Link to={`/more-story/${story.id}`} key={story.id}>
-                <StoryContentCp index={story.id} story={story} />
-              </Link>
-            );
-          })}
+          <StoryContentCp backC={"#DDD9D9"} />
+          <StoryContentCp backC={"#DDD9D9"} />
+          <StoryContentCp backC={"#DDD9D9"} />
+          <StoryContentCp backC={"#DDD9D9"} />
+          <StoryContentCp backC={"#DDD9D9"} />
         </StoryContents>
       </StoryWrapper>
     );
   }
+
+  return (
+    <StoryWrapper>
+      <StoryContents>
+        <MakeStoryContent
+          onClick={() => {
+            setStoryModalOpen(!storyModalOpen);
+          }}
+        >
+          <StoryProfile>
+            <MakeStoryProfileImg>
+              <PlusIcon />
+            </MakeStoryProfileImg>
+            <StoryProfileName>Make story</StoryProfileName>
+          </StoryProfile>
+        </MakeStoryContent>
+        {storyContentsInfo.data.map((story) => {
+          return (
+            <Link to={`/more-story/${story.id}`} key={story.id}>
+              <StoryContentCp index={story.id} story={story} />
+            </Link>
+          );
+        })}
+      </StoryContents>
+    </StoryWrapper>
+  );
 };
 
 export default StoryContentsCp;

@@ -18,7 +18,6 @@ import {
 
 //Atom
 import imgUrlAtom from "../../store/imgUrlAtom";
-import { useMutation } from "@tanstack/react-query";
 
 function MakePostDragDownImgCp() {
   const [imgUrlData, setImgUrlData] = useRecoilState(imgUrlAtom("postImgUrl"));

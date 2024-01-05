@@ -13,22 +13,13 @@ const ProfileCp = ({ otherUserId }) => {
 
   const userInfo = useUserInfoValue();
 
-  if (otherUserId) {
-    return (
-      <>
-        <ProfilePageWrapper>
-          <ProfileImgCp otherUserId={otherUserId} />
-          <ProfileContentsCp otherUserId={otherUserId} />
-        </ProfilePageWrapper>
-      </>
-    );
-  }
-
   return (
-    <ProfilePageWrapper>
-      <ProfileImgCp />
-      <ProfileContentsCp />
-    </ProfilePageWrapper>
+    <>
+      <ProfilePageWrapper>
+        <ProfileImgCp otherUserId={otherUserId} />
+        <ProfileContentsCp otherUserId={otherUserId} />
+      </ProfilePageWrapper>
+    </>
   );
 };
 

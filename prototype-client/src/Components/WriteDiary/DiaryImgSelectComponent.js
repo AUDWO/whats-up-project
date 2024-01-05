@@ -11,17 +11,36 @@ import {
 } from "../../StyledComponents/KeepDiaryStyle/DiaryImgSelect";
 import { useRecoilState } from "recoil";
 import imgUrlAtom from "../../store/imgUrlAtom";
+import axios from "axios";
 
 const DiaryImgSelectComponent = () => {
-  const [imgUrlData, setImgUrlData] = useRecoilState(imgUrlAtom("diaryImg"));
+  const [imgUrlData, setImgUrlData] = useRecoilState(imgUrlAtom("diaryImgUrl"));
+  const [imgOriginalUrlData, setImgOriginalUrlData] = useRecoilState(
+    imgUrlAtom("diaryImgOriginalUrl")
+  );
 
   const imgUrlRef = useRef();
   const imgPreviewRef = useRef();
 
-  const onUpload = (e) => {
+  const formData = new FormData();
+
+  const handleSubmitPostImg = async (formData) => {
+    try {
+      return await axios.post("/post/diaryimg", formData);
+    } catch (error) {
+      console.error(error, "handleSubmitPostImg -ERROR");
+    }
+  };
+
+  const handleFileSelect = async (e) => {
     e.preventDefault();
-    const selectedImg = e.target.files[0];
-    setImgUrlData(selectedImg);
+    const selectedImgUrl = e.target.files[0];
+    if (selectedImgUrl && selectedImgUrl.type.startsWith("image/")) {
+      formData.append("img", selectedImgUrl);
+      const response = await handleSubmitPostImg(formData);
+      setImgOriginalUrlData(response.data.originalUrl);
+      setImgUrlData(response.data.url);
+    }
   };
 
   return (
@@ -34,10 +53,11 @@ const DiaryImgSelectComponent = () => {
             type="file"
             accept="image/*"
             name="diaryImg"
-            onChange={onUpload}
+            onChange={handleFileSelect}
           />
           <DiaryImgCancelButton
             onClick={() => {
+              setImgOriginalUrlData("");
               setImgUrlData("");
             }}
           >
@@ -51,7 +71,7 @@ const DiaryImgSelectComponent = () => {
           {imgUrlData && (
             <DiaryImg
               id="image-preview"
-              src={URL.createObjectURL(imgUrlData)}
+              src={imgOriginalUrlData}
               alt="미리보기"
               ref={imgPreviewRef}
             />
@@ -62,7 +82,7 @@ const DiaryImgSelectComponent = () => {
             type="hidden"
             name="url"
             ref={imgUrlRef}
-            onChange={setImgUrlData}
+            onChange={handleFileSelect}
           />
         </DiaryImgDiv>
       </DiaryImgWrapper>

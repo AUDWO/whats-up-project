@@ -1,6 +1,3 @@
-import React from "react";
-import { useUserInfoValue } from "../../../contextApi/UserInfoProvider";
-
 import UserWrapper from "../../../StyledComponents/HomeStyle/Section3/UserWrapper";
 
 //Styled-components
@@ -9,12 +6,37 @@ import {
   DiaryWrapper,
   PostWrapper,
 } from "../../../StyledComponents/HomeStyle/Section3/ContentWrapper";
+import styled from "styled-components";
 
 //Component
 import ProfileCp from "../../Common/Profile/ProfileCp";
 
+//Custom hook
+import UserInfoQuery from "../../../customHooks/userInfoQuery";
+
 const User = () => {
-  const userInfo = useUserInfoValue();
+  const userInfo = UserInfoQuery();
+
+  if (userInfo.isLoading) {
+    return (
+      <UserWrapper>
+        <LoadingProfileWrapper>
+          <LoadingProfileImg />
+          <LoadingProfileNickname />
+        </LoadingProfileWrapper>
+        <LoadingContentsInfoWrapper>
+          <LoadingContentInfoWrapper>
+            <LoadingContentTitle />
+            <LoadingContentNumber />
+          </LoadingContentInfoWrapper>
+          <LoadingContentInfoWrapper>
+            <LoadingContentTitle />
+            <LoadingContentNumber />
+          </LoadingContentInfoWrapper>
+        </LoadingContentsInfoWrapper>
+      </UserWrapper>
+    );
+  }
 
   return (
     <UserWrapper>
@@ -28,11 +50,11 @@ const User = () => {
       <ContentWrapper>
         <PostWrapper>
           <div>게시글</div>
-          <div>{userInfo.postslength}</div>
+          <div>{userInfo?.postslength}</div>
         </PostWrapper>
         <DiaryWrapper>
           <div>일기</div>
-          <div>{userInfo.diarieslength}</div>
+          <div>{userInfo?.diarieslength}</div>
         </DiaryWrapper>
       </ContentWrapper>
     </UserWrapper>
@@ -40,3 +62,51 @@ const User = () => {
 };
 
 export default User;
+
+const LoadingProfileWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const LoadingProfileImg = styled.div`
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: #ddd9d9;
+`;
+
+const LoadingProfileNickname = styled.div`
+  height: 17px;
+  width: 50px;
+  background-color: #ddd9d9;
+  margin-left: 15px;
+`;
+
+const LoadingContentsInfoWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+`;
+
+const LoadingContentInfoWrapper = styled.div`
+  margin-right: 20px;
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+const LoadingContentTitle = styled.div`
+  width: 35px;
+  height: 17px;
+  background-color: #ddd9d9;
+  margin-bottom: 5px;
+`;
+
+const LoadingContentNumber = styled.div`
+  width: 17px;
+  height: 24px;
+  background-color: #ddd9d9;
+`;

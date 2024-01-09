@@ -73,8 +73,16 @@ exports.renderFollowInfo = async (req, res) => {
     });
 
     if (user) {
+      let check = false;
+      for (let i = 0; i < user.dataValues.Followers.length; i++) {
+        if (Number(user.dataValues.Followers[i].id) === Number(req.user.id)) {
+          check = true;
+        }
+      }
       res.send({
-        ...user.dataValues,
+        following: user.dataValues.Followings.length,
+        follower: user.dataValues.Followers.length,
+        checkFollower: check,
       });
     } else {
       res.status(404).send("no user");
@@ -110,8 +118,6 @@ exports.checkFollower = async (req, res, next) => {
         }
       }
       res.send(check);
-    } else {
-      res.status(404).send("no user");
     }
   } catch (error) {
     console.error(error);

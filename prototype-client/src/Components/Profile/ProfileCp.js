@@ -3,7 +3,7 @@ import React from "react";
 //Stlyed-Components
 import { ProfilePageWrapper } from "../../StyledComponents/ProfileStyle/ProfileCpSt";
 //Components
-import ProfileImgCp from "./ProfileImgCp";
+import ProfileIntroduceCp from "./ProfileIntroduceCp";
 import ProfileContentsCp from "./ProfileContentsCp";
 
 const ProfileCp = ({ otherUserId }) => {
@@ -12,7 +12,7 @@ const ProfileCp = ({ otherUserId }) => {
   return (
     <>
       <ProfilePageWrapper>
-        <ProfileImgCp otherUserId={otherUserId} />
+        <ProfileIntroduceCp otherUserId={otherUserId} />
         <ProfileContentsCp otherUserId={otherUserId} />
       </ProfilePageWrapper>
     </>

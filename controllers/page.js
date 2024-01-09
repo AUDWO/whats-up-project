@@ -107,6 +107,38 @@ exports.renderUserInfo = async (req, res, next) => {
   }
 };
 
+exports.renderOtherUserFollowInfo = async (req, res) => {
+  try {
+    const otherUserId = req.params.userId;
+
+    if (otherUserId) {
+      const user = await User.findOne({
+        where: { id: otherUserId },
+        include: [
+          {
+            model: User,
+            attributes: ["id", "nickname"],
+            as: "Followers",
+          }, //팔로잉git
+          {
+            model: User,
+            attributes: ["id", "nickname"],
+            as: "Followings",
+          }, //팔로워
+        ],
+      });
+
+      res.send({
+        id: user.dataValues.id,
+        Followers: user.dataValues.Followers,
+        Followings: user.dataValues.Followings,
+      });
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 exports.checkUserEmail = async (req, res) => {
   try {
     const user = await User.findOne({

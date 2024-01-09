@@ -1,17 +1,19 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-const CustomUseMutation = (fn, queryKey, callback) => {
+const CustomUseMutation = (fn, queryKeyArr, callback) => {
   const queryClient = useQueryClient();
-  const { mutate, isLoading } = useMutation({
+  const { mutate, isPending, isSuccess } = useMutation({
     mutationFn: fn,
     onSuccess: () => {
-      if (queryKey) {
-        queryClient.invalidateQueries({ queryKey: [queryKey] });
+      if (queryKeyArr.length) {
+        queryKeyArr.forEach((queryKey) => {
+          queryClient.invalidateQueries({ queryKey: [queryKey] });
+        });
         if (callback) return callback();
       }
     },
   });
-  return { mutate, isLoading };
+  return { mutate, isPending, isSuccess };
 };
 
 export default CustomUseMutation;

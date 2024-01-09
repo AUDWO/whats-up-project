@@ -13,7 +13,6 @@ const UserInfoQuery = () => {
     queryKey: ["myUserInfo"],
     queryFn: getMyInfo,
   });
-  if (data?.data) console.log(data.data, "data data data data");
 
   return { ...data?.data, isLoading };
 };

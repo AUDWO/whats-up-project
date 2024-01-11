@@ -66,6 +66,7 @@ exports.renderUserInfo = async (req, res, next) => {
       diarieslength: diaries.length,
     });
   }
+
   if (!otherUserId) {
     const following = res.locals.followingCount;
     const follower = res.locals.followerCount;

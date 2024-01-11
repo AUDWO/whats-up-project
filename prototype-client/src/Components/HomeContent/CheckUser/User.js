@@ -13,29 +13,13 @@ import ProfileCp from "../../Common/Profile/ProfileCp";
 
 //Custom hook
 import UserInfoQuery from "../../../customHooks/userInfoQuery";
+import LoadingCheckUserCp from "./LoadingCheckUserCp";
 
 const User = () => {
   const userInfo = UserInfoQuery();
 
   if (userInfo.isLoading) {
-    return (
-      <UserWrapper>
-        <LoadingProfileWrapper>
-          <LoadingProfileImg />
-          <LoadingProfileNickname />
-        </LoadingProfileWrapper>
-        <LoadingContentsInfoWrapper>
-          <LoadingContentInfoWrapper>
-            <LoadingContentTitle />
-            <LoadingContentNumber />
-          </LoadingContentInfoWrapper>
-          <LoadingContentInfoWrapper>
-            <LoadingContentTitle />
-            <LoadingContentNumber />
-          </LoadingContentInfoWrapper>
-        </LoadingContentsInfoWrapper>
-      </UserWrapper>
-    );
+    return <LoadingCheckUserCp />;
   }
 
   return (

@@ -32,6 +32,8 @@ const ProfileContentsCp = ({ otherUserId }) => {
 
   const userInfo = UserInfoQuery();
 
+  console.log(userInfo, "userInfo userInfo userInfo userInfo userInfo");
+
   //OtherUserProfile-Info--------------------------------------------------------
   const [otherUserDiaryContents, setOhterUserDiaryContents] = useState([]);
   const [otherUserPostContents, setOtherUserPostContents] = useState([]);

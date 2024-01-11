@@ -1,5 +1,7 @@
 import { useSetRecoilState } from "recoil";
 
+import styled from "styled-components";
+
 //Styled-Component
 import {
   ProfileInfoWrapper,
@@ -9,6 +11,8 @@ import {
   ProfileJoinedWrapper,
   ProfileJoinedTitle,
   ProfileJoineDate,
+  ProfileEditWrapper,
+  ProfileEditButton,
 } from "../../StyledComponents/ProfileStyle/ProfileInfoCpSt";
 
 //Atom
@@ -19,8 +23,6 @@ console.log("profileInfoCp - profileInfoCp - profileInfoCp");
 
 const ProfileInfoCp = ({ otherUserInfo, userInfo }) => {
   //const [checkFollower, setCheckFollower] = useState(false);
-
-  console.log("profileInfo profileInfo profileInfo ");
 
   const setConfigModalOpen = useSetRecoilState(
     ModalOpenAtom("profileConfigModal")
@@ -50,7 +52,7 @@ const ProfileInfoCp = ({ otherUserInfo, userInfo }) => {
       </ProfileInfoWrapper>
     );
   }
-  /*
+
   if (userInfo) {
     return (
       <ProfileInfoWrapper>
@@ -83,59 +85,37 @@ const ProfileInfoCp = ({ otherUserInfo, userInfo }) => {
         </FollowCountWrapper>
       </ProfileInfoWrapper>
     );
-  }*/
+  }
 };
 
 export default ProfileInfoCp;
 
-/*
-if (otherUserInfo && Object.keys(otherUserInfo).length >= 3 && isSuccess) {
-    return (
-      <ProfileInfoWrapper>
-        <ProfileNameWrapper>
-          <ProfileNickname>{otherUserInfo.nickname}</ProfileNickname>
-          {checkFollower?.data ? (
-            <FollowButton
-              onClick={() => {
-                handleUnFollowing();
-              }}
-            >
-              팔로우 취소
-            </FollowButton>
-          ) : (
-            <FollowButton
-              onClick={() => {
-                handleFollowing();
-              }}
-            >
-              팔로우
-            </FollowButton>
-          )}
-        </ProfileNameWrapper>
-        <ProfileName>{otherUserInfo.name}</ProfileName>
-        <ProfileJoinedWrapper>
-          <ProfileJoinedTitle>Joined</ProfileJoinedTitle>
-          <ProfileJoineDate>{handleDate(otherUserInfo)}</ProfileJoineDate>
-        </ProfileJoinedWrapper>
-        <FollowCountWrapper>
-          <FollowerWrapper>
-            <FollowerTitle>팔로워</FollowerTitle>
-            <FollowerCountNumber>
-              {otherUserInfo.Followers.length}
-            </FollowerCountNumber>
-          </FollowerWrapper>
-          <FollowingWrapper>
-            <FollowingTitle>팔로우</FollowingTitle>
-            <FolloiwngCountNumber>
-              {otherUserInfo.Followings.length}
-            </FolloiwngCountNumber>
-          </FollowingWrapper>
-        </FollowCountWrapper>
-      </ProfileInfoWrapper>
-    );
-  }
+export const FollowerWrapper = styled.span`
+  margin-right: 40px;
+`;
 
+export const FollowerTitle = styled.span`
+  font-size: 15px;
+`;
 
+export const FollowerCountNumber = styled.span`
+  font-weight: 600;
+  margin-left: 5px;
+`;
 
+export const FolloiwngCountNumber = styled.span`
+  margin-left: 5px;
+  font-weight: 600;
+`;
 
-*/
+export const FollowCountWrapper = styled.div`
+  height: auto;
+  margin-top: 30px;
+  margin-bottom: 10px;
+`;
+
+export const FollowingWrapper = styled.span``;
+
+export const FollowingTitle = styled.span`
+  font-size: 15px;
+`;

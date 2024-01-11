@@ -38,20 +38,24 @@ const SearchModalCp = forwardRef((props, ref) => {
     queryKey: ["allUser"],
     queryFn: getAllUser,
   });
+
+  console.log("SearchModalCp");
   useEffect(() => {
     if (allUser?.data && searchInput) {
+      console.log("SearchModalCp - useEffect In");
       const users = searchFilter(
         allUser?.data,
         searchInput,
-        userInfo?.data.nickname
+        userInfo?.nickname
       );
+
       setSearchedUsers([...users]);
       console.log(allUser.data, "allUser allUser");
     }
     if (!searchInput) {
       setNoSearch(true);
     }
-  }, [searchInput, allUser?.data, userInfo?.data]);
+  }, [searchInput, allUser?.data, userInfo]);
 
   useEffect(() => {
     if (searchedUsers.length > 0) setNoSearch(false);

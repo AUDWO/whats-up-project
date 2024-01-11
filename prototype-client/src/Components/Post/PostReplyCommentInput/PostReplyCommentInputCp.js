@@ -38,7 +38,7 @@ const PostReplyCommentInputCp = ({ comment }) => {
 
   const { mutate } = CustomUseMutation(
     createPostComment,
-    `postReplyComments-${comment.id}`,
+    [`postReplyComments-${comment.id}`],
     function callback() {
       setReplyCommentContent("");
     }

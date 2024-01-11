@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
@@ -21,7 +21,7 @@ import {
 } from "../../../StyledComponents/PostStyle/PostReplyComment/PostReplyCommentCpSt";
 
 //component
-import CommentConfigModalCp from "../../Common/Comment/CommentConfigModalCp";
+import CommentConfigModalCp from "../../Common/CommentConfigModal/CommentConfigModalCp";
 
 //atoms
 import ModalOpenAtom from "../../../store/ModalOpenAtom";
@@ -80,11 +80,11 @@ const PostReplyComment = ({ replyComment, commentId }) => {
 
   const { mutate: handlePostLike, isLoading: likeLoading } = CustomUseMutation(
     postLike,
-    `postReplyComments-${commentId}`
+    [`postReplyComments-${commentId}`]
   );
 
   const { mutate: handlePostUnLike, isLoading: unLikeLoading } =
-    CustomUseMutation(postUnLike, `postReplyComments-${commentId}`);
+    CustomUseMutation(postUnLike, [`postReplyComments-${commentId}`]);
 
   const handleLike = () => {
     setReplyCommentLikeCount((prev) => prev + 1);
@@ -96,6 +96,10 @@ const PostReplyComment = ({ replyComment, commentId }) => {
     setReplyCommentLikeCheck(false);
     handlePostUnLike();
   };
+
+  const offset = useMemo(() => {
+    return { bottom: "-10px", right: "-10px" };
+  }, []);
 
   if (isLoading || likeLoading || unLikeLoading) {
     return (
@@ -160,8 +164,7 @@ const PostReplyComment = ({ replyComment, commentId }) => {
                   commentId={replyComment.id}
                   commentIdOfReplyComment={commentId}
                   commentType={"replyComment"}
-                  bottom={"-10px"}
-                  right={"-10px"}
+                  offset={offset}
                 />
               )}
             </>

@@ -67,15 +67,13 @@ const PostInfoCp = ({ postInfo }) => {
     }
   };
 
-  const { mutate: handlePostUnLike } = CustomUseMutation(
-    postUnLike,
-    `postInfo-${postInfoId}`
-  );
+  const { mutate: handlePostUnLike } = CustomUseMutation(postUnLike, [
+    `postInfo-${postInfoId}`,
+  ]);
 
-  const { mutate: handlePostLike } = CustomUseMutation(
-    postLike,
-    `postInfo-${postInfoId}`
-  );
+  const { mutate: handlePostLike } = CustomUseMutation(postLike, [
+    `postInfo-${postInfoId}`,
+  ]);
 
   //postInfo fetch 함수 (api 폴더에서 따로 관리 할 예정)
   const fetchPostInfo = async () => {

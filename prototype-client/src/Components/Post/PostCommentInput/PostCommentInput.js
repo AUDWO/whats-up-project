@@ -23,7 +23,7 @@ const PostCommentInput = ({ postId }) => {
 
   const { mutate: getPostComments } = CustomUseMutation(
     fetchPostComments,
-    `postComments-${postId}`,
+    [`postComments-${postId}`],
     () => {
       setCommentContent("");
     }

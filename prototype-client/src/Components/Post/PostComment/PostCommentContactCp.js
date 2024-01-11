@@ -11,7 +11,7 @@ import {
 } from "../../../StyledComponents/PostStyle/PostCommentCpSt";
 
 //Component
-import CommentConfigModalCp from "../../Common/Comment/CommentConfigModalCp";
+import CommentConfigModalCp from "../../Common/CommentConfigModal/CommentConfigModalCp";
 
 //Atom
 import ModalOpenAtom from "../../../store/ModalOpenAtom";
@@ -47,8 +47,7 @@ const PostCommentContactCp = ({ postCommentLikeCount, myComment, comment }) => {
               commentId={comment.id}
               commentType={"comment"}
               contentId={comment.PostId}
-              bottom={"-10px"}
-              right={"-10px"}
+              offset={{ bottom: "-10px", right: "-10px" }}
             />
           )}
         </>

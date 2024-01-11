@@ -30,6 +30,8 @@ import UserInfoQuery from "../../customHooks/userInfoQuery";
 const PostContentCp = ({ postContentInfo, userId }) => {
   const userInfo = UserInfoQuery();
 
+  console.log(userInfo, "userInfo userInfo userInfo userInfo userInfo");
+
   const [modalOpen, setModalOpen] = useRecoilState(
     ModalOpenAtom(`commentModalOpen${postContentInfo.id}`)
   );
@@ -117,7 +119,7 @@ const PostContentCp = ({ postContentInfo, userId }) => {
               width: "40px",
               height: "40px",
               zIndex: "4",
-              basic: "50px",
+              basic: "37.5px",
             }}
             pfN={{
               backC: "black",
@@ -146,7 +148,7 @@ const PostContentCp = ({ postContentInfo, userId }) => {
               width: "40px",
               height: "40px",
               zIndex: "4",
-              basic: "50px",
+              basic: "37.5px",
             }}
             pfN={{
               backC: "black",

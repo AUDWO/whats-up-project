@@ -14,7 +14,7 @@ import {
 import ModalOpenAtom from "../../../../store/ModalOpenAtom";
 
 //Component
-import CommentConfigModalCp from "../../Comment/CommentConfigModalCp";
+import CommentConfigModalCp from "../../CommentConfigModal/CommentConfigModalCp";
 
 const ReplyCommentCp = ({ commentId, reply, moreType }) => {
   const [commentConfigModalOpen, setCommentConfigModalOpen] = useRecoilState(
@@ -39,8 +39,7 @@ const ReplyCommentCp = ({ commentId, reply, moreType }) => {
           {commentConfigModalOpen && (
             <CommentConfigModalCp
               contentType={moreType}
-              top={"0"}
-              right={"0"}
+              offset={{ top: "0px", right: "0px" }}
               commentIdOfReplyComment={commentId}
               commentId={reply.id}
               commentType={"replyComment"}

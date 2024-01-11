@@ -21,10 +21,11 @@ const StoryContentCp = ({ story, backC }) => {
             margin: { b: "10" },
           }}
           pfI={{
+            border: "on",
             width: "40px",
             height: "40px",
             margin: { b: "7" },
-            basic: "50px",
+            basic: "37.5px",
           }}
           pfN={{
             color: "#fae66a",

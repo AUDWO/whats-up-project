@@ -1,4 +1,7 @@
 const searchFilter = (arr, input, myNickname) => {
+  console.log(arr, "arr");
+  console.log(input, "input");
+  console.log(myNickname, "myNickname");
   const filteredArray = arr.filter(
     (user) => user.nickname.includes(input) && user.nickname !== myNickname
   );

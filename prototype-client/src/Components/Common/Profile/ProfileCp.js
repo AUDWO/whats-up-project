@@ -34,6 +34,7 @@ const ProfileCp = ({ pfW, pfIW, pfI, pfN, pfInfo }) => {
             h={pfI?.height}
             zI={pfI?.zIndex}
             mg={pfI?.margin}
+            bd={pfI?.border}
           />
         ) : (
           <BasicProfileImg fS={pfI.basic} zI={pfI?.zIndex} mg={pfI?.margin} />

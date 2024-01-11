@@ -28,7 +28,7 @@ import ModalOpenAtom from "../../../../store/ModalOpenAtom";
 
 //Component
 import ReplyCommentCp from "./MoreReplyCommentCp";
-import CommentConfigModalCp from "../../Comment/CommentConfigModalCp";
+import CommentConfigModalCp from "../../CommentConfigModal/CommentConfigModalCp";
 import CustomUseMutation from "../../../../customHooks/CustomUseMutation";
 
 const MoreCommentCp = ({ comment, moreType }) => {
@@ -137,8 +137,7 @@ const MoreCommentCp = ({ comment, moreType }) => {
           {commentConfigModalOpen && (
             <CommentConfigModalCp
               contentType={moreType}
-              top={"0"}
-              right={"0"}
+              offset={{ top: "0px", right: "0px" }}
               commentId={comment.id}
               commentType={"comment"}
               contentId={commentIdDeterminedByContentType}

@@ -119,7 +119,7 @@ const PostCommentCp = ({ comment, myComment }) => {
   if (isLoading) {
     return (
       <SpinnerWrapper>
-        <SpinnerCp color="blue" size="30px" />
+        <SpinnerCp color="#f7dd07" size="30px" />
       </SpinnerWrapper>
     );
   }

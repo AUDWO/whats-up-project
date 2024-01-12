@@ -26,12 +26,9 @@ import ProfileCp from "../Common/Profile/ProfileCp";
 
 //Custom hook
 import UserInfoQuery from "../../customHooks/userInfoQuery";
+import PostProfileCp from "./PostProfileCp";
 
 const PostContentCp = ({ postContentInfo, userId }) => {
-  const userInfo = UserInfoQuery();
-
-  console.log(userInfo, "userInfo userInfo userInfo userInfo userInfo");
-
   const [modalOpen, setModalOpen] = useRecoilState(
     ModalOpenAtom(`commentModalOpen${postContentInfo.id}`)
   );
@@ -62,9 +59,13 @@ const PostContentCp = ({ postContentInfo, userId }) => {
     setIsImgLoaded(true);
   };
 
+  const userInfo = UserInfoQuery();
+
   const isMyPost = (() => {
-    if (userInfo.id === postContentInfo.userInfo.id) return true;
-    else return false;
+    if (userInfo) {
+      if (userInfo.id === postContentInfo.userInfo.id) return true;
+      else return false;
+    } else return false;
   })();
 
   useEffect(() => {
@@ -106,6 +107,47 @@ const PostContentCp = ({ postContentInfo, userId }) => {
         />
       )}
       {isMyPost ? (
+        <Link to={`/dashboard/profile/`}>
+          <PostProfileCp contentUserInfo={postContentInfo.userInfo} />
+        </Link>
+      ) : (
+        <Link
+          to={`/dashboard/profile/${postContentInfo.userInfo.nickname}/${userId}`}
+        >
+          <PostProfileCp contentUserInfo={postContentInfo.userInfo} />
+        </Link>
+      )}
+
+      <PostContentsWrapper>
+        <PostTitleWrapper>
+          <PostUserInfoWrapper>
+            <PostUserName>{postContentInfo.userInfo.nickname}</PostUserName>
+            <PostTitle>{postContentInfo.title}</PostTitle>
+          </PostUserInfoWrapper>
+          {postContentControl && (
+            <>
+              {!postContentOpen ? (
+                <PostContentOpenIcon onClick={handleIconClick} />
+              ) : (
+                <PostContentCloseIcon onClick={handleIconClick} />
+              )}
+            </>
+          )}
+        </PostTitleWrapper>
+
+        {postContentOpen && (
+          <PostContent>{postContentInfo.content}</PostContent>
+        )}
+      </PostContentsWrapper>
+    </PostImgWrapper>
+  );
+};
+
+export default PostContentCp;
+
+/*
+
+ {isMyPost ? (
         <Link to={`/dashboard/profile/`}>
           <ProfileCp
             pfW={{ left: "20px", top: "15px", position: "absolute" }}
@@ -162,29 +204,8 @@ const PostContentCp = ({ postContentInfo, userId }) => {
           />
         </Link>
       )}
-      <PostContentsWrapper>
-        <PostTitleWrapper>
-          <PostUserInfoWrapper>
-            <PostUserName>{postContentInfo.userInfo.nickname}</PostUserName>
-            <PostTitle>{postContentInfo.title}</PostTitle>
-          </PostUserInfoWrapper>
-          {postContentControl && (
-            <>
-              {!postContentOpen ? (
-                <PostContentOpenIcon onClick={handleIconClick} />
-              ) : (
-                <PostContentCloseIcon onClick={handleIconClick} />
-              )}
-            </>
-          )}
-        </PostTitleWrapper>
 
-        {postContentOpen && (
-          <PostContent>{postContentInfo.content}</PostContent>
-        )}
-      </PostContentsWrapper>
-    </PostImgWrapper>
-  );
-};
 
-export default PostContentCp;
+
+
+*/

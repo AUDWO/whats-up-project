@@ -68,7 +68,7 @@ const DiaryImgSelectComponent = () => {
 
       <DiaryImgWrapper>
         <DiaryImgDiv>
-          {imgUrlData && (
+          {imgOriginalUrlData && (
             <DiaryImg
               id="image-preview"
               src={imgOriginalUrlData}

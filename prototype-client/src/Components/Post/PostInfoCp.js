@@ -96,7 +96,7 @@ const PostInfoCp = ({ postInfo }) => {
 
   const checkedLike = (() => {
     let checkingLike = false;
-    if (data?.data) {
+    if (data?.data && userInfo) {
       data.data.postLikeCount.forEach((info) => {
         if (info.id === userInfo.id) {
           checkingLike = true;

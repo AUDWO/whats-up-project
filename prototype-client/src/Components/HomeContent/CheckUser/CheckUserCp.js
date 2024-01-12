@@ -1,13 +1,14 @@
 import React from "react";
 import SectionContainer from "../../../StyledComponents/HomeStyle/SectionContainer";
-import User from "./User";
+import UserCp from "./UserCp";
 import styled from "styled-components";
+import NoUserCp from "./NoUserCp";
 
 const CheckUserCp = () => {
   return (
     <SectionContainer3 width={"320px"}>
       <section>
-        <User />
+        <NoUserCp />
       </section>
     </SectionContainer3>
   );

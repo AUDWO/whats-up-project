@@ -4,13 +4,13 @@ const CustomUseMutation = (fn, queryKeyArr, callback) => {
   const queryClient = useQueryClient();
   const { mutate, isPending, isSuccess } = useMutation({
     mutationFn: fn,
-    onSuccess: () => {
+    onSuccess: (data) => {
       if (queryKeyArr.length) {
         queryKeyArr.forEach((queryKey) => {
           queryClient.invalidateQueries({ queryKey: [queryKey] });
         });
-        if (callback) return callback();
       }
+      if (callback) return callback(data);
     },
   });
   return { mutate, isPending, isSuccess };

@@ -19,12 +19,7 @@ import PostCommentInput from "../PostCommentInput/PostCommentInput";
 //Atoms
 import ModalOpenAtom from "../../../store/ModalOpenAtom";
 
-//Cutom hook
-import UserInfoQuery from "../../../customHooks/userInfoQuery";
-
 const CommentModalCp = ({ postId }) => {
-  const userInfo = UserInfoQuery();
-
   const [modalOpen, setModalOpen] = useRecoilState(
     ModalOpenAtom(`commentModalOpen${postId}`)
   );
@@ -55,13 +50,7 @@ const CommentModalCp = ({ postId }) => {
         </CommentOptionWrapper>
         <CommentsWrapper>
           {data?.data.map((comment) => (
-            <>
-              {comment.UserId === userInfo.id ? (
-                <PostCommentCp comment={comment} myComment={true} />
-              ) : (
-                <PostCommentCp comment={comment} />
-              )}
-            </>
+            <PostCommentCp comment={comment} />
           ))}
         </CommentsWrapper>
         <PostCommentInput postId={postId} />

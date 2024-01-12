@@ -4,11 +4,21 @@ import UserCp from "./UserCp";
 import styled from "styled-components";
 import NoUserCp from "./NoUserCp";
 
+import LoadingCheckUserCp from "./LoadingCheckUserCp";
+import UserInfoQuery from "../../../customHooks/userInfoQuery";
+import { useNavigate } from "react-router-dom";
+
 const CheckUserCp = () => {
+  const userInfo = UserInfoQuery();
+
+  if (userInfo.isLoading) {
+    return <LoadingCheckUserCp />;
+  }
+
   return (
     <SectionContainer3 width={"320px"}>
       <section>
-        <NoUserCp />
+        {userInfo.data ? <UserCp userInfo={userInfo} /> : <NoUserCp />}
       </section>
     </SectionContainer3>
   );
@@ -22,3 +32,5 @@ export const SectionContainer3 = styled(SectionContainer)`
   z-index: 1;
   width: ${(props) => props.width};
 `;
+
+//   {userInfo.data ? <UserCp userInfo={userInfo} /> : <NoUserCp />}

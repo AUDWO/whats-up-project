@@ -2,14 +2,24 @@ import React from "react";
 
 import styled from "styled-components";
 import UserWrapper from "../../../StyledComponents/HomeStyle/Section3/UserWrapper";
+import { useNavigate } from "react-router-dom";
 
 const NoUserCp = () => {
+  const navigate = useNavigate();
   return (
     <UserWrapper>
-      <LoginWrapper>
+      <LoginWrapper
+        onClick={() => {
+          navigate("/");
+        }}
+      >
         <LoginText>Login</LoginText>
       </LoginWrapper>
-      <SignUpWrapper>
+      <SignUpWrapper
+        onClick={() => {
+          navigate("/join");
+        }}
+      >
         <SignUpText>Sign Up</SignUpText>
       </SignUpWrapper>
     </UserWrapper>

@@ -10,16 +10,8 @@ import {
 //Component
 import ProfileCp from "../../Common/Profile/ProfileCp";
 
-//Custom hook
-import UserInfoQuery from "../../../customHooks/userInfoQuery";
-import LoadingCheckUserCp from "./LoadingCheckUserCp";
-
-const UserCp = () => {
-  const userInfo = UserInfoQuery();
-
-  if (userInfo.isLoading) {
-    return <LoadingCheckUserCp />;
-  }
+const UserCp = ({ userInfo }) => {
+  //const userInfo = UserInfoQuery();
 
   return (
     <UserWrapper>

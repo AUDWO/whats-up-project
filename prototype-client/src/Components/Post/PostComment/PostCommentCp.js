@@ -29,8 +29,11 @@ import PostReplyCommentInputCp from "../PostReplyCommentInput/PostReplyCommentIn
 
 //atoms
 import ModalOpenAtom from "../../../store/ModalOpenAtom";
+import UserInfoQuery from "../../../customHooks/userInfoQuery";
 
-const PostCommentCp = ({ comment, myComment }) => {
+const PostCommentCp = ({ comment }) => {
+  const userInfo = UserInfoQuery();
+
   //댓글 좋아요 상태
   const [postCommentLikeCount, setPostCommentLikeCount] = useState(0);
   const [commentLikeCheck, setCommentLikeCheck] = useState(false);
@@ -149,7 +152,7 @@ const PostCommentCp = ({ comment, myComment }) => {
           </CommentUserNicknameWrapper>
           <CommentContent>{comment.content}</CommentContent>
           <PostCommentContactCp
-            myComment={myComment}
+            myComment={!!userInfo}
             comment={comment}
             postCommentLikeCount={postCommentLikeCount}
           />

@@ -19,6 +19,7 @@ export const StoryContent = styled.div`
   margin-right: 20px;
   flex-shrink: 0;
   transition: transform 0.3s ease;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
   &:hover {
     transform: scale(1.02); /* 확대하는 변환을 적용 */
     border: 3px solid black;

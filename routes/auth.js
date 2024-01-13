@@ -7,6 +7,6 @@ router.post("/sign-up", isNotLoggedIn, join);
 
 router.post("/login", isNotLoggedIn, login);
 
-router.get("/logout", isLoggedIn, logout);
+router.post("/logout", isLoggedIn, logout);
 
 module.exports = router;

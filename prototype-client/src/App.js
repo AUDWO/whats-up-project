@@ -10,26 +10,25 @@ import GlobalStyles from "./StyledComponents/GlobalStyles";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 
-import Error from "./pages/Error";
-
 //Atom
 import ModalOpenAtom from "./store/ModalOpenAtom";
 
 import PageWrapper from "./PageWrapper";
 import DashboardWrapper from "./DashboardWrapper";
+import ProtectedRoute from "./routes/ProtectedRoute";
 
-const ProfileConfigModal = lazy(() =>
+const ProfileConfigMd = lazy(() =>
   import("./Components/Profile/ProfileConfigModal")
 );
-const ProfileContentConfigModalCp = lazy(() =>
+const ProfileContentConfigMd = lazy(() =>
   import("./Components/Profile/ProfileContentConfigModalCp")
 );
-const MakePostModalCp = lazy(() =>
-  import("./Components/MakePost/MakePostModalCp")
-);
-const MakeStoryModalCp = lazy(() =>
+const MakePostMd = lazy(() => import("./Components/MakePost/MakePostModalCp"));
+const MakeStoryMd = lazy(() =>
   import("./Components/MakeStory/MakeStoryModalCp")
 );
+const LoginRequestMd = lazy(() => import("./modals/LoginRequestMd"));
+
 const Home = lazy(() => import("./pages/Home"));
 const Diary = lazy(() => import("./pages/Diary"));
 const MoreDiary = lazy(() => import("./pages/MoreDiary"));
@@ -47,32 +46,35 @@ function App() {
     ModalOpenAtom("profileContentConfigModal")
   );
 
+  const LoginRequestMdOpen = useRecoilValue(ModalOpenAtom("loginRequestMd"));
+
   return (
     <BrowserRouter>
       <GlobalStyles />
-      <Suspense fallback={<div>Loading...</div>}>
-        {PostModalOpen && <MakePostModalCp />}
-        {StoryModalOpen && <MakeStoryModalCp />}
-        {ProfileConfigModalOpen && <ProfileConfigModal />}
-        {ContentConfigModalOpen && <ProfileContentConfigModalCp />}
+      <Suspense fallback={<div></div>}>
+        {PostModalOpen && <MakePostMd />}
+        {StoryModalOpen && <MakeStoryMd />}
+        {ProfileConfigModalOpen && <ProfileConfigMd />}
+        {ContentConfigModalOpen && <ProfileContentConfigMd />}
+        {LoginRequestMdOpen && <LoginRequestMd />}
       </Suspense>
       <Routes>
         <Route path="/" element={<PageWrapper />}>
-          <Route index element={<Login />} />
+          <Route index element={<Home />} />
+          <Route path="login" element={<Login />} />
           <Route path="join" element={<SignUp />} />
           <Route path="more-diary/:diaryId" element={<MoreDiary />} />
           <Route path="more-story/:storyId" element={<MoreStory />} />
-          <Route path="home" element={<Home />} />
-          <Route path="error" element={<Error />} />
           <Route path="/dashboard" element={<DashboardWrapper />}>
             <Route path="diary" element={<Diary />} />
-            <Route path="make-diary" element={<MakeDiary />} />
-            <Route path="make-post" element={<MakePostModalCp />} />
-            <Route path="profile" element={<Profile />} />
             <Route
               path="profile/:userNickname/:otherUserId"
               element={<Profile />}
             />
+            <Route element={<ProtectedRoute />}>
+              <Route path="make-diary" element={<MakeDiary />} />
+              <Route path="profile" element={<Profile />} />
+            </Route>
           </Route>
         </Route>
       </Routes>
@@ -81,3 +83,5 @@ function App() {
 }
 
 export default App;
+
+// {LoginRequestMdOpen && <LoginRequestMd />}

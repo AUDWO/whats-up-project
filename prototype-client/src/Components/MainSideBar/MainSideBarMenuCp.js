@@ -1,4 +1,3 @@
-import React, { useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 //Styled-Components
@@ -8,7 +7,7 @@ import {
   MoreTitleWrapper,
   MoreTitle,
 } from "../../StyledComponents/MainSideBar/MainSideBarMenuCpSt";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 
 //Icons
 import {
@@ -26,23 +25,26 @@ import MoreModalCp from "./MoreModalCp";
 import SearchModalCp from "./SearchModalCp";
 
 //Atoms
-import toggleValueAtom from "../../store/ToggleValueAtom";
 import ModalOpenAtom from "../../store/ModalOpenAtom";
 
+//Customhook
+import UserInfoQuery from "../../customHooks/userInfoQuery";
+
 const MainSideBarMenuCp = () => {
+  const userInfo = UserInfoQuery();
   const navigate = useNavigate();
 
-  const [contentsChange, setContentsChange] = useRecoilState(
-    toggleValueAtom("contentsChange")
-  );
   const [moreModalOpen, setMoreModalOpen] = useRecoilState(
     ModalOpenAtom("moreModal")
   );
   const [searchModalOpen, setSearchModalOpen] = useRecoilState(
     ModalOpenAtom("searchModal")
   );
-  const [postModalOpen, setPostModalOpen] = useRecoilState(
-    ModalOpenAtom("makePostModal")
+
+  const setPostModalOpen = useSetRecoilState(ModalOpenAtom("makePostModal"));
+
+  const setLoginRequestMdOpen = useSetRecoilState(
+    ModalOpenAtom("loginRequestMd")
   );
 
   return (
@@ -77,7 +79,11 @@ const MainSideBarMenuCp = () => {
       </SidebarMenu>
       <SidebarMenu
         onClick={() => {
-          setPostModalOpen(!postModalOpen);
+          if (userInfo.loginCheck) {
+            setPostModalOpen(true);
+          } else {
+            setLoginRequestMdOpen(true);
+          }
         }}
       >
         <NewPostIcon marginR={"10"} />
@@ -85,7 +91,11 @@ const MainSideBarMenuCp = () => {
       </SidebarMenu>
       <SidebarMenu
         onClick={() => {
-          navigate("/dashboard/make-diary");
+          if (userInfo.loginCheck) {
+            navigate("/dashboard/make-diary");
+          } else {
+            setLoginRequestMdOpen(true);
+          }
         }}
       >
         <KeepDiaryIcon marginR={"5"} />
@@ -93,8 +103,11 @@ const MainSideBarMenuCp = () => {
       </SidebarMenu>
       <SidebarMenu
         onClick={() => {
-          navigate("/dashboard/profile");
-          setContentsChange(!contentsChange);
+          if (userInfo.loginCheck) {
+            navigate("/dashboard/profile");
+          } else {
+            setLoginRequestMdOpen(true);
+          }
         }}
       >
         <UserIcon marginR={"10"} />

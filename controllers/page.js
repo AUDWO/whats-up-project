@@ -12,6 +12,11 @@ const ContactStory = require("../models/contactStory");
 const ContactDiary = require("../models/contactDiary");
 const { blurhashFromURL } = require("blurhash-from-url");
 
+exports.inqueryUserLogin = async (req, res) => {
+  const LoginCheck = req.isAuthenticated();
+  res.send(LoginCheck);
+};
+
 exports.renderAllUserInfo = async (req, res) => {
   try {
     const allUser = await User.findAll();
@@ -68,6 +73,11 @@ exports.renderUserInfo = async (req, res, next) => {
   }
 
   if (!otherUserId) {
+    const loginCheck = req.isAuthenticated();
+
+    if (!loginCheck) {
+      return res.send({ loginCheck });
+    }
     const following = res.locals.followingCount;
     const follower = res.locals.followerCount;
     try {
@@ -100,6 +110,7 @@ exports.renderUserInfo = async (req, res, next) => {
         following,
         postslength: posts.length,
         diarieslength: diaries.length,
+        loginCheck,
       });
     } catch (error) {
       console.error(error);

@@ -7,42 +7,45 @@ import { useNavigate } from "react-router-dom";
 
 const LoginRequestMd = () => {
   const setLoginRequestMdOpen = useSetRecoilState(
-    ModalOpenAtom("LoginRequestMd")
+    ModalOpenAtom("loginRequestMd")
   );
 
-  const loginRequestBackground = useRef();
+  const loginRequestBackground = useRef(null);
   const navigate = useNavigate();
 
   return (
-    <LoginRequestMdWrapper
-      ref={loginRequestBackground}
-      onClick={(e) => {
-        if (e.target === loginRequestBackground.current) {
-          setLoginRequestMdOpen(false);
-        }
-      }}
-    >
-      <MainRequestSentence>로그인이 하시겠습니까?</MainRequestSentence>
-      <AdditionalRequestSentence>
-        로그인 후 기능을 이용할 수 있어요!
-      </AdditionalRequestSentence>
-      <ButtonWrapper>
-        <LoginButton
-          onClick={() => {
-            navigate("/");
-          }}
-        >
-          확인
-        </LoginButton>
-        <CancelButton
-          onClick={() => {
+    <LoginRequestMdBackground>
+      <LoginRequestMdWrapper
+        ref={loginRequestBackground}
+        onClick={(e) => {
+          if (e.target === loginRequestBackground.current) {
             setLoginRequestMdOpen(false);
-          }}
-        >
-          취소
-        </CancelButton>
-      </ButtonWrapper>
-    </LoginRequestMdWrapper>
+          }
+        }}
+      >
+        <MainRequestSentence>로그인이 하시겠습니까?</MainRequestSentence>
+        <AdditionalRequestSentence>
+          로그인 후 기능을 이용할 수 있어요!
+        </AdditionalRequestSentence>
+        <ButtonWrapper>
+          <LoginButton
+            onClick={() => {
+              navigate("/");
+              setLoginRequestMdOpen(false);
+            }}
+          >
+            확인
+          </LoginButton>
+          <CancelButton
+            onClick={() => {
+              setLoginRequestMdOpen(false);
+            }}
+          >
+            취소
+          </CancelButton>
+        </ButtonWrapper>
+      </LoginRequestMdWrapper>
+    </LoginRequestMdBackground>
   );
 };
 
@@ -55,14 +58,14 @@ export const LoginRequestMdBackground = styled.div`
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
 `;
 
 export const LoginRequestMdWrapper = styled.div`
   width: 400px;
   height: 200px;
-  border: 1px solid #f7dd07;
+  border: 2px solid #f7dd07;
   border-radius: 12px;
   display: flex;
   flex-direction: column;
@@ -80,12 +83,14 @@ export const LoginButton = styled.div`
   background-color: #f7dd07;
   padding: 10px 20px 10px 20px;
   border-radius: 5px;
+  cursor: pointer;
 `;
 export const CancelButton = styled.div`
   margin-left: 20px;
   background-color: #f7dd07;
   padding: 10px 20px 10px 20px;
   border-radius: 5px;
+  cursor: pointer;
 `;
 
 export const MainRequestSentence = styled.div`

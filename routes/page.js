@@ -23,6 +23,7 @@ const {
   checkUserNickname,
   renderUserInfo,
   renderAllUserInfo,
+  inqueryUserLogin,
 } = require("../controllers/page");
 const { isLoggedIn, isNotLoggedIn } = require("../middlewares");
 
@@ -39,7 +40,7 @@ router.use((req, res, next) => {
   next();
 });
 
-//blurhash test
+router.get("/login-check/", inqueryUserLogin);
 
 //회원가입
 router.get("/blur/:postId", renderOnlyPost);

@@ -8,8 +8,12 @@ import {
   CommentPostButton,
 } from "../../../../StyledComponents/CommonCpStyle/More/MoreComment/MoreCommentCpSt";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import UserInfoQuery from "../../../../customHooks/userInfoQuery";
+import { useSetRecoilState } from "recoil";
+import ModalOpenAtom from "../../../../store/ModalOpenAtom";
 
 const MoreCommentInputCp = ({ storyId, diaryId }) => {
+  const userInfo = UserInfoQuery();
   const [commentContent, setCommentContent] = useState("");
 
   const createStoryComment = async () => {
@@ -27,6 +31,9 @@ const MoreCommentInputCp = ({ storyId, diaryId }) => {
   };
 
   const queryClient = useQueryClient();
+  const setLoginRequestMdOpen = useSetRecoilState(
+    ModalOpenAtom("loginRequestMd")
+  );
 
   const { mutate: handlePostDiaryComment } = useMutation({
     mutationFn: createDiaryComment,
@@ -54,20 +61,32 @@ const MoreCommentInputCp = ({ storyId, diaryId }) => {
       <MoreCommnetInputWrapper>
         <MoreCommentInputIcon />
         <MoreCommentInput
-          placeholder="댓글을 입력하세요."
+          onClick={() => {
+            if (!userInfo.loginCheck) {
+              setLoginRequestMdOpen(true);
+            }
+          }}
+          placeholder={
+            userInfo.loginCheck
+              ? "댓글을 입력해 주세요!"
+              : "로그인 후 댓글 이용이 가능합니다."
+          }
           value={commentContent}
           onChange={(e) => {
             setCommentContent(e.target.value);
           }}
+          readOnly={!userInfo.loginCheck}
         />
         <CommentPostButton
           comment={commentContent}
           onClick={() => {
-            if (diaryId) {
-              handlePostDiaryComment();
-            }
-            if (storyId) {
-              handlePostStoryComment();
+            if (commentContent) {
+              if (diaryId) {
+                handlePostDiaryComment();
+              }
+              if (storyId) {
+                handlePostStoryComment();
+              }
             }
           }}
         >

@@ -150,7 +150,7 @@ const PostInfoCp = ({ postInfo }) => {
         {postCommentControl && <CountNumber>{postCommentCount}</CountNumber>}
       </IconWrapper>
       <IconWrapper>
-        {postLikeControl ? (
+        {postLikeControl && userInfo.loginCheck ? (
           likeCheck ? (
             <LikeFillIcon
               onClick={() => {

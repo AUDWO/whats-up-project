@@ -15,6 +15,8 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import CustomUseMutation from "../../../../customHooks/CustomUseMutation";
 import UserInfoQuery from "../../../../customHooks/userInfoQuery";
+import { useSetRecoilState } from "recoil";
+import ModalOpenAtom from "../../../../store/ModalOpenAtom";
 
 const MoreContactCp = ({ contentInfo, moreType }) => {
   const [likeReactionCount, setLikeReactionCount] = useState(0);
@@ -37,6 +39,9 @@ const MoreContactCp = ({ contentInfo, moreType }) => {
   const [myReactInfo, setMyReactInfo] = useState({});
 
   const userInfo = UserInfoQuery();
+  const setLoginRequestMdOpen = useSetRecoilState(
+    ModalOpenAtom("loginRequestMd")
+  );
 
   //react의 업데이트 된 정보를 참조하기 때문에
 
@@ -220,7 +225,11 @@ const MoreContactCp = ({ contentInfo, moreType }) => {
     <MoreContact>
       <ContactIconWrapper
         onClick={() => {
-          handleReactFilterType("like");
+          if (userInfo.loginCheck) {
+            handleReactFilterType("like");
+          } else {
+            setLoginRequestMdOpen(true);
+          }
         }}
         nextClick={nextClick}
         backC={"#3182f6"}
@@ -232,7 +241,11 @@ const MoreContactCp = ({ contentInfo, moreType }) => {
       </ContactIconWrapper>
       <ContactIconWrapper
         onClick={() => {
-          handleReactFilterType("heart");
+          if (userInfo.loginCheck) {
+            handleReactFilterType("heart");
+          } else {
+            setLoginRequestMdOpen(true);
+          }
         }}
         nextClick={nextClick}
         backC={"#ed203d"}
@@ -244,7 +257,11 @@ const MoreContactCp = ({ contentInfo, moreType }) => {
       </ContactIconWrapper>
       <ContactIconWrapper
         onClick={() => {
-          handleReactFilterType("smile");
+          if (userInfo.loginCheck) {
+            handleReactFilterType("smile");
+          } else {
+            setLoginRequestMdOpen(true);
+          }
         }}
         nextClick={nextClick}
         backC={"#f7dd07"}
@@ -256,7 +273,11 @@ const MoreContactCp = ({ contentInfo, moreType }) => {
       </ContactIconWrapper>
       <ContactIconWrapper
         onClick={() => {
-          handleReactFilterType("sad");
+          if (userInfo.loginCheck) {
+            handleReactFilterType("sad");
+          } else {
+            setLoginRequestMdOpen(true);
+          }
         }}
         nextClick={nextClick}
         backC={"#a64eff"}

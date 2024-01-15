@@ -9,12 +9,13 @@ const UserInfoQuery = () => {
       console.error(error);
     }
   };
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isFetching } = useQuery({
     queryKey: ["myUserInfo"],
     queryFn: getMyInfo,
+    staleTime: Infinity,
   });
 
-  return { ...data?.data, isLoading };
+  return { ...data?.data, isLoading, isFetching };
 };
 
 export default UserInfoQuery;

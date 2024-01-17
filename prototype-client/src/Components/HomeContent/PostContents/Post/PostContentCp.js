@@ -15,17 +15,16 @@ import {
   PostContentOpenIcon,
   PostContentCloseIcon,
   PostContent,
-} from "../../StyledComponents/PostStyle/PostContentCpSt";
+} from "../../../../StyledComponents/PostStyle/PostContentCpSt";
 
 //Atom
-import ModalOpenAtom from "../../store/ModalOpenAtom";
-import toggleValueAtom from "../../store/ToggleValueAtom";
+import ModalOpenAtom from "../../../../store/ModalOpenAtom";
+import toggleValueAtom from "../../../../store/ToggleValueAtom";
 
 //Component
-import ProfileCp from "../Common/Profile/ProfileCp";
 
 //Custom hook
-import UserInfoQuery from "../../customHooks/userInfoQuery";
+import UserInfoQuery from "../../../../customHooks/UserInfoQuery";
 import PostProfileCp from "./PostProfileCp";
 
 const PostContentCp = ({ postContentInfo, userId }) => {
@@ -91,21 +90,28 @@ const PostContentCp = ({ postContentInfo, userId }) => {
     };
   }, []);
 
+  console.log(isImgLoaded, `${postContentInfo.id} - isImgLoaded`);
+
+  useEffect(() => {});
+
   return (
     <PostImgWrapper click={modalOpen} ref={postRef}>
-      {isImgLoaded && !postObservingCheck ? (
+      {!isImgLoaded && (
         <Blurhash
           hash={postContentInfo.hash}
           width={"410px"}
           height={"585px"}
         />
-      ) : (
-        <PostImg
-          src={postContentInfo.url}
-          onLoad={() => updateImgLoadingStatus()}
-          ref={postImgRef}
-        />
       )}
+      <PostImg
+        src={postObservingCheck && postContentInfo.url}
+        onLoad={() => setIsImgLoaded(true)}
+        ref={postImgRef}
+        style={{
+          display: isImgLoaded && postObservingCheck ? "inline" : "none",
+        }}
+      />
+
       {isMyPost ? (
         <Link to={`/dashboard/profile/`}>
           <PostProfileCp contentUserInfo={postContentInfo.userInfo} />
@@ -144,68 +150,3 @@ const PostContentCp = ({ postContentInfo, userId }) => {
 };
 
 export default PostContentCp;
-
-/*
-
- {isMyPost ? (
-        <Link to={`/dashboard/profile/`}>
-          <ProfileCp
-            pfW={{ left: "20px", top: "15px", position: "absolute" }}
-            pfIW={{
-              width: "51px",
-              height: "51px",
-              margin: { r: "15" },
-              border: "on",
-            }}
-            pfI={{
-              width: "40px",
-              height: "40px",
-              zIndex: "4",
-              basic: "37.5px",
-            }}
-            pfN={{
-              backC: "black",
-              color: "#f7dd07",
-              fontS: "13px",
-              borderRadius: "10px",
-              height: "30px",
-              padding: { t: "5", r: "5", b: "5", l: "5" },
-            }}
-            pfInfo={postContentInfo.userInfo}
-          />
-        </Link>
-      ) : (
-        <Link
-          to={`/dashboard/profile/${postContentInfo.userInfo.nickname}/${userId}`}
-        >
-          <ProfileCp
-            pfW={{ left: "20px", top: "15px", position: "absolute" }}
-            pfIW={{
-              width: "51px",
-              height: "51px",
-              margin: { r: "15" },
-              border: "on",
-            }}
-            pfI={{
-              width: "40px",
-              height: "40px",
-              zIndex: "4",
-              basic: "37.5px",
-            }}
-            pfN={{
-              backC: "black",
-              color: "#f7dd07",
-              fontS: "13px",
-              borderRadius: "10px",
-              height: "30px",
-              padding: { t: "5", r: "5", b: "5", l: "5" },
-            }}
-            pfInfo={postContentInfo.userInfo}
-          />
-        </Link>
-      )}
-
-
-
-
-*/

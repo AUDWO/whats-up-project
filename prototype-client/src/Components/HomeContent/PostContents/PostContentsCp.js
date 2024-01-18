@@ -62,17 +62,6 @@ const PostContentsCp = () => {
       },
     });
 
-  console.log(data, "postContents Data postContents Data");
-  console.log(
-    isFetchingNextPage,
-    "isFetchingNextPage isFetchingNextPage isFetchingNextPage"
-  );
-  console.log(isRefetching, "isRefetching isRefetching isRefetching");
-
-  if (data?.data) {
-    console.log(data);
-  }
-
   return (
     <>
       {data ? (
